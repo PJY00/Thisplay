@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="de7bba56-041a-446b-bf31-ad75c44905f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/AdminController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/JoinController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/MainController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/DTO/CustomUserDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/DTO/JoinDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Entity/UserEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/JWTFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/JWTUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/LoginFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/service/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/service/JoinService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thisplay/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/build.gradle" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/thisplay">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="thisplay" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="31UnonRHMFLbPJF6nZNVAUHW2fp" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.Build thisplay.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.ThisplayApplication.executor": "Run",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature__login",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/kt288/Thisplay",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.thisplay.Controller" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="ThisplayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="thisplay.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.thisplay.ThisplayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="de7bba56-041a-446b-bf31-ad75c44905f4" name="Changes" comment="" />
+      <created>1755587698129</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1755587698129</updated>
+      <workItem from="1756714036591" duration="88000" />
+      <workItem from="1756735541948" duration="387000" />
+      <workItem from="1756774028756" duration="638000" />
+      <workItem from="1756785707891" duration="2520000" />
+      <workItem from="1756788266132" duration="27000" />
+      <workItem from="1756788295537" duration="205000" />
+      <workItem from="1756788514360" duration="1598000" />
+      <workItem from="1756790142883" duration="3237000" />
+      <workItem from="1756805929619" duration="339000" />
+      <workItem from="1757302214867" duration="3919000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
