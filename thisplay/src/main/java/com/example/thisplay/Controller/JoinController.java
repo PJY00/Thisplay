@@ -17,12 +17,14 @@ public class JoinController {
     public final JoinService joinService;
 
     @PostMapping("/join")
-    public Map<String, String> join(@RequestBody JoinDTO joinDTO) {
+    public Map<String, Object> join(@RequestBody JoinDTO joinDTO) {
         String result = joinService.join(joinDTO);
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
+        response.put("valid", result.equals("회원가입 성공"));  // boolean 저장 가능
         response.put("message", result);
         response.put("nickname", joinDTO.getNickname());
+
         return response;
     }
 }
