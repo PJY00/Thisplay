@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de7bba56-041a-446b-bf31-ad75c44905f4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/AdminController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/JoinController.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/JoinController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/MainController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/DTO/CustomUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/DTO/CustomUserDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/LoginFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/LoginFilter.java" afterDir="false" />
     </list>
@@ -142,12 +137,23 @@
       <workItem from="1756805929619" duration="339000" />
       <workItem from="1757302214867" duration="3919000" />
       <workItem from="1757337975587" duration="1755000" />
-      <workItem from="1757405231356" duration="1288000" />
+      <workItem from="1757405231356" duration="4175000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

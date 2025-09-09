@@ -2,6 +2,7 @@ package com.example.thisplay.jwt;
 
 import com.example.thisplay.DTO.CustomUserDetails;
 import com.example.thisplay.Entity.UserEntity;
+import com.example.thisplay.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -32,6 +35,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
             String nickname = requestMap.get("nickname");
             String password = requestMap.get("password");
+
+            // 닉네임 존재 여부 직접 체크
+            if (!userRepository.existsByNickname(nickname)) {
+                throw new UsernameNotFoundException("존재하지 않는 닉네임입니다.");
+            }
 
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(nickname, password);
@@ -79,9 +87,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
+        String errorMessage;
+        if (failed instanceof UsernameNotFoundException) {
+            errorMessage = "존재하지 않는 닉네임입니다.";
+        } else {
+            errorMessage = "비밀번호가 틀렸습니다.";
+        }
+
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("message", "로그인 실패");
-        responseBody.put("error", failed.getMessage());
+        responseBody.put("error", errorMessage);
 
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(responseBody));
