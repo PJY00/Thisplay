@@ -66,6 +66,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // DB에 RefreshToken 저장
         user.setRefreshToken(refreshToken);
+        userRepository.save(user);
 
         // JSON 응답
         response.setContentType("application/json");
