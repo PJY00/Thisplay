@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de7bba56-041a-446b-bf31-ad75c44905f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Controller/LogoutController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Entity/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/Entity/UserEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/LoginFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/jwt/LoginFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/thisplay/src/main/java/com/example/thisplay/repository/UserRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +140,7 @@
       <workItem from="1756805929619" duration="339000" />
       <workItem from="1757302214867" duration="3919000" />
       <workItem from="1757337975587" duration="1755000" />
-      <workItem from="1757405231356" duration="4175000" />
+      <workItem from="1757405231356" duration="6080000" />
     </task>
     <servers />
   </component>

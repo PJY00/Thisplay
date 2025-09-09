@@ -38,16 +38,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((auth) -> auth.disable())
-                .formLogin((auth) -> auth.disable())
-                .httpBasic((auth) -> auth.disable());
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .logout(logout -> logout.disable()); // 기본 로그아웃 비활성화
 
         http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join").permitAll() // 누구나 접근 가능
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/", "/join", "/logout").permitAll() //  /logout 허용
                         .anyRequest().authenticated());
 
-        // LoginFilter에 userRepository도 넘겨줌
+        // LoginFilter 등록
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository),
                         UsernamePasswordAuthenticationFilter.class);
@@ -57,7 +58,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
-                .sessionManagement((session) -> session
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

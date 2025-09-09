@@ -54,15 +54,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException {
-        // UserDetails 가져오기
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         UserEntity user = customUserDetails.getUserEntity();
 
         String username = customUserDetails.getUsername();
         String role = customUserDetails.getAuthorities().iterator().next().getAuthority();
 
-        // JWT 발급
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L);
+        // AccessToken, RefreshToken 발급
+        String accessToken = jwtUtil.createJwt(username, role, 10 * 60 * 1000L);  // 10분
+        String refreshToken = jwtUtil.createJwt(username, role, 24 * 60 * 60 * 1000L); // 24시간
+
+        // DB에 RefreshToken 저장
+        user.setRefreshToken(refreshToken);
 
         // JSON 응답
         response.setContentType("application/json");
@@ -70,7 +73,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         Map<String, Object> data = new HashMap<>();
         data.put("userId", user.getUserId());
-        data.put("token", token);
+        data.put("accessToken", accessToken);
+        data.put("refreshToken", refreshToken);
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("message", "로그인 성공");
@@ -79,6 +83,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(responseBody));
     }
+
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
