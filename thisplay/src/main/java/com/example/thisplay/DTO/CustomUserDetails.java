@@ -10,62 +10,50 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
     private final UserEntity userEntity;
 
-    //생성자로 주입하는 방식
+    // 생성자로 주입
     public CustomUserDetails(UserEntity userEntity) {
-
         this.userEntity = userEntity;
+    }
+
+
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         Collection<GrantedAuthority> collection = new ArrayList<>();
-
-        collection.add(new GrantedAuthority() {
-
-            @Override
-            public String getAuthority() {
-
-                return userEntity.getRole();
-            }
-        });
-
+        collection.add(() -> userEntity.getRole());
         return collection;
     }
 
     @Override
     public String getPassword() {
-
         return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-
         return userEntity.getNickname();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-
         return true;
     }
 }

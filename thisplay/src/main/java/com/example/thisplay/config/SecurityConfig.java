@@ -1,6 +1,7 @@
 package com.example.thisplay.config;
 
 
+import com.example.thisplay.jwt.JWTFilter;
 import com.example.thisplay.jwt.JWTUtil;
 import com.example.thisplay.jwt.LoginFilter;
 import lombok.AllArgsConstructor;
@@ -53,8 +54,8 @@ public class SecurityConfig {
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //JWTFilter 등록
-        //http
-        //        .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http
                 .sessionManagement((session) -> session

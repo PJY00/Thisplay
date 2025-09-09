@@ -21,7 +21,7 @@ public class JoinController {
         String result = joinService.join(joinDTO);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("valid", result.equals("회원가입 성공"));  // boolean 저장 가능
+        response.put("valid", result.equals("회원가입 성공"));
         response.put("message", result);
         response.put("nickname", joinDTO.getNickname());
 
