@@ -1,3 +1,5 @@
+
+//Spring Security 설정 담당 파일
 package com.example.thisplay.config;
 
 import com.example.thisplay.jwt.JWTFilter;
@@ -25,16 +27,19 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository; // 추가
 
+    //사용자 인증 처리
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
+    //비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    //보안 규칙 정의
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -45,7 +50,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout").permitAll() //  /logout 허용
+                        .requestMatchers("/login", "/", "/join", "/logout").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated());
 
         // LoginFilter 등록

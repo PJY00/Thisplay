@@ -10,6 +10,7 @@ public class PasswordValidator {
 
     private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 
+    //비밀번호를 검사
     public static boolean isValid(String password) {
         return pattern.matcher(password).matches();
     }

@@ -1,3 +1,4 @@
+//검증된 사용자 정보를 등록
 package com.example.thisplay.jwt;
 
 import com.example.thisplay.DTO.CustomUserDetails;

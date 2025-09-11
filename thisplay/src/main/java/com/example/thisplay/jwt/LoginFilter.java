@@ -26,6 +26,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
 
+    //요청의 nickname, password를 JSON에서 꺼낸어 로그인 정보가 맞는지 확인
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
@@ -51,6 +52,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         }
     }
 
+    //로그인 성공시
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException {
@@ -86,6 +88,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
 
+    //로그인 실패시
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException failed) throws IOException {

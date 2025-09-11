@@ -18,8 +18,9 @@ public class JoinController {
 
     @PostMapping("/join")
     public Map<String, Object> join(@RequestBody JoinDTO joinDTO) {
-        String result = joinService.join(joinDTO);
+        String result = joinService.join(joinDTO); //JoinDTO 객체로 변환
 
+        //응답을 JSON 형식으로 구성
         Map<String, Object> response = new HashMap<>();
         response.put("valid", result.equals("회원가입 성공"));
         response.put("message", result);

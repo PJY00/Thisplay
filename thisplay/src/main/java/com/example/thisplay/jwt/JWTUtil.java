@@ -1,3 +1,4 @@
+//토큰 발급, 유저정보 꺼내기
 package com.example.thisplay.jwt;
 
 
@@ -29,6 +30,7 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
+    //토큰 만료 여부
     public Boolean isExpired(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
