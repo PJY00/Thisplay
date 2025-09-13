@@ -50,7 +50,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout").permitAll() //인증 없이 접근 가능
+                        .requestMatchers("/login", "/", "/join", "/logout",
+                                "/oauth2/**", "/login/oauth2/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated());
 
         // LoginFilter 등록
@@ -62,9 +63,16 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
+
+        http
+                .oauth2Login(oauth -> oauth
+                        .defaultSuccessUrl("/loginSuccess", true) // 로그인 성공 후 이동할 URL
+                        .failureUrl("/loginFailure")              // 로그인 실패 시 이동할 URL
+                );
+
         http
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         return http.build();
     }
