@@ -69,4 +69,70 @@ public class TmdbApiClient {
                     return filtered;
                 });
     }
+
+    // 특정 영화 상세 조회 (credits, release_dates 포함)
+    public Mono<JsonNode> getMovieDetail(int movieId) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/movie/{id}")
+                        .queryParam("api_key", apiKey)
+                        .queryParam("language", "ko-KR")
+                        .queryParam("append_to_response", "credits,release_dates")
+                        .build(movieId))
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(response -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    ObjectNode obj = mapper.createObjectNode();
+
+                    // 기본 정보
+                    obj.put("id", response.path("id").asInt());
+                    obj.put("title", response.path("title").asText(""));
+                    obj.put("original_title", response.path("original_title").asText(""));
+                    obj.put("overview", response.path("overview").asText(""));
+                    obj.put("runtime", response.path("runtime").asInt(0));
+
+                    // 포스터 URL
+                    String posterPath = response.hasNonNull("poster_path") ? response.get("poster_path").asText() : "";
+                    obj.put("poster_path", "https://image.tmdb.org/t/p/w500" + posterPath);
+
+                    // 장르 (배열 -> 문자열 배열)
+                    ArrayNode genreArray = mapper.createArrayNode();
+                    response.withArray("genres").forEach(genre -> {
+                        genreArray.add(genre.get("name").asText());
+                    });
+                    obj.set("genres", genreArray);
+
+                    // 배우 정보 (상위 5명)
+                    ArrayNode castArray = mapper.createArrayNode();
+                    ArrayNode casts = (ArrayNode) response.path("credits").path("cast");
+                    for (int i = 0; i < Math.min(5, casts.size()); i++) {
+                        JsonNode cast = casts.get(i);
+                        ObjectNode castObj = mapper.createObjectNode();
+                        castObj.put("name", cast.path("name").asText(""));
+                        castObj.put("character", cast.path("character").asText(""));
+                        castArray.add(castObj);
+                    }
+                    obj.set("cast", castArray);
+
+                    // 한국 개봉일 & 심의 등급
+                    String releaseDate = "";
+                    String certification = "";
+                    ArrayNode releaseResults = (ArrayNode) response.path("release_dates").path("results");
+                    for (JsonNode country : releaseResults) {
+                        if ("KR".equals(country.path("iso_3166_1").asText())) {
+                            ArrayNode krReleases = (ArrayNode) country.path("release_dates");
+                            if (krReleases.size() > 0) {
+                                JsonNode krRelease = krReleases.get(0);
+                                releaseDate = krRelease.path("release_date").asText("");
+                                certification = krRelease.path("certification").asText("");
+                            }
+                        }
+                    }
+                    obj.put("release_date", releaseDate);
+                    obj.put("certification", certification);
+
+                    return obj;
+                });
+    }
 }
