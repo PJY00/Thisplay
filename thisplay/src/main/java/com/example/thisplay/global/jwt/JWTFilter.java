@@ -27,8 +27,8 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // /api/movies/** 경로는 JWT 검증 건너뜀
-        if (path.startsWith("/api/main")) {
+        // /api/movies/**, 경로는 JWT 검증 건너뜀
+        if (path.startsWith("/api/main")||path.startsWith("/api/movies/show")||path.startsWith("/login")||path.startsWith("/join")) {
             filterChain.doFilter(request, response);
             return;
         }
