@@ -1,6 +1,5 @@
 package com.example.thisplay.common.movie;
 
-import com.example.thisplay.common.movie.DTO.MovieDetailDTO;
 import com.example.thisplay.global.api.TmdbApiClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
