@@ -1,11 +1,11 @@
 
 //Spring Security 설정 담당 파일
-package com.example.thisplay.config;
+package com.example.thisplay.global.config;
 
-import com.example.thisplay.jwt.JWTFilter;
-import com.example.thisplay.jwt.JWTUtil;
-import com.example.thisplay.jwt.LoginFilter;
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.global.jwt.JWTFilter;
+import com.example.thisplay.global.jwt.JWTUtil;
+import com.example.thisplay.global.jwt.LoginFilter;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package com.example.thisplay.DTO;
+package com.example.thisplay.common.Auth.DTO;
 
-import com.example.thisplay.Entity.UserEntity;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

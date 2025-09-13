@@ -1,4 +1,4 @@
-package com.example.thisplay.util;
+package com.example.thisplay.global.util;
 
 import java.util.regex.Pattern;
 

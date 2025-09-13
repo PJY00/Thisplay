@@ -1,8 +1,8 @@
-package com.example.thisplay.service;
+package com.example.thisplay.common.Auth.service;
 
-import com.example.thisplay.DTO.CustomUserDetails;
-import com.example.thisplay.Entity.UserEntity;
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

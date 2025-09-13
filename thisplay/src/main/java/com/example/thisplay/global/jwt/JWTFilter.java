@@ -1,8 +1,8 @@
 //검증된 사용자 정보를 등록
-package com.example.thisplay.jwt;
+package com.example.thisplay.global.jwt;
 
-import com.example.thisplay.DTO.CustomUserDetails;
-import com.example.thisplay.Entity.UserEntity;
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

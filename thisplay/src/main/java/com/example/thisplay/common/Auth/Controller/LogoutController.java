@@ -1,6 +1,6 @@
-package com.example.thisplay.Controller;
+package com.example.thisplay.common.Auth.Controller;
 
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
