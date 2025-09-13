@@ -94,7 +94,7 @@ public class TmdbApiClient {
 
                     // 포스터 URL
                     String posterPath = response.hasNonNull("poster_path") ? response.get("poster_path").asText() : "";
-                    obj.put("poster_path", "https://image.tmdb.org/t/p/w500" + posterPath);
+                    obj.put("poster_path", "https://image.tmdb.org/t/p/w185" + posterPath);
 
                     // 장르 (배열 -> 문자열 배열)
                     ArrayNode genreArray = mapper.createArrayNode();
@@ -106,11 +106,13 @@ public class TmdbApiClient {
                     // 배우 정보 (상위 5명)
                     ArrayNode castArray = mapper.createArrayNode();
                     ArrayNode casts = (ArrayNode) response.path("credits").path("cast");
-                    for (int i = 0; i < Math.min(5, casts.size()); i++) {
+                    for (int i = 0; i < Math.min(10, casts.size()); i++) {
                         JsonNode cast = casts.get(i);
                         ObjectNode castObj = mapper.createObjectNode();
                         castObj.put("name", cast.path("name").asText(""));
                         castObj.put("character", cast.path("character").asText(""));
+                        String profilePath = cast.hasNonNull("profile_path") ? cast.get("profile_path").asText() : "";
+                        castObj.put("profile_path", profilePath.isEmpty() ? "" : "https://image.tmdb.org/t/p/w185" + profilePath);
                         castArray.add(castObj);
                     }
                     obj.set("cast", castArray);
