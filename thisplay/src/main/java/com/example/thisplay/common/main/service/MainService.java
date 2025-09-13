@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class MovieService {
+public class MainService {
     private final TmdbApiClient tmdbApiClient;
     private final GenreSelectionRepository genreRepo;
 
