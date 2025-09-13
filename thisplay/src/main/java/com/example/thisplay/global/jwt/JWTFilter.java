@@ -32,6 +32,7 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        //---여기까지 변경 사항
 
         //request에서 Authorization 헤더를 찾음
         String authorization= request.getHeader("Authorization");
