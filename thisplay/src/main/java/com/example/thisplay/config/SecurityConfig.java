@@ -66,8 +66,12 @@ public class SecurityConfig {
 
         http
                 .oauth2Login(oauth -> oauth
-                        .defaultSuccessUrl("/loginSuccess", true) // 로그인 성공 후 이동할 URL
-                        .failureUrl("/loginFailure")              // 로그인 실패 시 이동할 URL
+                        .successHandler((request, response, authentication) -> {
+                            response.sendRedirect("/loginSuccess");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.sendRedirect("/loginFailure");
+                        })
                 );
 
         http
