@@ -1,4 +1,4 @@
-package com.example.thisplay.Entity;
+package com.example.thisplay.common.Auth.Entity;
 
 
 import jakarta.persistence.*;

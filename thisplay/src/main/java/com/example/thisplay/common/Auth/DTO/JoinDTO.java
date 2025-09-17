@@ -1,5 +1,5 @@
 //회원가입 요청에서 전달되는 데이터를 담음
-package com.example.thisplay.DTO;
+package com.example.thisplay.common.Auth.DTO;
 
 
 import lombok.Getter;

@@ -1,7 +1,7 @@
-package com.example.thisplay.repository;
+package com.example.thisplay.common.Auth.repository;
 
 
-import com.example.thisplay.Entity.UserEntity;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

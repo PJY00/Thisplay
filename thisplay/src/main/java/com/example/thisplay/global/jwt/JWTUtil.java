@@ -1,5 +1,5 @@
 //토큰 발급, 유저정보 꺼내기
-package com.example.thisplay.jwt;
+package com.example.thisplay.global.jwt;
 
 
 import io.jsonwebtoken.Jwts;

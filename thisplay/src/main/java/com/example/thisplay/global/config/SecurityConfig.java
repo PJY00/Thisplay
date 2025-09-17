@@ -1,11 +1,11 @@
 
 //Spring Security 설정 담당 파일
-package com.example.thisplay.config;
+package com.example.thisplay.global.config;
 
-import com.example.thisplay.jwt.JWTFilter;
-import com.example.thisplay.jwt.JWTUtil;
-import com.example.thisplay.jwt.LoginFilter;
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.global.jwt.JWTFilter;
+import com.example.thisplay.global.jwt.JWTUtil;
+import com.example.thisplay.global.jwt.LoginFilter;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,8 +50,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout",
-                                "/oauth2/**", "/login/oauth2/**").permitAll() //인증 없이 접근 가능
+                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated());
 
         // LoginFilter 등록

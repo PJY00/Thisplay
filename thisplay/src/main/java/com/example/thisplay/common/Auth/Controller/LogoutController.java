@@ -1,6 +1,7 @@
-package com.example.thisplay.Controller;
+package com.example.thisplay.common.Auth.Controller;
 
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +42,7 @@ public class LogoutController {
 
         if (refreshToken != null) {
             // 2. DB에서 refreshToken 삭제
-            Optional<com.example.thisplay.Entity.UserEntity> userOpt = userRepository.findByRefreshToken(refreshToken);
+            Optional<UserEntity> userOpt = userRepository.findByRefreshToken(refreshToken);
             userOpt.ifPresent(user -> {
                 user.setRefreshToken(null);
                 userRepository.save(user);

@@ -1,8 +1,8 @@
-package com.example.thisplay.Controller;
+package com.example.thisplay.common.Auth.Controller;
 
 
-import com.example.thisplay.DTO.JoinDTO;
-import com.example.thisplay.service.JoinService;
+import com.example.thisplay.common.Auth.DTO.JoinDTO;
+import com.example.thisplay.common.Auth.service.JoinService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

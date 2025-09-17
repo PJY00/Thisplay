@@ -1,4 +1,4 @@
-package com.example.thisplay.Controller;
+package com.example.thisplay.common.Auth.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

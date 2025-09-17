@@ -1,8 +1,8 @@
-package com.example.thisplay.jwt;
+package com.example.thisplay.global.jwt;
 
-import com.example.thisplay.DTO.CustomUserDetails;
-import com.example.thisplay.Entity.UserEntity;
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

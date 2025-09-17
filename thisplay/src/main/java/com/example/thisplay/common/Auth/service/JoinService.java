@@ -1,9 +1,9 @@
-package com.example.thisplay.service;
+package com.example.thisplay.common.Auth.service;
 
-import com.example.thisplay.DTO.JoinDTO;
-import com.example.thisplay.Entity.UserEntity;
-import com.example.thisplay.repository.UserRepository;
-import com.example.thisplay.util.PasswordValidator;
+import com.example.thisplay.common.Auth.DTO.JoinDTO;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.repository.UserRepository;
+import com.example.thisplay.global.util.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

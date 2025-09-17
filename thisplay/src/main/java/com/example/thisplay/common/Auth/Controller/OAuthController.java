@@ -1,8 +1,8 @@
-package com.example.thisplay.Controller;
+package com.example.thisplay.common.Auth.Controller;
 
-import com.example.thisplay.Entity.UserEntity;
-import com.example.thisplay.jwt.JWTUtil;
-import com.example.thisplay.repository.UserRepository;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.global.jwt.JWTUtil;
+import com.example.thisplay.common.Auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;

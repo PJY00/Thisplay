@@ -1,7 +1,8 @@
-package com.example.thisplay.jwt;
+//검증된 사용자 정보를 등록
+package com.example.thisplay.global.jwt;
 
-import com.example.thisplay.DTO.CustomUserDetails;
-import com.example.thisplay.Entity.UserEntity;
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -17,6 +18,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
 
+    //생성자 방식으로 JWTUTil을 주입받음
     public JWTFilter(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
@@ -26,6 +28,16 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // /api/movies/**, 경로는 JWT 검증 건너뜀
+        if (path.startsWith("/api/main")||path.startsWith("/api/movies/show")||path.startsWith("/login")||path.startsWith("/join")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        //---여기까지 변경 사항
+
+        //request에서 Authorization 헤더를 찾음
         String token = null;
 
         // 1. Authorization 헤더에서 토큰 추출
