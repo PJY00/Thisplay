@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import jakarta.servlet.http.Cookie;
 
 @AllArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -69,6 +70,30 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // DB에 RefreshToken 저장
         user.setRefreshToken(refreshToken);
         userRepository.save(user);
+
+//  AccessToken 쿠키
+        Cookie accessCookie = new Cookie("accessToken", accessToken);
+        accessCookie.setHttpOnly(true);
+        accessCookie.setSecure(true); // HTTPS 환경에서만 전송
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(10 * 60); // 10분
+        response.addCookie(accessCookie);
+// SameSite=None 추가
+        response.setHeader("Set-Cookie",
+                String.format("accessToken=%s; Max-Age=%d; Path=/; HttpOnly; Secure; SameSite=None",
+                        accessToken, 10 * 60));
+
+//  RefreshToken 쿠키
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(true); // HTTPS 환경에서만 전송
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(24 * 60 * 60); // 24시간
+        response.addCookie(refreshCookie);
+// SameSite=None 추가
+        response.addHeader("Set-Cookie",
+                String.format("refreshToken=%s; Max-Age=%d; Path=/; HttpOnly; Secure; SameSite=None",
+                        refreshToken, 24 * 60 * 60));
 
         // JSON 응답
         response.setContentType("application/json");
