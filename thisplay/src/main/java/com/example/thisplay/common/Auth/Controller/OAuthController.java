@@ -36,8 +36,8 @@ public class OAuthController {
         });
 
         // JWT 발급
-        String accessToken = jwtUtil.createJwt(user.getNickname(), user.getRole(), 10 * 60 * 1000L);  // 10분
-        String refreshToken = jwtUtil.createJwt(user.getNickname(), user.getRole(), 24 * 60 * 60 * 1000L); // 24시간
+        String accessToken = jwtUtil.createJwt(user.getUserId(), user.getNickname(), user.getRole(), 10 * 60 * 1000L);
+        String refreshToken = jwtUtil.createJwt(user.getUserId(), user.getNickname(), user.getRole(), 24 * 60 * 60 * 1000L);
 
         // DB에 RefreshToken 저장
         user.setRefreshToken(refreshToken);
