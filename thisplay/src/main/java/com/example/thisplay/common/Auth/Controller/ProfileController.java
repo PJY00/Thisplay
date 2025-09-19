@@ -31,7 +31,6 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("권한이 없습니다");
         }
-
         return ResponseEntity.ok(profileService.getProfile(id));
     }
 
@@ -51,7 +50,6 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("권한이 없습니다");
         }
-
         return ResponseEntity.ok(profileService.updateProfile(id, dto));
     }
 }

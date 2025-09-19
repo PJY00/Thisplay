@@ -14,7 +14,7 @@ public class ProfileService {
     // 프로필 조회
     public ProfileDTO getProfile(Long userId) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없음"));
 
         return ProfileDTO.builder()
                 .nickname(user.getNickname())
@@ -25,7 +25,7 @@ public class ProfileService {
     // 프로필 수정
     public ProfileDTO updateProfile(Long userId, ProfileDTO dto) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없음"));
 
         user.setNickname(dto.getNickname());
         user.setProfileImgUrl(dto.getProfileImgUrl());
