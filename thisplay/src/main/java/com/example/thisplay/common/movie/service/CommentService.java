@@ -2,6 +2,7 @@ package com.example.thisplay.common.movie.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.Auth.repository.UserRepository;
+import com.example.thisplay.common.movie.controller.CommentResponseDTO;
 import com.example.thisplay.common.movie.dto.CommentDTO;
 import com.example.thisplay.common.movie.entity.CommentEntity;
 import com.example.thisplay.common.movie.repository.CommentRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +31,18 @@ public class CommentService {
                 .build();
 
         return commentRepository.save(comment);
+    }
+    public List<CommentResponseDTO> getCommentsByMovie(Long movieId) {
+        List<CommentEntity> comments = commentRepository.findByMovieId(movieId);
+
+        return comments.stream()
+                .map(c -> CommentResponseDTO.builder()
+                        .commentId(c.getCommentId())
+                        .movieId(c.getMovieId())
+                        .content(c.getContent())
+                        .createdAt(c.getCreatedAt())
+                        .writer(c.getUser().getNickname())
+                        .build()
+                ).toList();
     }
 }

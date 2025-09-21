@@ -10,19 +10,21 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 @RestController
 @RequestMapping("/api/movies")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
+    // 댓글 작성
     @PostMapping("/{movieId}/comments")
     public Map<String, Object> addComment(
             @PathVariable Long movieId,
             @RequestBody CommentDTO dto,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
+
         UserEntity user = userDetails.getUserEntity();
         CommentEntity saved = commentService.createComment(user, movieId, dto);
 
@@ -33,4 +35,11 @@ public class CommentController {
         response.put("content", saved.getContent());
         return response;
     }
+
+    // 댓글 조회
+    @GetMapping("/{movieId}/comments")
+    public List<CommentResponseDTO> getComments(@PathVariable Long movieId) {
+        return commentService.getCommentsByMovie(movieId);
+    }
 }
+
