@@ -50,7 +50,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**").permitAll() //인증 없이 접근 가능
+                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**", "/api/reviews/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated());
 
         // LoginFilter 등록
