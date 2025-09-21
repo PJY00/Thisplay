@@ -41,5 +41,17 @@ public class CommentController {
     public List<CommentResponseDTO> getComments(@PathVariable Long movieId) {
         return commentService.getCommentsByMovie(movieId);
     }
+
+    @PutMapping("/{movieId}/comments/{commentId}")
+    public CommentResponseDTO updateComment(
+            @PathVariable Long movieId,
+            @PathVariable Long commentId,
+            @RequestBody CommentDTO dto,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserEntity user = userDetails.getUserEntity();
+
+        return commentService.updateComment(commentId, user, dto.getContent());
+    }
 }
 

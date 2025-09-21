@@ -45,4 +45,29 @@ public class CommentService {
                         .build()
                 ).toList();
     }
+
+    public CommentResponseDTO updateComment(Long commentId, UserEntity user, String newContent) {
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        // DB에서 영속 유저 다시 조회
+        UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
+
+        if (!comment.getUser().getUserId().equals(persistentUser.getUserId())) {
+            throw new SecurityException("본인이 작성한 댓글만 수정할 수 있습니다.");
+        }
+
+        comment.setContent(newContent);
+        CommentEntity updated = commentRepository.save(comment);
+
+        return CommentResponseDTO.builder()
+                .commentId(updated.getCommentId())
+                .movieId(updated.getMovieId())
+                .content(updated.getContent())
+                .createdAt(updated.getCreatedAt())
+                .writer(updated.getUser().getNickname())
+                .build();
+    }
+
 }
