@@ -45,6 +45,7 @@ public class CommentService {
                         .content(c.getContent())
                         .createdAt(c.getCreatedAt())
                         .writer(c.getUser().getNickname())
+                        .writerId(c.getUser().getUserId())
                         .build()
                 ).toList();
     }
@@ -70,6 +71,7 @@ public class CommentService {
                 .content(updated.getContent())
                 .createdAt(updated.getCreatedAt())
                 .writer(updated.getUser().getNickname())
+                .writerId(updated.getUser().getUserId())
                 .build();
     }
 
