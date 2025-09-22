@@ -1,10 +1,10 @@
-package com.example.thisplay.common.Auth.service;
+package com.example.thisplay.common.movie.service;
 
-import com.example.thisplay.common.Auth.DTO.ReviewDTO;
-import com.example.thisplay.common.Auth.Entity.ReviewEntity;
 import com.example.thisplay.common.Auth.Entity.UserEntity;
-import com.example.thisplay.common.Auth.repository.ReviewRepository;
 import com.example.thisplay.common.Auth.repository.UserRepository;
+import com.example.thisplay.common.movie.dto.ReviewDTO;
+import com.example.thisplay.common.movie.entity.ReviewEntity;
+import com.example.thisplay.common.movie.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -98,7 +96,7 @@ public class ReviewService {
         reviewRepository.deleteById(id);
     }
 
-        // 페이징
+    // 페이징
     @Transactional(readOnly = true)
     public Page<ReviewDTO> paging(Pageable pageable) {
         return reviewRepository.findAll(pageable)

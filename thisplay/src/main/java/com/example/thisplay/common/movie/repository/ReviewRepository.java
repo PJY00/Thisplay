@@ -1,6 +1,6 @@
-package com.example.thisplay.common.Auth.repository;
+package com.example.thisplay.common.movie.repository;
 
-import com.example.thisplay.common.Auth.Entity.ReviewEntity;
+import com.example.thisplay.common.movie.entity.ReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

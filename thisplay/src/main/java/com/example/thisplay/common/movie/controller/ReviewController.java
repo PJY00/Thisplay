@@ -1,7 +1,7 @@
-package com.example.thisplay.common.Auth.Controller;
+package com.example.thisplay.common.movie.controller;
 
-import com.example.thisplay.common.Auth.DTO.ReviewDTO;
-import com.example.thisplay.common.Auth.service.ReviewService;
+import com.example.thisplay.common.movie.dto.ReviewDTO;
+import com.example.thisplay.common.movie.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

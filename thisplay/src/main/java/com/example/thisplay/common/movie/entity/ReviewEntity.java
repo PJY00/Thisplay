@@ -1,6 +1,7 @@
-package com.example.thisplay.common.Auth.Entity;
+package com.example.thisplay.common.movie.entity;
 
-import com.example.thisplay.common.Auth.DTO.ReviewDTO;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.movie.dto.ReviewDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

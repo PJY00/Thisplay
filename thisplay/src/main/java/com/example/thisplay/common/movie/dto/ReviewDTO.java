@@ -1,9 +1,8 @@
-package com.example.thisplay.common.Auth.DTO;
+package com.example.thisplay.common.movie.dto;
 
-import com.example.thisplay.common.Auth.Entity.ReviewEntity;
+import com.example.thisplay.common.movie.entity.ReviewEntity;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
