@@ -53,5 +53,18 @@ public class CommentController {
 
         return commentService.updateComment(commentId, user, dto.getContent());
     }
+    @DeleteMapping("/{movieId}/comments/{commentId}")
+    public Map<String, String> deleteComment(
+            @PathVariable Long movieId,
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        UserEntity user = userDetails.getUserEntity();
+        commentService.deleteComment(commentId, user);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "댓글이 삭제되었습니다.");
+        return response;
+    }
 }
 

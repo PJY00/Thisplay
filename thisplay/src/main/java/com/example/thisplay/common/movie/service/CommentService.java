@@ -8,12 +8,15 @@ import com.example.thisplay.common.movie.entity.CommentEntity;
 import com.example.thisplay.common.movie.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository; //DB 조회용 추가
@@ -68,6 +71,23 @@ public class CommentService {
                 .createdAt(updated.getCreatedAt())
                 .writer(updated.getUser().getNickname())
                 .build();
+    }
+
+
+    public void deleteComment(Long commentId, UserEntity user) {
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
+        // DB에서 영속 UserEntity 다시 조회
+        UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
+
+        // 본인 댓글인지 확인
+        if (!comment.getUser().getUserId().equals(persistentUser.getUserId())) {
+            throw new SecurityException("본인이 작성한 댓글만 삭제할 수 있습니다.");
+        }
+
+        commentRepository.delete(comment);
     }
 
 }
