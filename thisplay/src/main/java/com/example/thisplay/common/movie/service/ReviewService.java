@@ -65,35 +65,47 @@ public class ReviewService {
         return dtoList;
     }
 
-    // 리뷰 등록
+    //리뷰 등록
     @Transactional
-    public ReviewDTO create(ReviewDTO dto) {
-        UserEntity user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. id=" + dto.getUserId()));
+    public ReviewDTO create(ReviewDTO dto, Long userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. id=" + userId));
 
         ReviewEntity entity = ReviewEntity.toCreateEntity(dto, user);
         ReviewEntity saved = reviewRepository.save(entity);
+
         return ReviewDTO.toReviewDTO(saved);
     }
 
     // 리뷰 수정
     @Transactional
-    public ReviewDTO update(ReviewDTO dto) {
-        ReviewEntity reviewentity = reviewRepository.findById(dto.getReviewId())
+    public ReviewDTO update(ReviewDTO dto, Long currentUserId) {
+        ReviewEntity review = reviewRepository.findById(dto.getReviewId())
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. id=" + dto.getReviewId()));
 
-        reviewentity.setReviewTitle(dto.getReviewTitle());
-        reviewentity.setReviewBody(dto.getReviewBody());
-        reviewentity.setStar(dto.getStar());
+        if (!review.getUser().getUserId().equals(currentUserId)) {
+            throw new SecurityException("권한이 없습니다");
+        }
 
-        ReviewEntity updated = reviewRepository.save(reviewentity);
+        review.setReviewTitle(dto.getReviewTitle());
+        review.setReviewBody(dto.getReviewBody());
+        review.setStar(dto.getStar());
+
+        ReviewEntity updated = reviewRepository.save(review);
         return ReviewDTO.toReviewDTO(updated);
     }
 
     // 리뷰 삭제
     @Transactional
-    public void delete(Long id) {
-        reviewRepository.deleteById(id);
+    public void delete(Long reviewId, Long currentUserId) {
+        ReviewEntity review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰가 존재하지 않습니다. id=" + reviewId));
+
+        if (!review.getUser().getUserId().equals(currentUserId)) {
+            throw new SecurityException("권한이 없습니다");
+        }
+
+        reviewRepository.delete(review);
     }
 
     // 페이징

@@ -1,11 +1,14 @@
 package com.example.thisplay.common.movie.controller;
 
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -43,26 +46,23 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ReviewDTO create(@RequestBody ReviewDTO dto) {
-        return reviewService.create(dto);
-    } //등록
+    public ReviewDTO create(@RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        dto.setUserId(userDetails.getUserEntity().getUserId());
+        return reviewService.create(dto, userDetails.getUserId());
+    }
 
 
     @PutMapping("/{id}")
-    public ReviewDTO update(@PathVariable Long id, @RequestBody ReviewDTO dto) {
+    public ReviewDTO update(@PathVariable Long id, @RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
         dto.setReviewId(id);
-        return reviewService.update(dto);
-    }// 수정
+        return reviewService.update(dto, userDetails.getUserId());
+    }
 
     @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable Long id) {
-        reviewService.delete(id);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "삭제 완료");
-        response.put("deletedId", id);
-        return response;
-    } //삭제
+    public ResponseEntity<?> delete(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        reviewService.delete(id, userDetails.getUserId());
+        return ResponseEntity.ok("삭제 완료");
+    }
 
     @GetMapping("/paging")
     public Page<ReviewDTO> paging(@PageableDefault(page = 1) Pageable pageable) {
