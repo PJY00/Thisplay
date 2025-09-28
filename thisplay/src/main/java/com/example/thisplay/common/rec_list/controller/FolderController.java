@@ -1,9 +1,15 @@
 package com.example.thisplay.common.rec_list.controller;
 
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.rec_list.DTO.FolderDTO;
+import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
+import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.service.MovieFolderService;
+import com.example.thisplay.common.rec_list.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,21 +19,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FolderController {
     private final MovieFolderService folderService;
+    private final MovieService movieService;
+
 
     // 특정 유저의 폴더 리스트 조회
-    @GetMapping("/user/{userId}")
-    public List<MovieFolder> getFoldersByUser(@PathVariable Long userId){
-        UserEntity user = new UserEntity();
-        user.setUserId(userId); // 간단하게 userId만 셋팅, 실제로는 Authentication에서 가져오는 게 안전
+    @GetMapping("/me")
+    public List<ViewFolderDTO> getMyFolders(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserEntity user = userDetails.getUserEntity();
         return folderService.getFoldersByUser(user);
     }
 
     // 폴더 생성
     //쿼리 스트링 형태로 ?folderName=어쩌구 로 post주면 새로운 폴더 생성
-    @PostMapping("/create/{userId}")
-    public MovieFolder createFolder(@PathVariable Long userId, @RequestParam String folderName){
-        UserEntity user = new UserEntity();
-        user.setUserId(userId);
+    @PostMapping("/create")
+    public FolderDTO createFolder(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                  @RequestParam String folderName) {
+        UserEntity user = userDetails.getUserEntity();
         return folderService.createFolder(user, folderName);
+    }
+
+    // 폴더 내 영화 리스트 조회
+    @GetMapping("/{folderId}/movies")
+    public List<MovieEntity> getMoviesByFolder(@PathVariable Long folderId,
+                                               @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUserEntity().getUserId();
+        return movieService.getMoviesByFolder(folderId, userId);
     }
 }

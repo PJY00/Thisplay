@@ -1,29 +1,69 @@
 package com.example.thisplay.common.rec_list.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.repository.UserRepository;
+import com.example.thisplay.common.rec_list.DTO.FolderDTO;
+import com.example.thisplay.common.rec_list.DTO.MovieDTO;
+import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MovieFolderService {
     private final MovieFolderRepository folderRepository;
+    private final UserRepository userRepository;
 
     // 특정 유저의 폴더 리스트 조회
-    public List<MovieFolder> getFoldersByUser(UserEntity user) {
-        return folderRepository.findAllByUser(user);
+    public List<ViewFolderDTO> getFoldersByUser(UserEntity user) {
+        // 1. DB에서 영속화된 UserEntity 가져오기
+        UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
+                .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+
+        List<MovieFolder> folders = folderRepository.findAllByUser(persistentUser);
+
+        return folders.stream().map(folder -> {
+            ViewFolderDTO dto = new ViewFolderDTO();
+            dto.setFolderId(folder.getId());
+            dto.setFolderName(folder.getName());
+
+            List<MovieDTO> movieList = folder.getMovies().stream().map(m -> {
+                MovieDTO movieDTO = new MovieDTO();
+                movieDTO.setTmdbId(m.getTmdbId());
+                movieDTO.setTitle(m.getTitle());
+                movieDTO.setOriginalTitle(m.getOriginalTitle());
+                movieDTO.setPosterPath(m.getPosterPath());
+                return movieDTO;
+            }).collect(Collectors.toList());
+
+            dto.setMovies(movieList);
+            return dto;
+        }).collect(Collectors.toList());
     }
 
+
     // 새로운 폴더 생성
-    public MovieFolder createFolder(UserEntity user, String folderName) {
+    public FolderDTO createFolder(UserEntity user, String folderName) {
+        // DB에서 영속화된 User 가져오기
+        UserEntity User = userRepository.findByNickname(user.getNickname())
+                .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+
         MovieFolder folder = MovieFolder.builder()
                 .name(folderName)
-                .user(user)
+                .user(User)
                 .build();
-        return folderRepository.save(folder);
+        MovieFolder savedFolder = folderRepository.save(folder);
+
+        // DTO로 변환 후 반환
+        return new FolderDTO(
+                savedFolder.getId(),
+                savedFolder.getName(),
+                savedFolder.getUser().getNickname()
+        );
     }
 }
