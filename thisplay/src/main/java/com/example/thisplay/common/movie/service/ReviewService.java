@@ -112,7 +112,13 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public Page<ReviewDTO> paging(Pageable pageable) {
         return reviewRepository.findAll(pageable)
-                .map(ReviewDTO::toReviewDTO); // Page 매핑에도 static 메서드 활용
+                .map(ReviewDTO::toReviewDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ReviewDTO> getReviewsByMoviePaging(int movieId, Pageable pageable) {
+        return reviewRepository.findByMovieId(movieId, pageable)
+                .map(ReviewDTO::toReviewDTO);
     }
 
 

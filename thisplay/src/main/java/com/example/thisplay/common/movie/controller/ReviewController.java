@@ -6,6 +6,7 @@ import com.example.thisplay.common.movie.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,7 +66,12 @@ public class ReviewController {
     }
 
     @GetMapping("/paging")
-    public Page<ReviewDTO> paging(@PageableDefault(page = 1) Pageable pageable) {
+    public Page<ReviewDTO> paging(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return reviewService.paging(pageable);
-    } //페이징
+    }
+
+    @GetMapping("/movie/{movieId}/paging")
+    public Page<ReviewDTO> getByMoviePaging(@PathVariable int movieId, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return reviewService.getReviewsByMoviePaging(movieId, pageable);
+    }
 }
