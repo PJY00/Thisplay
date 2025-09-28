@@ -1,10 +1,9 @@
-package com.example.thisplay.common.rec_list.service;
+package com.example.thisplay.common.moviepage.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.moviepage.DTO.Movie_FolderDTO;
 import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
-import com.example.thisplay.common.moviepage.exception.FolderAccessDeniedException;
-import com.example.thisplay.common.rec_list.DTO.MovieDTO;
+import com.example.thisplay.common.moviepage.DTO.MovieDTO;
 import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
 import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

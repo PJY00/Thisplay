@@ -1,4 +1,4 @@
-package com.example.thisplay.common.rec_list.DTO;
+package com.example.thisplay.common.moviepage.DTO;
 
 import lombok.*;
 
