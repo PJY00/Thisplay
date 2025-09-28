@@ -4,6 +4,8 @@ import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.moviepage.DTO.Movie_FolderDTO;
 import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
 import com.example.thisplay.common.moviepage.exception.FolderAccessDeniedException;
+import com.example.thisplay.common.rec_list.DTO.MovieDTO;
+import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
 import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
@@ -64,13 +66,28 @@ public class MovieService {
     }
 
     // 폴더별 영화 리스트 조회
-    public List<MovieEntity> getMoviesByFolder(Long folderId, Long userId) {
+    public ViewFolderDTO getMoviesByFolder(Long folderId, UserEntity userNickname) {
         MovieFolder folder = folderRepository.findById(folderId)
                 .orElseThrow(() -> new RuntimeException("폴더 없음"));
         // ✅ 폴더 소유자 검증
-        if (!folder.getUser().getUserId().equals(userId)) {
+        if (!Objects.equals(folder.getUser().getNickname(), userNickname.getNickname())) {
             throw new RuntimeException("해당 폴더에 접근 권한이 없습니다.");
         }
-        return movieRepository.findAllByFolder(folder);
+        // MovieEntity → MovieDTO 변환
+        List<MovieDTO> movieDTOs = folder.getMovies().stream()
+                .map(entity -> new MovieDTO(
+                        entity.getTmdbId(),
+                        entity.getTitle(),
+                        entity.getOriginalTitle(),
+                        entity.getPosterPath()
+                ))
+                .toList();
+
+        // ViewFolderDTO 생성
+        return new ViewFolderDTO(
+                folder.getId(),
+                folder.getName(),
+                movieDTOs
+        );
     }
 }
