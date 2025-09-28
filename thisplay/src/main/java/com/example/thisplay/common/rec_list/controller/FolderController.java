@@ -40,9 +40,9 @@ public class FolderController {
 
     // 폴더 내 영화 리스트 조회
     @GetMapping("/{folderId}/movies")
-    public List<MovieEntity> getMoviesByFolder(@PathVariable Long folderId,
+    public ViewFolderDTO getMoviesByFolder(@PathVariable Long folderId,
                                                @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Long userId = userDetails.getUserEntity().getUserId();
-        return movieService.getMoviesByFolder(folderId, userId);
+        UserEntity user = userDetails.getUserEntity();
+        return movieService.getMoviesByFolder(folderId, user);
     }
 }
