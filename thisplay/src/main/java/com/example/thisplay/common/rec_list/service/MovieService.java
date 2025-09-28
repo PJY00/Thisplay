@@ -25,7 +25,7 @@ public class MovieService {
     private final TmdbApiClient tmdbApiClient;
 
     // 영화 저장
-    public Optional<movie_saveDTO> saveMovie(Long folderId, int tmdbId, UserEntity loginUser) {
+    public movie_saveDTO saveMovie(Long folderId, int tmdbId, UserEntity loginUser) {
         MovieFolder folder = folderRepository.findById(folderId)
                 .orElseThrow(() -> new RuntimeException("폴더 없음"));
 
@@ -54,14 +54,13 @@ public class MovieService {
         // DTO 변환
         Movie_FolderDTO folderDTO = new Movie_FolderDTO(folder.getId(),folder.getName());
 
-        movie_saveDTO dto=new movie_saveDTO(
+        return new movie_saveDTO(
                 movie.getTmdbId(),
                 movie.getTitle(),
                 movie.getOriginalTitle(),
                 movie.getPosterPath(),
                 folderDTO
         );
-        return Optional.of(dto);
     }
 
     // 폴더별 영화 리스트 조회
