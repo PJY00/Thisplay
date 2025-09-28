@@ -1,5 +1,6 @@
 package com.example.thisplay.common.rec_list.DTO;
 
+import com.example.thisplay.common.moviepage.DTO.MovieDTO;
 import lombok.*;
 
 import java.util.List;

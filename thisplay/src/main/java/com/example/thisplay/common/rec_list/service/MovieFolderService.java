@@ -3,7 +3,7 @@ package com.example.thisplay.common.rec_list.service;
 import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.rec_list.DTO.FolderDTO;
-import com.example.thisplay.common.rec_list.DTO.MovieDTO;
+import com.example.thisplay.common.moviepage.DTO.MovieDTO;
 import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
