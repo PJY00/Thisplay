@@ -1,10 +1,13 @@
 package com.example.thisplay.common.moviepage;
 
+import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.service.MovieService;
 import com.example.thisplay.global.api.TmdbApiClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -25,13 +28,10 @@ public class MovieController {
 
     // 영화 DB에 저장
     @PostMapping("/save/{folderId}/{tmdbId}")
-    public MovieEntity saveMovie(@PathVariable Long folderId, @PathVariable int tmdbId) {
-        return movieService.saveMovie(folderId, tmdbId);
-    }
-
-    // 폴더 내 영화 리스트 조회
-    @GetMapping("/folder/{folderId}")
-    public List<MovieEntity> getMoviesByFolder(@PathVariable Long folderId) {
-        return movieService.getMoviesByFolder(folderId);
+    public MovieEntity saveMovie(@PathVariable Long folderId,
+                                 @PathVariable int tmdbId,
+                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserEntity loginUser = userDetails.getUserEntity();
+        return movieService.saveMovie(folderId, tmdbId, loginUser);
     }
 }

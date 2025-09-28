@@ -19,7 +19,7 @@ public class MovieEntity {
     private String originalTitle;
     private String posterPath;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id")
     private MovieFolder folder;
 }
