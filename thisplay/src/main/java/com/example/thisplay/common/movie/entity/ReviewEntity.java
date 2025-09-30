@@ -7,7 +7,9 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,9 +35,13 @@ public class ReviewEntity {
 
     @Column(columnDefinition = "INT DEFAULT 0")
     private int commentCount;
-    private int likeCount;
     private int star;
     private int seen_arrange;
+    private int likeCount;
+
+    @OneToMany(mappedBy = "review")
+    @Builder.Default
+    private List<LikeEntity> likes = new ArrayList<>();
 
     @Column
     private int movieId; // 지금은 String, 나중에 MovieEntity로 연결 가능
