@@ -31,4 +31,7 @@ public class UserEntity {
 
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    @Column(name = "profile_img_url")
+    private String profileImgUrl;
 }
