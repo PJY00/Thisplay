@@ -21,6 +21,22 @@ public class LikeService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
+    public boolean isReviewWriter(Long userId, Long reviewId) {
+        ReviewEntity review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("리뷰 없음"));
+        return review.getUser().getUserId().equals(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isLikeOwner(Long userId, Long reviewId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("유저 없음"));
+        ReviewEntity review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("리뷰 없음"));
+        return likeRepository.existsByReviewAndUser(review, user);
+    }
+
     @Transactional
     public void addLike(Long userId, Long reviewId) {
         UserEntity user = userRepository.findById(userId)
