@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thisplay</title>
+    <!--css 적용 전 카드 list style 확인-->
+    <style>
+        .card-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            /* 가로 스크롤 가능 */
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-bar">
+        <nav class="header-nav-menu">
+            <a class="nav-item" href="/">로고</a>
+            <a class="nav-item" href="/mypage">마이페이지</a>
+            <a class="nav-item" href="/friend">친구</a>
+            <a class="nav-item" href="/login">로그인</a>
+            <a class="nav-item" href="/settings">설정</a>
+        </nav>
+    </header>
+    <hr>
+    <main class="main_content">
+        <section class="search">
+            <h2>검색창</h2>
+            <search>
+                <form action="/search">
+                    <input type="search" id="movie" name="q" placeholder="검색어를 입력하세요" />
+                    <button type="submit">Search</button>
+                </form>
+            </search>
+        </section>
+        <hr>
+        <section class="movielist">
+            <label for="genre-select">Top 20</label>
+            <select name="genres" id="genre-select">
+                <option value="action">액션</option>
+                <option value="adventure">모험</option>
+                <option value="animation">애니</option>
+                <option value="comedy">코미디</option>
+                <option value="crime">범죄</option>
+                <option value="documentary">다큐멘터리</option>
+                <option value="drama">드라마</option>
+                <option value="fantasy">판타지</option>
+                <option value="history">역사</option>
+                <option value="horror">공포</option>
+                <option value="music">음악</option>
+                <option value="mistery">미스터리</option>
+                <option value="romance">로맨스</option>
+                <option value="SF">SF</option>
+                <option value="TV-drama">TV 드라마</option>
+                <option value="war">전쟁</option>
+                <option value="westerns">서부</option>
+            </select>
+        </section>
+    </main>
+    <hr>
+    <footer>
+        <section class="footer_contents">
+            <p class="coptright">Copyright @SSOK All right reserved.</p>
+        </section>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
