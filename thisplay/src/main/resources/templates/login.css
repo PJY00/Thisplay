@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap");
+@import url('https://unicons.iconscout.com/release/v4.0.0/css/line.css');
 
 :root {
     --primary-glow: rgba(0, 255, 170, 0.7);
@@ -25,7 +26,7 @@ body {
     color: #c4c3ca;
     /* background-color: #1f2029; */
     background-color: #050505;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     margin: 0;
     padding: 0;
     display: flex;
@@ -72,7 +73,9 @@ h6 span{
     text-transform: uppercase;
     /* color: #ffeba7; */
     color: rgba(0, 255, 170, 0.7);
-    text-shadow: 0 0 15px var(--primary-glow);
+    /* color: white; */
+    text-shadow: 0 0 1rem var(--primary-glow);
+    /* text-shadow: 0 0 15px var(--primary-glow); */
     font-size: 0.9rem;
     margin-bottom: 1rem;
 }
@@ -98,12 +101,14 @@ h6 span{
     margin: 10px auto;
     cursor: pointer;
     background-color: #ffeba7;
+    /* background-color: #318353; */
 }
 
 .checkbox:checked + label:before,
 .checkbox:not(:checked) + label:before {
+    font-family: 'unicons-line';
     content: '\eb4f';
-    font-family: 'unicons';
+    /* font-family: 'unicons'; */
     position: absolute;
     display: block;
     width: 36px;
@@ -111,6 +116,7 @@ h6 span{
     border-radius: 50%;
     color: #ffeba7;
     background-color: #102770;
+    /* background-color: #318353; */
     top: -10px;
     left: -10px;
     line-height: 36px;
@@ -199,8 +205,10 @@ h6 span{
     left: 0;
     padding: 2rem 1.5rem;
     border-radius: 0.8rem;
+    border: 1px solid rgb(109, 109, 109);
     box-sizing: border-box;
     box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3);
+    box-shadow: 0 0rem 1.25rem var(--primary-glow);
     backface-visibility: hidden;
     transform-style: preserve-3d;
     transition: all 0.6s ease-out;
@@ -212,8 +220,9 @@ h6 span{
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
     /* color: #ffeba7; */
-    color: rgba(0, 255, 170, 0.7);
-    text-shadow: 0 0 15px var(--primary-glow);
+    /* color: rgba(0, 255, 170, 0.7); */
+    color: white;
+    text-shadow: 0 0 1.2rem var(--primary-glow);
 }
 
 .card-signup {
@@ -286,18 +295,21 @@ button:hover {
     /* background-color: #1f2029; */
     background-color: rgba(5, 10, 15, 0.9);
     border: none;
+    /* border: 1px solid rgb(109, 109, 109); */
     outline: none;
     /* box-shadow: 0 4px 8px rgba(21, 21, 21, 0.2); */
+    box-shadow: 0 0 12px rgba(137, 137, 137, 0.2);
     /* box-shadow: 0 0.1rem 0.2rem rgba(0, 255, 170, 0.3); */
     transition: all 0.2s linear;
 }
 
 .form-group input{
     margin-bottom: 1rem;
+    box-shadow: 0 4px 4px var(--primary-glow);
 }
 
 .form-style:focus {
-    box-shadow: 0 4px 12px rgba(255, 235, 167, 0.2);
+    box-shadow: 0 2px 12px var(--primary-glow);
 }
 
 .form-group input::placeholder  {
