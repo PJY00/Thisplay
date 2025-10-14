@@ -19,6 +19,7 @@ public class CustomUserDetails implements UserDetails {
         return userEntity.getUserId();
     }
 
+
     //필요하면 원본 객체를 그대로 가져옴
     public UserEntity getUserEntity() {
         return userEntity;
