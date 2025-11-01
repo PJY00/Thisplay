@@ -28,10 +28,14 @@ public class ReviewController {
         return reviewService.getAllReviews();
     }
 
-    // 단일 리뷰 조회
+    // 상세 리뷰 조회 + 조회수 증가
     @GetMapping("/{id}")
-    public ReviewDTO getReview(@PathVariable Long id) {
-        return reviewService.getReview(id);
+    public ReviewDTO getReview(@PathVariable Long id,
+                               @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long currentUserId = (userDetails != null)
+                ? userDetails.getUserEntity().getUserId()
+                : null;
+        return reviewService.getReviewAndIncrease(id, currentUserId);
     }
 
     // 영화별 리뷰 조회
@@ -73,6 +77,5 @@ public class ReviewController {
     public Page<ReviewDTO> getByMoviePaging(@PathVariable int movieId, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return reviewService.getReviewsByMoviePaging(movieId, pageable);
     }
-
 
 }
