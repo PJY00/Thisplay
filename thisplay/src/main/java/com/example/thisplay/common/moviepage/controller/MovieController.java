@@ -24,7 +24,7 @@ public class MovieController {
         return tmdbApiClient.getMovieDetail(movieId);
     }
 
-    // 영화 DB에 저장
+    // 영화 DB에 저장-> 이것도 폴더 id말고 폴더 이름을 사용할까 고민중임.
     @PostMapping("/save/{folderId}/{tmdbId}")
     public movie_saveDTO saveMovie(@PathVariable Long folderId,
                                    @PathVariable int tmdbId,
@@ -32,4 +32,15 @@ public class MovieController {
         UserEntity loginUser = userDetails.getUserEntity();
         return movieService.saveMovie(folderId, tmdbId, loginUser);
     }
+
+    // 폴더에 추가한 영화 삭제
+    @DeleteMapping("/delete/{folderId}/{tmdbId}")
+    public String deleteMovieFromFolder(@PathVariable Long folderId,
+                                        @PathVariable int tmdbId,
+                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserEntity user = userDetails.getUserEntity();
+        String resultMessage = movieService.deleteMovieFromFolder(folderId, tmdbId, user);
+        return resultMessage;
+    }
+
 }

@@ -88,4 +88,27 @@ public class MovieService {
                 movieDTOs
         );
     }
+
+    // 폴더 내 단일 영화 삭제
+    public String deleteMovieFromFolder(Long folderId, int tmdbId, UserEntity loginUser) {
+        // 1️⃣ 폴더 존재 여부 확인
+        MovieFolder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new RuntimeException("폴더를 찾을 수 없습니다."));
+
+        // 2️⃣ 폴더 소유자 검증
+        if (!Objects.equals(folder.getUser().getNickname(), loginUser.getNickname())) {
+            throw new RuntimeException("해당 폴더에 접근 권한이 없습니다.");
+        }
+
+        // 3️⃣ 폴더 내 영화 존재 여부 확인
+        MovieEntity movie = movieRepository.findByTmdbIdAndFolder_Id(tmdbId, folderId)
+                .orElseThrow(() -> new RuntimeException("해당 영화가 폴더에 없습니다."));
+
+        // 4️⃣ 삭제 수행
+        movieRepository.delete(movie);
+
+        // 5️⃣ 결과 메시지 반환
+        return String.format("폴더 '%s'에서 영화 '%s'가 삭제되었습니다.", folder.getName(), movie.getTitle());
+    }
+
 }
