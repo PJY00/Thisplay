@@ -33,6 +33,9 @@ public class ReviewEntity {
     @Column(length=500, nullable = false)
     private String reviewBody;
 
+    @Column(length = 100, nullable = false)
+    private String oneLineReview;
+
     @Column(columnDefinition = "INT DEFAULT 0")
     private int commentCount;
     private int star;
@@ -57,6 +60,7 @@ public class ReviewEntity {
                 .user(user)
                 .reviewTitle(dto.getReviewTitle())
                 .reviewBody(dto.getReviewBody())
+                .oneLineReview(dto.getOneLineReview())
                 .star(dto.getStar())
                 .movieId(dto.getMovieId())
                 .seen_arrange(0)

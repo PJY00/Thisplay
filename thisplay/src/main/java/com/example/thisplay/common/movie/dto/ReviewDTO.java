@@ -22,6 +22,7 @@ public class ReviewDTO {
 
     private String reviewTitle;
     private String reviewBody;
+    private String oneLineReview;
     private int star;
     private int seenArrange;
     private int likeCount;
@@ -35,6 +36,7 @@ public class ReviewDTO {
         dto.setReviewId(entity.getReviewId());
         dto.setReviewTitle(entity.getReviewTitle());
         dto.setReviewBody(entity.getReviewBody());
+        dto.setOneLineReview(entity.getOneLineReview());
         dto.setMovieId(entity.getMovieId());
         dto.setStar(entity.getStar());
         dto.setSeenArrange(entity.getSeen_arrange());
