@@ -35,6 +35,9 @@ public class UserEntity {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    @Column(name = "profile_img_url")
+    private String profileImgUrl;
+
     // 유저가 가진 폴더 리스트 (1:N)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieFolder> folders = new ArrayList<>();
