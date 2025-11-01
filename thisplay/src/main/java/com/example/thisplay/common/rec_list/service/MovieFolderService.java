@@ -66,4 +66,24 @@ public class MovieFolderService {
                 savedFolder.getUser().getNickname()
         );
     }
+
+    // 폴더 삭제
+    public void deleteFolder(Long folderId, UserEntity user) {
+        // 1. 유저 확인 (DB에 존재하는 유저인지)
+        UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
+                .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+
+        // 2. 폴더 가져오기
+        MovieFolder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new RuntimeException("폴더를 찾을 수 없습니다."));
+
+        // 3. 해당 폴더가 로그인한 유저의 소유인지 확인(타인은 할 수 없게)
+        if (!folder.getUser().getUserId().equals(persistentUser.getUserId())) {
+            throw new RuntimeException("이 폴더를 삭제할 권한이 없습니다.");
+        }
+
+        // 4. 삭제 (CascadeType.ALL + orphanRemoval로 인해 폴더 안 영화도 같이 삭제됨)
+        folderRepository.delete(folder);
+    }
+
 }

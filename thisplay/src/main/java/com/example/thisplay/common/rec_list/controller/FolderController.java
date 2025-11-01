@@ -18,9 +18,12 @@ import java.util.List;
 public class FolderController {
     private final MovieFolderService folderService;
     private final MovieService movieService;
+    //권한 (공개범위)나누어서 특정 유저 폴더 리스트 허가를 해야 함.
+    //전체 공개 리스트 설정.
+    //enum을 달아서 1은 개인, 2는 친구, 3은 전체공개로 해서 3은 접근성(id검사)검사 하지 말고...?
 
-
-    // 특정 유저의 폴더 리스트 조회
+    // 내 폴더 리스트 조회
+    // 현재는 타인이 접근하면 그냥 빈 리스트 반환함
     @GetMapping("/me")
     public List<ViewFolderDTO> getMyFolders(@AuthenticationPrincipal CustomUserDetails userDetails) {
         UserEntity user = userDetails.getUserEntity();
@@ -36,11 +39,20 @@ public class FolderController {
         return folderService.createFolder(user, folderName);
     }
 
-    // 폴더 내 영화 리스트 조회
+    // 폴더 내 영화 리스트 조회-> 폴더 ID말고 폴더 이름으로 할까 고민중
     @GetMapping("/{folderId}/movies")
     public ViewFolderDTO getMoviesByFolder(@PathVariable Long folderId,
                                                @AuthenticationPrincipal CustomUserDetails userDetails) {
         UserEntity user = userDetails.getUserEntity();
         return movieService.getMoviesByFolder(folderId, user);
+    }
+
+    //폴더 삭제 기능
+    @DeleteMapping("/{folderId}")
+    public String deleteFolder(@PathVariable Long folderId,
+                               @AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserEntity user = userDetails.getUserEntity();
+        folderService.deleteFolder(folderId, user);
+        return "폴더 및 해당 폴더 내 영화가 성공적으로 삭제되었습니다.";
     }
 }
