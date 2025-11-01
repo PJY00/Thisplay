@@ -87,9 +87,10 @@ public class ReviewService {
             throw new SecurityException("권한이 없습니다");
         }
 
-        review.setReviewTitle(dto.getReviewTitle());
-        review.setReviewBody(dto.getReviewBody());
-        review.setStar(dto.getStar());
+        if (dto.getReviewTitle() != null) review.setReviewTitle(dto.getReviewTitle());
+        if (dto.getReviewBody() != null) review.setReviewBody(dto.getReviewBody());
+        if (dto.getOneLineReview() != null) review.setOneLineReview(dto.getOneLineReview());
+        if (dto.getStar() != 0) review.setStar(dto.getStar());
 
         ReviewEntity updated = reviewRepository.save(review);
         return ReviewDTO.toReviewDTO(updated);

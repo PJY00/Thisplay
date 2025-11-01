@@ -52,9 +52,8 @@ public class ReviewController {
         return reviewService.create(dto, userDetails.getUserId());
     }
 
-
-    @PutMapping("/{id}")
-    public ReviewDTO update(@PathVariable Long id, @RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    @PatchMapping("/{id}")
+    public ReviewDTO patchReview(@PathVariable Long id, @RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
         dto.setReviewId(id);
         return reviewService.update(dto, userDetails.getUserId());
     }
@@ -74,4 +73,6 @@ public class ReviewController {
     public Page<ReviewDTO> getByMoviePaging(@PathVariable int movieId, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return reviewService.getReviewsByMoviePaging(movieId, pageable);
     }
+
+
 }
