@@ -5,6 +5,7 @@ import com.example.thisplay.common.moviepage.DTO.Movie_FolderDTO;
 import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
 import com.example.thisplay.common.moviepage.DTO.MovieDTO;
 import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
+import com.example.thisplay.common.rec_list.entity.FolderVisibility;
 import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,29 +66,45 @@ public class MovieService {
     }
 
     // 폴더별 영화 리스트 조회
-    public ViewFolderDTO getMoviesByFolder(Long folderId, UserEntity userNickname) {
+    public ViewFolderDTO getMoviesByFolder(Long folderId, UserEntity requester) {
         MovieFolder folder = folderRepository.findById(folderId)
-                .orElseThrow(() -> new RuntimeException("폴더 없음"));
-        // ✅ 폴더 소유자 검증
-        if (!Objects.equals(folder.getUser().getNickname(), userNickname.getNickname())) {
-            throw new RuntimeException("해당 폴더에 접근 권한이 없습니다.");
-        }
-        // MovieEntity → MovieDTO 변환
-        List<MovieDTO> movieDTOs = folder.getMovies().stream()
-                .map(entity -> new MovieDTO(
-                        entity.getTmdbId(),
-                        entity.getTitle(),
-                        entity.getOriginalTitle(),
-                        entity.getPosterPath()
-                ))
-                .toList();
+                .orElseThrow(() -> new RuntimeException("폴더를 찾을 수 없습니다."));
 
-        // ViewFolderDTO 생성
+        // 1. 권한 확인
+        if (folder.getVisibility() == FolderVisibility.PRIVATE &&
+                !folder.getUser().getUserId().equals(requester.getUserId())) {
+            throw new RuntimeException("이 폴더는 비밀 폴더로 접근할 수 없습니다.");
+        }
+
+//        if (folder.getVisibility() == FolderVisibility.FRIENDS &&
+//                !isFriend(requester, folder.getUser())) {
+//            throw new RuntimeException("친구공개 폴더는 친구만 볼 수 있습니다.");
+//        }
+
+        // 2. DTO 변환
+        return mapToViewFolderDTO(folder);
+    }
+//임시 친구 처리...
+//    private boolean isFriend(UserEntity requester, UserEntity folderOwner) {
+//        // 친구 여부 확인 로직
+//        return requester.getFriends().contains(folderOwner); // 예시
+//    }
+
+    private ViewFolderDTO mapToViewFolderDTO(MovieFolder folder) {
+        List<MovieDTO> movies = folder.getMovies().stream().map(m -> {
+            return new MovieDTO(
+                    m.getTmdbId(),
+                    m.getTitle(),
+                    m.getOriginalTitle(),
+                    m.getPosterPath()
+            );
+        }).collect(Collectors.toList());
+
         return new ViewFolderDTO(
                 folder.getId(),
                 folder.getName(),
-                folder.getVisibility().name(),
-                movieDTOs
+                folder.getVisibility(), // 새로 추가한 필드
+                movies
         );
     }
 

@@ -1,5 +1,6 @@
 package com.example.thisplay.common.rec_list.DTO;
 
+import com.example.thisplay.common.rec_list.entity.FolderVisibility;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ public class FolderDTO {
     private Long folderId;
     private String folderName;
     private String userNickname;
-    private String visibility;
+    private FolderVisibility visibility;
 }

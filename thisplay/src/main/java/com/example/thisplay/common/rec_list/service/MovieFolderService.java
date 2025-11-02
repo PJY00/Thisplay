@@ -20,31 +20,61 @@ public class MovieFolderService {
     private final MovieFolderRepository folderRepository;
     private final UserRepository userRepository;
 
-    // 특정 유저의 폴더 리스트 조회
+    // ✅ 본인 폴더 조회 (기존 그대로)
     public List<ViewFolderDTO> getFoldersByUser(UserEntity user) {
         UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
                 .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
-
         List<MovieFolder> folders = folderRepository.findAllByUser(persistentUser);
+        return folders.stream()
+                .map(this::mapToViewFolderDTO)
+                .collect(Collectors.toList());
+    }
+    // ✅ 다른 유저 폴더 조회 (공개 범위 적용)
+    public List<ViewFolderDTO> getFoldersByNicknameWithVisibility(String nickname, UserEntity viewer) {
+        UserEntity folderOwner = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
 
-        return folders.stream().map(folder -> {
-            ViewFolderDTO dto = new ViewFolderDTO();
-            dto.setFolderId(folder.getId());
-            dto.setFolderName(folder.getName());
-            dto.setVisibility(folder.getVisibility().name()); // 👈 추가됨
+        List<MovieFolder> allFolders = folderRepository.findAllByUser(folderOwner);
 
-            List<MovieDTO> movieList = folder.getMovies().stream().map(m -> {
-                MovieDTO movieDTO = new MovieDTO();
-                movieDTO.setTmdbId(m.getTmdbId());
-                movieDTO.setTitle(m.getTitle());
-                movieDTO.setOriginalTitle(m.getOriginalTitle());
-                movieDTO.setPosterPath(m.getPosterPath());
-                return movieDTO;
-            }).collect(Collectors.toList());
+        return allFolders.stream()
+                .filter(folder -> {
+                    FolderVisibility visibility = folder.getVisibility();
 
-            dto.setMovies(movieList);
-            return dto;
-        }).collect(Collectors.toList());
+                    // 1️⃣ 내 폴더는 전부 허용
+                    if (folderOwner.getUserId().equals(viewer.getUserId())) return true;
+
+                    // 2️⃣ 전체 공개
+                    if (visibility == FolderVisibility.PUBLIC) return true;
+
+                    // 3️⃣ 친구만 공개
+                    if (visibility == FolderVisibility.FRIENDS) {
+                        // TODO: 친구 관계 테이블을 나중에 만들어서 실제 친구 확인하도록 수정
+                        //return friendService.areFriends(viewer,folderOwner)와 같이 수정하면 된다고 함.
+                        // 지금은 임시로 false로 처리
+                        return false;
+                    }
+
+                    // 4️⃣ 비공개 폴더는 차단
+                    return false;
+                })
+                .map(this::mapToViewFolderDTO)
+                .collect(Collectors.toList());
+    }
+    // ✅ DTO 변환 공통 메서드
+    private ViewFolderDTO mapToViewFolderDTO(MovieFolder folder) {
+        ViewFolderDTO dto = new ViewFolderDTO();
+        dto.setFolderId(folder.getId());
+        dto.setFolderName(folder.getName());
+        dto.setVisibility(folder.getVisibility());
+        dto.setMovies(folder.getMovies().stream().map(m -> {
+            MovieDTO movieDTO = new MovieDTO();
+            movieDTO.setTmdbId(m.getTmdbId());
+            movieDTO.setTitle(m.getTitle());
+            movieDTO.setOriginalTitle(m.getOriginalTitle());
+            movieDTO.setPosterPath(m.getPosterPath());
+            return movieDTO;
+        }).collect(Collectors.toList()));
+        return dto;
     }
 
     // 새로운 폴더 생성
@@ -65,7 +95,7 @@ public class MovieFolderService {
                 savedFolder.getId(),
                 savedFolder.getName(),
                 savedFolder.getUser().getNickname(),
-                savedFolder.getVisibility().name()
+                savedFolder.getVisibility()
         );
     }
 

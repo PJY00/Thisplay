@@ -30,6 +30,14 @@ public class FolderController {
         UserEntity user = userDetails.getUserEntity();
         return folderService.getFoldersByUser(user);
     }
+    // ✅ 다른 유저의 폴더 조회
+    @GetMapping("/{nickname}")
+    public List<ViewFolderDTO> getOtherUserFolders(
+            @PathVariable String nickname,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserEntity viewer = userDetails.getUserEntity();
+        return folderService.getFoldersByNicknameWithVisibility(nickname, viewer);
+    }
 
     // 폴더 생성
     //쿼리 스트링 형태로 ?folderName=어쩌구 로 post주면 새로운 폴더 생성
@@ -47,8 +55,8 @@ public class FolderController {
     @GetMapping("/{folderId}/movies")
     public ViewFolderDTO getMoviesByFolder(@PathVariable Long folderId,
                                                @AuthenticationPrincipal CustomUserDetails userDetails) {
-        UserEntity user = userDetails.getUserEntity();
-        return movieService.getMoviesByFolder(folderId, user);
+        UserEntity requester = userDetails.getUserEntity();
+        return movieService.getMoviesByFolder(folderId, requester);
     }
 
     //폴더 삭제 기능
