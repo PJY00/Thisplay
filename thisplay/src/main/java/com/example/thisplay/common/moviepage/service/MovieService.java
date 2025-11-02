@@ -85,6 +85,7 @@ public class MovieService {
         return new ViewFolderDTO(
                 folder.getId(),
                 folder.getName(),
+                folder.getVisibility().name(),
                 movieDTOs
         );
     }

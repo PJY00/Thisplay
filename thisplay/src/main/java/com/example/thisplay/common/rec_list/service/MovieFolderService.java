@@ -5,6 +5,7 @@ import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.rec_list.DTO.FolderDTO;
 import com.example.thisplay.common.moviepage.DTO.MovieDTO;
 import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
+import com.example.thisplay.common.rec_list.entity.FolderVisibility;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,6 @@ public class MovieFolderService {
 
     // 특정 유저의 폴더 리스트 조회
     public List<ViewFolderDTO> getFoldersByUser(UserEntity user) {
-        // 1. DB에서 영속화된 UserEntity 가져오기
         UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
                 .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
 
@@ -31,6 +31,7 @@ public class MovieFolderService {
             ViewFolderDTO dto = new ViewFolderDTO();
             dto.setFolderId(folder.getId());
             dto.setFolderName(folder.getName());
+            dto.setVisibility(folder.getVisibility().name()); // 👈 추가됨
 
             List<MovieDTO> movieList = folder.getMovies().stream().map(m -> {
                 MovieDTO movieDTO = new MovieDTO();
@@ -46,9 +47,8 @@ public class MovieFolderService {
         }).collect(Collectors.toList());
     }
 
-
     // 새로운 폴더 생성
-    public FolderDTO createFolder(UserEntity user, String folderName) {
+    public FolderDTO createFolder(UserEntity user, String folderName, FolderVisibility visibility) {
         // DB에서 영속화된 User 가져오기
         UserEntity User = userRepository.findByNickname(user.getNickname())
                 .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
@@ -56,6 +56,7 @@ public class MovieFolderService {
         MovieFolder folder = MovieFolder.builder()
                 .name(folderName)
                 .user(User)
+                .visibility(visibility!=null?visibility:FolderVisibility.PRIVATE)
                 .build();
         MovieFolder savedFolder = folderRepository.save(folder);
 
@@ -63,7 +64,8 @@ public class MovieFolderService {
         return new FolderDTO(
                 savedFolder.getId(),
                 savedFolder.getName(),
-                savedFolder.getUser().getNickname()
+                savedFolder.getUser().getNickname(),
+                savedFolder.getVisibility().name()
         );
     }
 
@@ -86,4 +88,19 @@ public class MovieFolderService {
         folderRepository.delete(folder);
     }
 
+    //공개 범위 변경 메서드 추가
+    public void updateFolderVisibility(Long folderId, FolderVisibility newVisibility, UserEntity user) {
+        UserEntity persistentUser = userRepository.findByNickname(user.getNickname())
+                .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+
+        MovieFolder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new RuntimeException("폴더를 찾을 수 없습니다."));
+
+        if (!folder.getUser().getUserId().equals(persistentUser.getUserId())) {
+            throw new RuntimeException("이 폴더의 공개 범위를 변경할 권한이 없습니다.");
+        }
+
+        folder.setVisibility(newVisibility);
+        folderRepository.save(folder);
+    }
 }

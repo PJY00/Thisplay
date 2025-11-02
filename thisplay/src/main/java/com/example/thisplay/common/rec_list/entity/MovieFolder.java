@@ -26,4 +26,8 @@ public class MovieFolder {
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieEntity> movies = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private FolderVisibility visibility = FolderVisibility.PRIVATE; // 기본값: 비공개
 }
