@@ -12,5 +12,6 @@ import java.util.List;
 public class ViewFolderDTO {
     private Long FolderId;
     private String FolderName;
+    private String visibility;
     private List<MovieDTO> movies;
 }

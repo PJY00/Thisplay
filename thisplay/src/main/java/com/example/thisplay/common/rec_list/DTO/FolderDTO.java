@@ -13,4 +13,5 @@ public class FolderDTO {
     private Long folderId;
     private String folderName;
     private String userNickname;
+    private String visibility;
 }
