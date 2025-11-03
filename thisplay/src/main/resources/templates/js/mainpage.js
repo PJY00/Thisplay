@@ -7,6 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("movie-container");
   const logoLink = document.querySelector('.nav-item[href="/mainpage"]');
 
+  // 로고 클릭 시 mainpage.html로 이동
+  logoLink.addEventListener("click", (e) => {
+    e.preventDefault(); // 기본 링크 이동 막기 (선택)
+    window.location.href = "mainpage.html"; // 이동할 경로
+  });
+
   // ✅ 1. 장르 목록 가져오기
   async function loadGenres() {
     try {
