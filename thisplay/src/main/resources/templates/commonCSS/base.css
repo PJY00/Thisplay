@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap");
 @import url('https://unicons.iconscout.com/release/v4.0.0/css/line.css');
 
+/* 전체적으로 색상은 추후 수정 예정 */
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -49,21 +51,37 @@ table {
 
 /* 여기부터 css 기본 틀 */
 
-html {
-    font-size: 16px; /* 1rem */
-    scroll-behavior: smooth;
+:root {
+    /* 색상 수정 필요 */
+    --color-primary: black;
+    --color-secondary: white;
+    --color-accent: grey;
+    --color-bg: black;
+    --color-text: white;
+    --color-muted: grey;
+
+    /* 폰트 수정 필요 */
+    --font-main: 'Pretendard', 'Noto Sans KR', sans-serif;
+    --font-heading: 'Poppins', sans-serif;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s ease-in-out;
+}
+
+html {
+    font-size: 16px; /* 1rem */
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    color: white;
-    background-color: black;
+    color: var(--color-text);
+    background: var(--color-bg);
+    font-family: var(--font-main);
     line-height: 1.6;
     letter-spacing: -0.3px;
     word-break: keep-all;
@@ -98,10 +116,13 @@ img {
     max-width: 100%;
     height: auto;
     object-fit: cover;
+    border-style:none
 }
 
 /* 글씨 크기 및 굵기 */
-
+h1, h2, h3 {
+    font-family: var(--font-heading);
+}
 h1 { font-size: 2rem; font-weight: 700; }
 h2 { font-size: 1.75rem; font-weight: 600; }
 h3 { font-size: 1.5rem; font-weight: 600; }
@@ -123,6 +144,25 @@ section {
     padding: 40px 0;
 }
 
+/* input 통일 */
+/* 색상 지정에 따라 수정 필요 */
+input, textarea, select {
+    font: inherit;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 10px;
+    outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 3px var(--color-primary);
+}
+
+::placeholder {
+    color: #aaa;
+}
+
 /* 공통 클래스: 부트스트랩처럼 이 클래스 추가하면 바로 적용 */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
@@ -133,5 +173,27 @@ section {
 .mb-10 { margin-bottom: 10px; }
 .mb-20 { margin-bottom: 20px; }
 
+.flex { display: flex; }
+.flex-center { display: flex; justify-content: center; align-items: center; }
+.grid { display: grid; gap: 1rem; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* 스크롤 바 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
 /* 반응형 추가시 여기에 */
 /* rem 기준으로 수정해서 반응형을 넣을지 고민하는 중 */
+/* 추가로 공통 애니메이션 효과도 정할지 고민 */
