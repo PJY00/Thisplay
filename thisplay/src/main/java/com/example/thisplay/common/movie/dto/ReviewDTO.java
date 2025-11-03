@@ -16,8 +16,8 @@ public class ReviewDTO {
 
     private Long userId;
     private int movieId; //리뷰등록시필요
+    private String movieTitle;
     private String writer;
-//    private String movieName; 얘 넣을까요 말까요
 
 
     private String reviewTitle;
@@ -38,6 +38,7 @@ public class ReviewDTO {
         dto.setReviewBody(entity.getReviewBody());
         dto.setOneLineReview(entity.getOneLineReview());
         dto.setMovieId(entity.getMovieId());
+        dto.setMovieTitle(entity.getMovieTitle());
         dto.setStar(entity.getStar());
         dto.setSeenArrange(entity.getSeen_arrange());
         dto.setWriter(entity.getUser().getNickname());

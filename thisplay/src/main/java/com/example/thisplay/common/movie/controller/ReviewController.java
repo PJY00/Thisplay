@@ -2,7 +2,9 @@ package com.example.thisplay.common.movie.controller;
 
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
+import com.example.thisplay.global.api.TmdbApiClient;
 import com.example.thisplay.common.movie.service.ReviewService;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
+    private final TmdbApiClient tmdbApiClient;
 
     // 전체 리뷰 조회
     @GetMapping
@@ -39,9 +42,20 @@ public class ReviewController {
     }
 
     // 영화별 리뷰 조회
-    @GetMapping("/movie/{movieId}")
-    public List<ReviewDTO> getByMovie(@PathVariable int movieId) {
-        return reviewService.getReviewsByMovie(movieId);
+    @GetMapping("/movie/{tmdbId}")
+    public Map<String, Object> getByMovie(@PathVariable int tmdbId) {
+
+        List<ReviewDTO> reviews = reviewService.getReviewsByMovie(tmdbId);
+
+        JsonNode movieDetail = tmdbApiClient.getMovieDetail(tmdbId).block();
+        String movieTitle = movieDetail.path("title").asText("제목 없음");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("tmdbId", tmdbId);
+        response.put("movieTitle", movieTitle);
+        response.put("reviews", reviews);
+
+        return response;
     }
 
     // 유저별 리뷰 조회
@@ -50,11 +64,15 @@ public class ReviewController {
         return reviewService.getReviewsByUser(userId);
     }
 
-    @PostMapping
-    public ReviewDTO create(@RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    @PostMapping("/movie/{tmdbId}")
+    public ReviewDTO create(@PathVariable int tmdbId, @RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
         dto.setUserId(userDetails.getUserEntity().getUserId());
+        dto.setMovieId(tmdbId);
+        JsonNode movieDetail = tmdbApiClient.getMovieDetail(tmdbId).block();
+        dto.setMovieTitle(movieDetail.path("title").asText("제목 없음"));
         return reviewService.create(dto, userDetails.getUserId());
     }
+
 
     @PatchMapping("/{id}")
     public ReviewDTO patchReview(@PathVariable Long id, @RequestBody ReviewDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -73,9 +91,22 @@ public class ReviewController {
         return reviewService.paging(pageable);
     }
 
-    @GetMapping("/movie/{movieId}/paging")
-    public Page<ReviewDTO> getByMoviePaging(@PathVariable int movieId, @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return reviewService.getReviewsByMoviePaging(movieId, pageable);
+    @GetMapping("/movie/{tmdbId}/paging")
+    public Map<String, Object> getByMoviePaging(
+            @PathVariable int tmdbId,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<ReviewDTO> page = reviewService.getReviewsByMoviePaging(tmdbId, pageable);
+
+        JsonNode movieDetail = tmdbApiClient.getMovieDetail(tmdbId).block();
+        String movieTitle = movieDetail.path("title").asText("제목 없음");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("tmdbId", tmdbId);
+        response.put("movieTitle", movieTitle);
+        response.put("page", page);
+
+        return response;
     }
 
 }
