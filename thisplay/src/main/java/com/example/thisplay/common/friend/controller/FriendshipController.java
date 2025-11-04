@@ -80,8 +80,12 @@ public class FriendshipController {
 
     // 6친구 찾기
     @PostMapping("/search")
-    public ResponseEntity<FriendSearchDTO> searchFriend(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> searchFriend(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody Map<String, String> request
+    ) {
         String nickname = request.get("nickname");
-        return ResponseEntity.ok(friendshipService.searchUserByNickname(nickname));
+
+        return ResponseEntity.ok(friendshipService.searchFriend(userDetails.getUserEntity(), nickname));
     }
 }

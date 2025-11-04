@@ -117,10 +117,21 @@ public class FriendshipService {
                 || friendshipRepository.findByReceiveUserAndSendUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent();
     }
 
-    public FriendSearchDTO searchUserByNickname(String nickname) {
-        UserEntity user = userRepository.findByNickname(nickname)
+    public FriendSearchDTO searchFriend(UserEntity loginUser, String nickname) {
+
+        UserEntity targetUser = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
 
-        return new FriendSearchDTO(user.getUserId(), user.getNickname());
+        // ✅ 자기 자신 검색은 허용 (프로필 열람 가능하도록)
+        if (loginUser.getUserId().equals(targetUser.getUserId())) {
+            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+        }
+
+        // ✅ 친구가 아닐 경우 조회 불가
+        if (!areFriends(loginUser, targetUser)) {
+            throw new RuntimeException("해당 유저는 친구 목록에 없습니다.");
+        }
+
+        return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
     }
 }
