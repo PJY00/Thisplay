@@ -3,6 +3,7 @@ package com.example.thisplay.common.friend.service;
 import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.entity.Friendship;
 import com.example.thisplay.common.friend.entity.FriendshipStatus;
 import com.example.thisplay.common.friend.repository.FriendshipRepository;
@@ -114,5 +115,12 @@ public class FriendshipService {
     public boolean areFriends(UserEntity userA, UserEntity userB) {
         return friendshipRepository.findBySendUserAndReceiveUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent()
                 || friendshipRepository.findByReceiveUserAndSendUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent();
+    }
+
+    public FriendSearchDTO searchUserByNickname(String nickname) {
+        UserEntity user = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
+
+        return new FriendSearchDTO(user.getUserId(), user.getNickname());
     }
 }

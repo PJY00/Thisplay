@@ -3,6 +3,7 @@ package com.example.thisplay.common.friend.controller;
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.friend.dto.FriendDTO;
 import com.example.thisplay.common.friend.dto.FriendRequestDTO;
+import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/friends")
@@ -74,5 +76,12 @@ public class FriendshipController {
 
         Long userId = userDetails.getUserId();
         return ResponseEntity.ok(friendshipService.getFriendList(userId));
+    }
+
+    // 6친구 찾기
+    @PostMapping("/search")
+    public ResponseEntity<FriendSearchDTO> searchFriend(@RequestBody Map<String, String> request) {
+        String nickname = request.get("nickname");
+        return ResponseEntity.ok(friendshipService.searchUserByNickname(nickname));
     }
 }
