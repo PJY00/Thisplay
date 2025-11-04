@@ -1,0 +1,54 @@
+package com.example.thisplay.common.friend.controller;
+
+import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.service.FriendshipService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("api/friends")
+@RequiredArgsConstructor
+public class FriendshipController {
+    private final FriendshipService friendshipService;
+
+    // 1️⃣ 친구 요청 보내기
+    @PostMapping("/request")
+    public ResponseEntity<String> sendFriendRequest(
+            @RequestParam Long senderId,
+            @RequestParam String receiverNickname) {
+        return ResponseEntity.ok(friendshipService.sendFriendRequest(senderId, receiverNickname));
+    }
+
+    // 2️⃣ 친구 요청 수락
+    @PostMapping("/{friendshipId}/accept")
+    public ResponseEntity<String> acceptFriendRequest(
+            @PathVariable Long friendshipId,
+            @RequestParam Long receiverId) {
+        return ResponseEntity.ok(friendshipService.acceptFriendRequest(friendshipId, receiverId));
+    }
+
+    // 3️⃣ 친구 요청 거절
+    @PostMapping("/{friendshipId}/reject")
+    public ResponseEntity<String> rejectFriendRequest(
+            @PathVariable Long friendshipId,
+            @RequestParam Long receiverId) {
+        return ResponseEntity.ok(friendshipService.rejectFriendRequest(friendshipId, receiverId));
+    }
+
+    // 4️⃣ 친구 요청 취소
+    @DeleteMapping("/{friendshipId}/cancel")
+    public ResponseEntity<String> cancelFriendRequest(
+            @PathVariable Long friendshipId,
+            @RequestParam Long senderId) {
+        return ResponseEntity.ok(friendshipService.cancelFriendRequest(friendshipId, senderId));
+    }
+
+    // 5️⃣ 친구 목록 조회
+    @GetMapping("/list")
+    public ResponseEntity<List<FriendDTO>> getFriendList(@RequestParam Long userId) {
+        return ResponseEntity.ok(friendshipService.getFriendList(userId));
+    }
+}

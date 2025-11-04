@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @Table(name="friendship_table")
 public class Friendship {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -17,12 +18,12 @@ public class Friendship {
     //친구 요청을 보낸 사람
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "send_user_id")
-    private UserEntity send_user;
+    private UserEntity sendUser;
 
     //친구 요청을 받은 사람
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="receive_user_id")
-    private UserEntity receive_user;
+    private UserEntity receiveUser;
 
     //친구 상태
     @Enumerated(EnumType.STRING)

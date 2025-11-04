@@ -44,9 +44,9 @@ public class UserEntity {
     private List<MovieFolder> folders = new ArrayList<>();
 
     // ✅ 유저가 포함된 친구 관계 리스트 (1:N)
-    @OneToMany(mappedBy = "send_user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sendUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friendship> friendshipList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receive_user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "receiveUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friendship> receivedFriendships = new ArrayList<>();
 }

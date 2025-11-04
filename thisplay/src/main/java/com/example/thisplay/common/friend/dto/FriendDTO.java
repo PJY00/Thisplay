@@ -23,8 +23,8 @@ public class FriendDTO {
         dto.setFriendshipId(friendship.getFriendshipId());
         dto.setStatus(friendship.getStatus());
 
-        UserEntity sender = friendship.getSend_user();
-        UserEntity receiver = friendship.getReceive_user();
+        UserEntity sender = friendship.getSendUser();
+        UserEntity receiver = friendship.getReceiveUser();
 
         // is from 계산
         boolean isFrom = sender.getUserId().equals(loginUserId);
