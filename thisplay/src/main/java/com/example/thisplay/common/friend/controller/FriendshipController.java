@@ -69,7 +69,7 @@ public class FriendshipController {
         );
     }
 
-    // 5️⃣ 친구 목록 조회
+    // 5️⃣ 친구 목록 조회(친구 리스트)
     @GetMapping("/list")
     public ResponseEntity<List<FriendDTO>> getFriendList(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
