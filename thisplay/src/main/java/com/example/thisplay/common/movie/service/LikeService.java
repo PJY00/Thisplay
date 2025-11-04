@@ -48,12 +48,14 @@ public class LikeService {
             throw new RuntimeException("이미 좋아요 누른 상태");
         }
 
-        LikeEntity like = LikeEntity.builder()
-                .user(user)
-                .review(review)
-                .build();
+        likeRepository.save(
+                LikeEntity.builder()
+                        .user(user)
+                        .review(review)
+                        .build()
+        );
 
-        likeRepository.save(like);
+        review.setLikeCount(review.getLikeCount() + 1);
     }
 
     @Transactional
@@ -67,6 +69,8 @@ public class LikeService {
                 .orElseThrow(() -> new RuntimeException("좋아요 기록 없음"));
 
         likeRepository.delete(like);
+
+        review.setLikeCount(Math.max(0, review.getLikeCount() - 1));
     }
 
     @Transactional(readOnly = true)
@@ -81,11 +85,9 @@ public class LikeService {
                         .build())
                 .toList();
 
-
         return LikeDTO.builder()
                 .likeCount(users.size())
                 .users(users)
                 .build();
     }
 }
-
