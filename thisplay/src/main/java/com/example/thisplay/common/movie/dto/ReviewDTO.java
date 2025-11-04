@@ -40,6 +40,8 @@ public class ReviewDTO {
         dto.setMovieId(entity.getMovieId());
         dto.setMovieTitle(entity.getMovieTitle());
         dto.setStar(entity.getStar());
+        dto.setCommentCount(entity.getCommentCount());
+        dto.setLikeCount(entity.getLikeCount());
         dto.setSeenArrange(entity.getSeen_arrange());
         dto.setWriter(entity.getUser().getNickname());
         dto.setUserId(entity.getUser().getUserId());
