@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("api/friends")
 @RequiredArgsConstructor
 public class FriendshipController {
+    //로그인해서 Authorization에서 인증 받으면 사용자는 자동으로 입력이 됩니다. 헤더에 Authorization꼭 주세요
     private final FriendshipService friendshipService;
 
     // 1️⃣ 친구 요청 보내기
@@ -30,7 +31,7 @@ public class FriendshipController {
     }
 
     // 2️⃣ 친구 요청 수락
-    //friednshipid: 친구요청을 보낸 사람의 Id.
+    //friednshipid: DB에 friendshipId가 있는데 그거 확인해서 사용하시면 됩니다.
     @PostMapping("/{friendshipId}/accept")
     public ResponseEntity<String> acceptFriendRequest(
             @PathVariable Long friendshipId,
