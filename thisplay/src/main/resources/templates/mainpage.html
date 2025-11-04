@@ -5,22 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thisplay</title>
-    <!--css 적용 전 카드 list style 확인-->
-    <style>
-        .card-container {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            /* 가로 스크롤 가능 */
-            padding-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="./mainpage.css">
 </head>
 
 <body>
     <header class="header-bar">
         <nav class="header-nav-menu">
-            <a class="nav-item" href="/">로고</a>
+            <a class="nav-item" href="/mainpage">로고</a>
             <a class="nav-item" href="/mypage">마이페이지</a>
             <a class="nav-item" href="/friend">친구</a>
             <a class="nav-item" href="/login">로그인</a>
@@ -39,7 +30,6 @@
             </search>
         </section>
         <hr>
-
         <section class="movielist">
             <label for="genre-select">장르 선택:</label>
             <select id="genre-select">
@@ -55,7 +45,6 @@
         </section>
 
         <section class="card-container" id="movie-container"></section>
-
         <script src="./js/mainpage.js"></script>
 </body>
 
