@@ -43,7 +43,7 @@ public class FriendshipController {
     }
 
     // 3️⃣ 친구 요청 거절
-    @PostMapping("/{friendshipId}/reject")
+    @DeleteMapping("/{friendshipId}/reject")
     public ResponseEntity<String> rejectFriendRequest(
             @PathVariable Long friendshipId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {

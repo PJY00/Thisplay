@@ -73,7 +73,7 @@ public class FriendshipService {
             throw new RuntimeException("거절 권한이 없습니다.");
         }
 
-        friendship.setStatus(FriendshipStatus.REJECTED);
+        friendshipRepository.delete(friendship);   // ✅ 거절 시에도 삭제
         return "친구 요청을 거절했습니다.";
     }
 
