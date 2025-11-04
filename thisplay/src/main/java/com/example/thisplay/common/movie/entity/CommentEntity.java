@@ -23,8 +23,9 @@ public class CommentEntity {
     @JoinColumn(name="user_id", nullable=false)
     private UserEntity user;   // 작성자
 
-    @Column(nullable = false)
-    private Long movieId;     // 어떤 리뷰/영화에 달린 댓글인지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id", nullable = false)
+    private ReviewEntity review;
 
     @Column(nullable = false, length = 500)
     private String content;
