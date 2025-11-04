@@ -30,8 +30,8 @@ public class Friendship {
     private FriendshipStatus status;
 
     //양방향 연관관계 설정 보조 메서드
+    //친구 요청이 수락될 때 호출되는 메서드. 호출시 상태를 "Accepted"로 바꿔줌.
     public void acceptFriendshipRequest(){
         this.status=FriendshipStatus.ACCEPTED;
     }
-
 }
