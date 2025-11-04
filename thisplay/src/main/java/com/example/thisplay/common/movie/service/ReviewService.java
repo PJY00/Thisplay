@@ -40,6 +40,23 @@ public class ReviewService {
         return ReviewDTO.toReviewDTO(reviewEntity);
     }
 
+    @Transactional
+    public ReviewDTO getReviewAndIncrease(Long id, Long currentUserId) {
+        ReviewEntity review = reviewRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. id=" + id));
+
+        boolean isAuthor = currentUserId != null && review.getUser().getUserId().equals(currentUserId);
+
+        if (!isAuthor) {
+            reviewRepository.incrementViewCount(id); // DB에서 +1
+            // flush 이후 최신값 반영 위해 다시 조회
+            review = reviewRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. id=" + id));
+        }
+
+        return ReviewDTO.toReviewDTO(review);
+    }
+
     // 영화별 리뷰 조회
     @Transactional(readOnly = true)
     public List<ReviewDTO> getReviewsByMovie(int movieId) {
@@ -87,9 +104,10 @@ public class ReviewService {
             throw new SecurityException("권한이 없습니다");
         }
 
-        review.setReviewTitle(dto.getReviewTitle());
-        review.setReviewBody(dto.getReviewBody());
-        review.setStar(dto.getStar());
+        if (dto.getReviewTitle() != null) review.setReviewTitle(dto.getReviewTitle());
+        if (dto.getReviewBody() != null) review.setReviewBody(dto.getReviewBody());
+        if (dto.getOneLineReview() != null) review.setOneLineReview(dto.getOneLineReview());
+        if (dto.getStar() != 0) review.setStar(dto.getStar());
 
         ReviewEntity updated = reviewRepository.save(review);
         return ReviewDTO.toReviewDTO(updated);
@@ -120,6 +138,4 @@ public class ReviewService {
         return reviewRepository.findByMovieId(movieId, pageable)
                 .map(ReviewDTO::toReviewDTO);
     }
-
-
 }

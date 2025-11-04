@@ -27,24 +27,29 @@ public class ReviewEntity {
     @JoinColumn(name = "userId", nullable = false)
     private UserEntity user;
 
-    @Column(nullable = false)
+    @Column
+    private int movieId;
+    private String movieTitle;
+
+    @Column(length=50, nullable = false)
     private String reviewTitle;
 
-    @Column(length=500, nullable = false)
+    @Column(nullable = false)
     private String reviewBody;
 
+    @Column(length = 100, nullable = false)
+    private String oneLineReview;
+
     @Column(columnDefinition = "INT DEFAULT 0")
-    private int commentCount;
     private int star;
     private int seen_arrange;
     private int likeCount;
+    private int commentCount;
 
     @OneToMany(mappedBy = "review")
     @Builder.Default
     private List<LikeEntity> likes = new ArrayList<>();
 
-    @Column
-    private int movieId; // 지금은 String, 나중에 MovieEntity로 연결 가능
 
     @CreationTimestamp
     private Date createdAt;
@@ -55,10 +60,12 @@ public class ReviewEntity {
     public static ReviewEntity toCreateEntity(ReviewDTO dto, UserEntity user) {
         return ReviewEntity.builder()
                 .user(user)
+                .movieId(dto.getMovieId())
+                .movieTitle(dto.getMovieTitle())
                 .reviewTitle(dto.getReviewTitle())
                 .reviewBody(dto.getReviewBody())
+                .oneLineReview(dto.getOneLineReview())
                 .star(dto.getStar())
-                .movieId(dto.getMovieId())
                 .seen_arrange(0)
                 .likeCount(0)
                 .commentCount(0)
