@@ -10,59 +10,76 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class FaqService {
     private final FaqRepository faqRepository;
 
-    @Transactional(readOnly = true)
-    public List<FaqDTO> findAll() {
-        return faqRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
-                .stream().map(this::toDto).toList();
+    // 전체 조회
+    public List<FaqDTO> getAllFaqs() {
+        return faqRepository.findAll().stream()
+                .map(f -> new FaqDTO(
+                        f.getId(),
+                        f.getQuestion(),
+                        f.getAnswer(),
+                        f.getCreatedAt(),
+                        f.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public FaqDTO findOne(Long id) {
-        FaqEntity e = faqRepository.findById(id)
-                .orElseThrow(() -> new ChangeSetPersister.NotFoundException("FAQ not found: " + id));
-        return toDto(e);
+    // 특정 faq 조회
+    public FaqDTO getFaqById(Long id) {
+        FaqEntity f = faqRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("FAQ를 찾을 수 없습니다."));
+        return new FaqDTO(
+                f.getId(),
+                f.getQuestion(),
+                f.getAnswer(),
+                f.getCreatedAt(),
+                f.getUpdatedAt()
+        );
     }
 
-    public FaqDTO create(FaqDTO dto) {
-        FaqEntity e = FaqEntity.builder()
+    // 등록
+    public FaqDTO createFaq(FaqDTO dto) {
+        FaqEntity f = FaqEntity.builder()
                 .question(dto.getQuestion())
                 .answer(dto.getAnswer())
                 .build();
-        faqRepository.save(e);
-        return toDto(e);
+
+        FaqEntity saved = faqRepository.save(f);
+        return new FaqDTO(
+                saved.getId(),
+                saved.getQuestion(),
+                saved.getAnswer(),
+                saved.getCreatedAt(),
+                saved.getUpdatedAt()
+        );
     }
 
-    public FaqDTO update(Long id, FaqDTO dto) {
-        FaqEntity e = faqRepository.findById(id)
-                .orElseThrow(() -> new ChangeSetPersister.NotFoundException("FAQ not found: " + id));
-        e.setQuestion(dto.getQuestion());
-        e.setAnswer(dto.getAnswer());
-        // updatedAt은 JPA Auditing이 자동 반영
-        return toDto(e);
+    // 수정
+    public FaqDTO updateFaq(Long id, FaqDTO dto) {
+        FaqEntity f = faqRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("FAQ를 찾을 수 없습니다."));
+
+        if (dto.getQuestion() != null) f.setQuestion(dto.getQuestion());
+        if (dto.getAnswer() != null) f.setAnswer(dto.getAnswer());
+
+        FaqEntity updated = faqRepository.save(f);
+        return new FaqDTO(
+                updated.getId(),
+                updated.getQuestion(),
+                updated.getAnswer(),
+                updated.getCreatedAt(),
+                updated.getUpdatedAt()
+        );
     }
 
-    public void delete(Long id) {
-        if (!faqRepository.existsById(id)) {
-            throw new ChangeSetPersister.NotFoundException("FAQ not found: " + id);
-        }
+    // 삭제
+    public void deleteFaq(Long id) {
         faqRepository.deleteById(id);
-    }
-
-    /* --------- mapper --------- */
-    private FaqDTO toDto(FaqEntity e) {
-        return FaqDTO.builder()
-                .id(e.getId())
-                .question(e.getQuestion())
-                .answer(e.getAnswer())
-                .createdAt(e.getCreatedAt())
-                .updatedAt(e.getUpdatedAt())
-                .build();
     }
 }
