@@ -1,4 +1,4 @@
-package com.example.thisplay.common.notice.dto;
+package com.example.thisplay.common.setting.dto;
 
 import lombok.*;
 

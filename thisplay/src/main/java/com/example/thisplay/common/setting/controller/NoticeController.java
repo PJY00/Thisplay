@@ -1,7 +1,7 @@
-package com.example.thisplay.common.notice.controller;
+package com.example.thisplay.common.setting.controller;
 
-import com.example.thisplay.common.notice.dto.NoticeDTO;
-import com.example.thisplay.common.notice.service.NoticeService;
+import com.example.thisplay.common.setting.dto.NoticeDTO;
+import com.example.thisplay.common.setting.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
