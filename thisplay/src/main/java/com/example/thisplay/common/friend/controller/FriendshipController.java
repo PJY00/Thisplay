@@ -58,13 +58,20 @@ public class FriendshipController {
     @DeleteMapping("/{friendshipId}/cancel")
     public ResponseEntity<String> cancelFriendRequest(
             @PathVariable Long friendshipId,
-            @RequestParam Long senderId) {
-        return ResponseEntity.ok(friendshipService.cancelFriendRequest(friendshipId, senderId));
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long senderId = userDetails.getUserId();
+        return ResponseEntity.ok(
+                friendshipService.cancelFriendRequest(friendshipId, senderId)
+        );
     }
 
     // 5️⃣ 친구 목록 조회
     @GetMapping("/list")
-    public ResponseEntity<List<FriendDTO>> getFriendList(@RequestParam Long userId) {
+    public ResponseEntity<List<FriendDTO>> getFriendList(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long userId = userDetails.getUserId();
         return ResponseEntity.ok(friendshipService.getFriendList(userId));
     }
 }
