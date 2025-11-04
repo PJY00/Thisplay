@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .map(
             (m) => `
                 <article class="project-card">
-                  <img class="project-card__bg" src="https://image.tmdb.org/t/p/w500${m.backdrop_path}" alt="">
+                  <img class="project-card__bg" src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="">
                   <div class="project-card__content">
                     <img class="project-card__thumb" src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="">
                     <div>
