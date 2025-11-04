@@ -1,5 +1,6 @@
 package com.example.thisplay.common.Auth.Entity;
 
+import com.example.thisplay.common.friend.entity.Friendship;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,4 +42,11 @@ public class UserEntity {
     // 유저가 가진 폴더 리스트 (1:N)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieFolder> folders = new ArrayList<>();
+
+    // ✅ 유저가 포함된 친구 관계 리스트 (1:N)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friendship> friendshipList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friendship> receivedFriendships = new ArrayList<>();
 }
