@@ -19,5 +19,19 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     List<Friendship> findBySendUserAndStatus(UserEntity sendUser, FriendshipStatus status);
 
     List<Friendship> findByReceiveUserAndStatus(UserEntity receiveUser, FriendshipStatus status);
+
+    // 두 유저 사이에 수락 상태의 친구 관계가 존재하는지 확인
+    Optional<Friendship> findBySendUserAndReceiveUserAndStatus(
+            UserEntity sendUser,
+            UserEntity receiveUser,
+            FriendshipStatus status
+    );
+
+    // 친구 관계는 양방향이라, 역방향도 확인
+    Optional<Friendship> findByReceiveUserAndSendUserAndStatus(
+            UserEntity receiveUser,
+            UserEntity sendUser,
+            FriendshipStatus status
+    );
 }
 

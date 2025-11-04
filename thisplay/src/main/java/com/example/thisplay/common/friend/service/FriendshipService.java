@@ -108,4 +108,11 @@ public class FriendshipService {
                 .map(friendship -> FriendDTO.fromEntity(friendship, loginUserId))
                 .collect(Collectors.toList());
     }
+
+
+    // 두 유저가 친구인지 확인 (Accepted 상태인지)
+    public boolean areFriends(UserEntity userA, UserEntity userB) {
+        return friendshipRepository.findBySendUserAndReceiveUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent()
+                || friendshipRepository.findByReceiveUserAndSendUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent();
+    }
 }
