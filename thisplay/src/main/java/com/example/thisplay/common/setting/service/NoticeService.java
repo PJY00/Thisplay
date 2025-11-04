@@ -1,8 +1,8 @@
-package com.example.thisplay.common.notice.service;
+package com.example.thisplay.common.setting.service;
 
-import com.example.thisplay.common.notice.dto.NoticeDTO;
-import com.example.thisplay.common.notice.entity.NoticeEntity;
-import com.example.thisplay.common.notice.repository.NoticeRepository;
+import com.example.thisplay.common.setting.dto.NoticeDTO;
+import com.example.thisplay.common.setting.entity.NoticeEntity;
+import com.example.thisplay.common.setting.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
