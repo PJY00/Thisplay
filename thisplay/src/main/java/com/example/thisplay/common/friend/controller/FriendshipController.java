@@ -30,6 +30,7 @@ public class FriendshipController {
     }
 
     // 2️⃣ 친구 요청 수락
+    //friednshipid: 친구요청을 보낸 사람의 Id.
     @PostMapping("/{friendshipId}/accept")
     public ResponseEntity<String> acceptFriendRequest(
             @PathVariable Long friendshipId,
@@ -45,8 +46,12 @@ public class FriendshipController {
     @PostMapping("/{friendshipId}/reject")
     public ResponseEntity<String> rejectFriendRequest(
             @PathVariable Long friendshipId,
-            @RequestParam Long receiverId) {
-        return ResponseEntity.ok(friendshipService.rejectFriendRequest(friendshipId, receiverId));
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long receiverId = userDetails.getUserId();
+        return ResponseEntity.ok(
+                friendshipService.rejectFriendRequest(friendshipId, receiverId)
+        );
     }
 
     // 4️⃣ 친구 요청 취소
