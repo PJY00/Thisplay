@@ -1,8 +1,10 @@
 package com.example.thisplay.common.friend.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.Entity.UserStatus;
 import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.dto.FriendRecommendationDTO;
 import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.entity.Friendship;
 import com.example.thisplay.common.friend.entity.FriendshipStatus;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -133,5 +136,33 @@ public class FriendshipService {
         }
 
         return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+    }
+
+    public List<FriendRecommendationDTO> getRecommendedFriends(Long loginUserId) {
+
+        UserEntity loginUser = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 없음"));
+
+        // 1. STAR 상태의 유저 전체 조회
+        List<UserEntity> stars = userRepository.findByStatus(UserStatus.STAR);
+
+        // 2. 현재 유저 자신은 제외
+        stars = stars.stream()
+                .filter(u -> !u.getUserId().equals(loginUserId))
+                .collect(Collectors.toList());
+
+        // 3. 이미 친구인 사람 제외
+        stars = stars.stream()
+                .filter(u -> !areFriends(loginUser, u))
+                .collect(Collectors.toList());
+
+        // 4. 랜덤 셔플
+        Collections.shuffle(stars);
+
+        // 5. 최대 10명만 반환
+        return stars.stream()
+                .limit(10)
+                .map(u -> new FriendRecommendationDTO(u.getUserId(), u.getNickname()))
+                .collect(Collectors.toList());
     }
 }

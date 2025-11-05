@@ -2,6 +2,7 @@ package com.example.thisplay.common.friend.controller;
 
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.dto.FriendRecommendationDTO;
 import com.example.thisplay.common.friend.dto.FriendRequestDTO;
 import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.service.FriendshipService;
@@ -87,5 +88,15 @@ public class FriendshipController {
         String nickname = request.get("nickname");
 
         return ResponseEntity.ok(friendshipService.searchFriend(userDetails.getUserEntity(), nickname));
+    }
+
+    // 7️⃣ 추천 친구 조회
+    //만약 가능하다면 누르면 친구 프로필로 가서 친구 신청 가능하게끔...?
+    @GetMapping("/recommend")
+    public ResponseEntity<List<FriendRecommendationDTO>> getRecommendedFriends(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long userId = userDetails.getUserId();
+        return ResponseEntity.ok(friendshipService.getRecommendedFriends(userId));
     }
 }
