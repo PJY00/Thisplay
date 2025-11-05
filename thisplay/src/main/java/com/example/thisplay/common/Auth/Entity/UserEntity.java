@@ -39,6 +39,11 @@ public class UserEntity {
     @Column(name = "profile_img_url")
     private String profileImgUrl;
 
+    //유저의 상태(추천친구 or 일반 유저 구분 시 사용)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status=UserStatus.NORMAL;
+
     // 유저가 가진 폴더 리스트 (1:N)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieFolder> folders = new ArrayList<>();
