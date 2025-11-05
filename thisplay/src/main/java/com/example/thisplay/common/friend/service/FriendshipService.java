@@ -160,9 +160,15 @@ public class FriendshipService {
         Collections.shuffle(stars);
 
         // 5. 최대 10명만 반환
+        //친구인 경우 해당 유저를 배제하고 가져옴.
         return stars.stream()
                 .limit(10)
-                .map(u -> new FriendRecommendationDTO(u.getUserId(), u.getNickname()))
+                .map(u -> new FriendRecommendationDTO(
+                        u.getUserId(),
+                        u.getNickname(),
+                        u.getProfileImgUrl(),   // ✅ 추가된 필드
+                        u.getStatus()           // ✅ UserStatus 전달
+                ))
                 .collect(Collectors.toList());
     }
 }

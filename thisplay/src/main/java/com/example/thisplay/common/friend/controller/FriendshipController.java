@@ -92,6 +92,7 @@ public class FriendshipController {
 
     // 7️⃣ 추천 친구 조회
     //만약 가능하다면 누르면 친구 프로필로 가서 친구 신청 가능하게끔...?
+    //유저가 STAR user라도 나와 친구이면 recommend에 안 뜸.
     @GetMapping("/recommend")
     public ResponseEntity<List<FriendRecommendationDTO>> getRecommendedFriends(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
