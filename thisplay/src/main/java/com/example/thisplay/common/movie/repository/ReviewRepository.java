@@ -21,4 +21,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update ReviewEntity r set r.seen_arrange = r.seen_arrange + 1 where r.reviewId = :id")
     int incrementViewCount(@Param("id") Long id);
+
+
 }
