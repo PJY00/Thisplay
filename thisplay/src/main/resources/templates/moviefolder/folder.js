@@ -4,7 +4,6 @@ import { logout, isLoggedIn, getToken } from "../../static/js/utils/auth.js";
 const BASE_URL = "http://localhost:8080";
 console.log("✅ folder.js 연결 완료");
 
-
 document.addEventListener("DOMContentLoaded", async () => {
     const folderWrapper = document.getElementById("folder-wrapper");
     const leftArrow = document.getElementById("left-arrow");
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const response = await api.get("/api/folders/me");
             const folders = response.data;
 
-
             console.log(folders);
 
             if (!folders || folders.length === 0) {
@@ -25,23 +23,84 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // 🔹 innerHTML로 카드 렌더링
+            // 🔹 폴더 카드 렌더링 (⋮ 메뉴 + 삭제 버튼 포함)
             folderWrapper.innerHTML = folders
                 .map(
                     (f) => `
-        <div class="folder-card">
+        <div class="folder-card" data-folder-id="${f.folderId}">
             <div class="folder-thumbnail"></div>
             <p class="folder-title">${f.folderName}</p>
+
+            <!-- 오른쪽 하단 ⋮ 메뉴 -->
+            <div class="folder-menu">
+                <button class="menu-btn">⋮</button>
+                <div class="menu-dropdown hidden">
+                    <button class="delete-btn">삭제</button>
+                </div>
+            </div>
         </div>
         `
                 )
                 .join("");
+
+            // ✅ 카드 렌더링 후 이벤트 연결
+            attachMenuEvents();
         } catch (err) {
             console.error("❌ 폴더 목록 불러오기 실패:", err);
             folderWrapper.innerHTML = `<p style="color:red;">폴더를 불러오는 중 오류가 발생했습니다.</p>`;
         }
     }
 
+    // ✅ ⋮ 버튼 및 삭제 버튼 이벤트 연결 함수
+    function attachMenuEvents() {
+        // ⋮ 버튼 클릭 시 메뉴 열기/닫기
+        document.querySelectorAll(".menu-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation(); // 이벤트 버블링 방지
+                const dropdown = e.currentTarget.nextElementSibling;
+                dropdown.classList.toggle("hidden");
+            });
+        });
+
+        // 삭제 버튼 클릭 시 API 호출
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                const card = e.currentTarget.closest(".folder-card");
+                const folderId = card.dataset.folderId;
+                const folderName = card.querySelector(".folder-title").textContent;
+
+                if (confirm(`'${folderName}' 폴더를 삭제하시겠습니까?`)) {
+                    try {
+                        const res = await api.delete(`/api/folders/${folderId}`, {
+                            headers: {
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                        });
+
+                        if (res.status === 200) {
+                            alert("폴더가 성공적으로 삭제되었습니다.");
+                            card.remove();
+                        } else {
+                            alert("폴더 삭제 실패: " + res.statusText);
+                        }
+                    } catch (err) {
+                        console.error("❌ 폴더 삭제 중 오류:", err);
+                        alert("서버 오류로 폴더를 삭제할 수 없습니다.");
+                    }
+                }
+            });
+        });
+
+        // 다른 영역 클릭 시 모든 드롭다운 닫기
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(".folder-menu")) {
+                document.querySelectorAll(".menu-dropdown").forEach((menu) => menu.classList.add("hidden"));
+            }
+        });
+    }
+
+    // ✅ 좌우 스크롤
     leftArrow.addEventListener("click", () => {
         folderWrapper.scrollBy({
             left: -scrollAmount,
@@ -55,6 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             behavior: "smooth",
         });
     });
+
     // ✅ 폴더 생성 기능
     const form = document.getElementById("create-folder-form");
     const resultText = document.getElementById("folder-result");
@@ -94,5 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
+
+    // ✅ 초기 폴더 목록 로드
     await loadMyFolders();
 });

@@ -107,7 +107,6 @@
     right: 0;
 }
 
-/* 오른쪽 하단 메뉴 위치 */
 .folder-menu {
     position: absolute;
     bottom: 10px;
@@ -121,7 +120,6 @@
     cursor: pointer;
 }
 
-/* 드롭다운 메뉴 */
 .menu-dropdown {
     position: absolute;
     bottom: 30px;
