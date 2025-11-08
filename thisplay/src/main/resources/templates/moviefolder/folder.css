@@ -1,0 +1,151 @@
+@import url("../commonCSS/base.css");
+
+.myfolder {
+    background-color: #000;
+    color: #fff;
+    padding: 30px 40px;
+    position: relative;
+}
+
+.folderlist {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.card-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+#folder-wrapper {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+#folder-wrapper::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.folder-card {
+    flex: 0 0 auto;
+    width: 180px;
+    height: 240px;
+    border-radius: 12px;
+    background: #e5e5e5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.folder-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.folder-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+
+.folder-thumbnail {
+    flex: 1;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(135deg, #ccc, #aaa);
+}
+
+.folder-title {
+    color: black;
+    background-color: white;
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+    font-weight: 600;
+    border-top: 1px solid #ddd;
+    border-radius: 0 0 12px 12px;
+}
+
+/* 좌우 화살표 버튼 */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+    z-index: 10;
+}
+
+.arrow:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
+
+/* 오른쪽 하단 메뉴 위치 */
+.folder-menu {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.menu-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* 드롭다운 메뉴 */
+.menu-dropdown {
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-dropdown button {
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+}
+
+.menu-dropdown button:hover {
+    background-color: #f0f0f0;
+}
+
+.hidden {
+    display: none;
+}
