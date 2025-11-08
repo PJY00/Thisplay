@@ -62,6 +62,14 @@ public class ReviewController {
         return reviewService.getReviewsByUser(userId);
     }
 
+    // 내 리뷰 조회
+    @GetMapping("/me")
+    public List<ReviewDTO> getMyReviews(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) throw new RuntimeException("로그인이 필요합니다");
+        Long myId = userDetails.getUserEntity().getUserId();
+        return reviewService.getReviewsByUser(myId);
+    }
+
     // 리뷰 작성
     @PostMapping("/movie/{tmdbId}")
     public ReviewDTO create(@PathVariable int tmdbId,
