@@ -17,6 +17,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     List<ReviewEntity> findByMovieId(int tmdbId); // 영화별 리뷰 조회
     Page<ReviewEntity> findByMovieId(int tmdbId, Pageable pageable); // 페이징
     List<ReviewEntity> findByUser_UserId(Long userId); // 유저별 리뷰 조회
+    List<ReviewEntity> findByMovieIdIn(List<Integer> movieIds);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update ReviewEntity r set r.seen_arrange = r.seen_arrange + 1 where r.reviewId = :id")

@@ -126,4 +126,24 @@ public class ReviewController {
             return "제목 없음";
         }
     }
+
+    //단일폴더리뷰
+    @GetMapping("/myfolders/{folderId}")
+    public List<ReviewDTO> getMyFolderReviews(
+            @PathVariable Long folderId,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        if (userDetails == null) throw new RuntimeException("로그인이 필요합니다");
+        return reviewService.getMyFolderReviews(folderId, userDetails.getUserEntity());
+    }
+
+    //전체폴더리뷰
+    @GetMapping("/myfolders")
+    public List<ReviewDTO> getMyFoldersReviews(
+            @RequestParam(required = false) List<Long> ids,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        if (userDetails == null) throw new RuntimeException("로그인이 필요합니다");
+        return reviewService.getMyFoldersReviews(userDetails.getUserEntity(), ids);
+    }
 }

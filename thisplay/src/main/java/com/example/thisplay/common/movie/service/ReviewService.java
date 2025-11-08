@@ -5,14 +5,21 @@ import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.entity.ReviewEntity;
 import com.example.thisplay.common.movie.repository.ReviewRepository;
+import com.example.thisplay.common.rec_list.entity.FolderVisibility;
+import com.example.thisplay.common.rec_list.entity.MovieFolder;
+import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +27,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final MovieFolderRepository folderRepository;
 
     // 전체 리뷰 조회
     @Transactional
@@ -138,4 +146,44 @@ public class ReviewService {
         return reviewRepository.findByMovieId(movieId, pageable)
                 .map(ReviewDTO::toReviewDTO);
     }
+
+    // 단일 폴더의 영화 리뷰 모아보기
+    @Transactional(readOnly = true)
+    public List<ReviewDTO> getMyFolderReviews(Long folderId, UserEntity viewer) {
+        MovieFolder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new IllegalArgumentException("폴더를 찾을 수 없습니다. id=" + folderId));
+
+        // PRIVATE 접근 제한 (FRIENDS는 나중에 확장)
+        if (folder.getVisibility() == FolderVisibility.PRIVATE &&
+                !Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
+            throw new AccessDeniedException("비밀 폴더 접근 불가");
+        }
+
+        List<Integer> tmdbIds = folderRepository.findTmdbIdsInFolder(folderId);
+        if (tmdbIds.isEmpty()) return Collections.emptyList();
+
+        List<ReviewEntity> reviews = reviewRepository.findByMovieIdIn(tmdbIds);
+        List<ReviewDTO> dtoList = new ArrayList<>();
+
+        for (ReviewEntity review : reviews) {
+            dtoList.add(ReviewDTO.toReviewDTO(review));
+        }
+        return dtoList;
+    }
+
+    //폴더 전체 모아보기
+    @Transactional(readOnly = true)
+    public List<ReviewDTO> getMyFoldersReviews(UserEntity viewer, List<Long> folderIds) {
+        List<Integer> tmdbIds = folderRepository.findTmdbIdsInMyFolders(viewer.getUserId(), folderIds);
+        if (tmdbIds.isEmpty()) return Collections.emptyList();
+
+        List<ReviewEntity> reviews = reviewRepository.findByMovieIdIn(tmdbIds);
+        List<ReviewDTO> dtoList = new ArrayList<>();
+
+        for (ReviewEntity review : reviews) {
+            dtoList.add(ReviewDTO.toReviewDTO(review));
+        }
+        return dtoList;
+    }
+
 }
