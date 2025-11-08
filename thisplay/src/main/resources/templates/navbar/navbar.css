@@ -1,12 +1,12 @@
 @import url("../commonCSS/base.css");
 
-body {
+/* body {
   background: var(--color-bg);
-  /* background: white; */
+  background: white;
   height: 100vh;
   margin: 0;
-  padding-top: 0.625rem; /* 10px */
-}
+  padding-top: 0.625rem; 10px
+} */
 
 .navbar {
   display: flex;
