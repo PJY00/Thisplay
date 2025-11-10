@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thisplay</title>
+    <link rel="stylesheet" href="./mainpage.css">
+    <link rel="stylesheet" href="../moviefolder/folder.css">
+</head>
+
+<body>
+    <!-- <header class="header-bar">
+        <nav class="header-nav-menu">
+            <a class="nav-item" href="/mainpage">로고</a>
+            <a class="nav-item" href="/mypage">마이페이지</a>
+            <a class="nav-item" href="/friend">친구</a>
+            <a class="nav-item" href="/login">로그인</a>
+            <a class="nav-item" href="/settings">설정</a>
+        </nav>
+    </header> -->
+
+    <main class="main_content">
+        <section class="search">
+            <h2>검색창</h2>
+            <search>
+                <form action="/search">
+                    <input type="search" id="movie" name="q" placeholder="검색어를 입력하세요" />
+                    <button type="submit">Search</button>
+                </form>
+            </search>
+        </section>
+        <section class="movielist">
+            <label for="genre-select">장르 선택</label>
+            <select id="genre-select">
+                <option value="28">액션</option>
+            </select>
+        </section>
+
+        <section class="card-container" id="movie-container"></section>
+
+        <section class="myfolder">
+            <h3 class="folderlist">나의 추천 영화 폴더</h3>
+            <!-- ✅ 새 폴더 만들기 폼 추가 -->
+            <div class="create-folder-box">
+                <form id="create-folder-form">
+                    <input type="text" id="folderName" placeholder="새 폴더 이름 입력" required />
+                    <select id="visibility">
+                        <option value="PRIVATE">비공개</option>
+                        <option value="FRIEND">친구 공개</option>
+                        <option value="PUBLIC">전체 공개</option>
+                    </select>
+                    <button type="submit">폴더 생성</button>
+                </form>
+                <p id="folder-result"></p>
+            </div>
+            <!-- ✅ 여기까지 폴더 생성 영역 -->
+            <div class="card-container" id="folder-container">
+                <button class="arrow left" id="left-arrow">&#10094;</button>
+                <div id="folder-wrapper">
+                    <div class="folder-card">
+                        <p class="folder-title"></p>
+                    </div>
+                </div>
+                <button class="arrow right" id="right-arrow">&#10095;</button>
+            </div>
+        </section>
+
+
+
+        <script type="module" src="../navbar/navbarDOM.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+        <script type="module" src=></script>
+        <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+        <script type="module" src="./mainpage.js"></script>
+        <script type="module" src="../moviefolder/folder.js"></script>
+</body>
+
+</html>
