@@ -21,6 +21,7 @@ public class TmdbApiClient {
         this.apiKey = apiKey;
         this.webClient = WebClient.builder()
                 .baseUrl(baseUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .build();
     }
 
@@ -139,6 +140,7 @@ public class TmdbApiClient {
     }
 
     // 영화 제목 자동완성 (검색)
+    // 현재 첫 번째 요청시 한글 query를 webclient가 제대로 인코딩 하지 못해 TMDB서버가 400을 반환하는 오류가 있음.
     public Mono<JsonNode> searchMovies(String query) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -155,13 +157,20 @@ public class TmdbApiClient {
                     ArrayNode results = (ArrayNode) response.get("results");
                     ArrayNode filtered = mapper.createArrayNode();
 
-                    for (int i = 0; i < Math.min(5, results.size()); i++) {
-                        JsonNode movie = results.get(i);
-                        ObjectNode obj = mapper.createObjectNode();
-                        obj.put("id", movie.path("id").asInt());
-                        obj.put("title", movie.path("title").asText(""));  // 한국어 제목
-                        obj.put("original_title", movie.path("original_title").asText(""));  // 영어 제목
-                        filtered.add(obj);
+                    for (JsonNode movie : results) {
+                        String title = movie.path("title").asText("").trim();
+
+                        // 🔹 title이 query로 시작하는지 확인 (대소문자 구분 X)
+                        if (title.startsWith(query)) {
+                            ObjectNode obj = mapper.createObjectNode();
+                            obj.put("id", movie.path("id").asInt());
+                            obj.put("title", title);  // 한국어 제목
+                            obj.put("original_title", movie.path("original_title").asText(""));
+                            filtered.add(obj);
+
+                            // 최대 5개까지만
+                            if (filtered.size() >= 5) break;
+                        }
                     }
 
                     return filtered;
