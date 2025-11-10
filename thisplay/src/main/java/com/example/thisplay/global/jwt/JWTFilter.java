@@ -29,13 +29,19 @@ public class JWTFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
-
+        String method = request.getMethod();
         // /api/movies/**, 경로는 JWT 검증 건너뜀
-        if (path.startsWith("/api/main")||path.startsWith("/api/movies/show")||path.startsWith("/login")||path.startsWith("/join")) {
+        if (("GET".equals(method) && path.matches("^/api/users/\\d+/profile$"))
+                || ("GET".equals(method) && path.startsWith("/api/reviews/"))
+                || ("GET".equals(method) && path.startsWith("/api/likes/"))
+                || path.startsWith("/api/main")
+                || path.startsWith("/api/movies/show")
+                || path.startsWith("/login")
+                || path.startsWith("/join")) {
+
             filterChain.doFilter(request, response);
             return;
         }
-        //---여기까지 변경 사항
 
         //request에서 Authorization 헤더를 찾음
         String token = null;
