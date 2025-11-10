@@ -53,11 +53,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/genres/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**","/api/likes/**","/api/users/*/profile").permitAll() //인증 없이 접근 가능
-                        .requestMatchers("api/reviews/**", "/api/likes/**").authenticated()
-                        .requestMatchers(HttpMethod.PATCH,"/api/users/*/profile").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/reviews/**", "/api/likes/**", "/api/main/genres/**", "/api/movies/show/**"
-                        ).permitAll()
+                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/genres/**","/api/movies/**","/oauth2/**", "/login/oauth2/**","/api/likes/**").permitAll() //인증 없이 접근 가능
+                        .requestMatchers("/api/users/*/profile", "api/reviews/**", "api/likes/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/**", "api/likes/**", "/api/users/*/profile").permitAll()
                         .anyRequest().authenticated());
 
         // LoginFilter 등록
