@@ -36,6 +36,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 || ("GET".equals(method) && path.startsWith("/api/likes/"))
                 || path.startsWith("/api/main")
                 || path.startsWith("/api/movies/show")
+                || path.startsWith("/api/movies")
                 || path.startsWith("/login")
                 || path.startsWith("/join")) {
 
