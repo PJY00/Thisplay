@@ -137,4 +137,34 @@ public class TmdbApiClient {
                     return obj;
                 });
     }
+
+    // 영화 제목 자동완성 (검색)
+    public Mono<JsonNode> searchMovies(String query) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search/movie")
+                        .queryParam("api_key", apiKey)
+                        .queryParam("language", "ko-KR")
+                        .queryParam("query", query)
+                        .queryParam("include_adult", false)
+                        .build())
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(response -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    ArrayNode results = (ArrayNode) response.get("results");
+                    ArrayNode filtered = mapper.createArrayNode();
+
+                    for (JsonNode movie : results) {
+                        ObjectNode obj = mapper.createObjectNode();
+                        obj.put("id", movie.path("id").asInt());
+                        obj.put("title", movie.path("title").asText(""));  // 한국어 제목
+                        obj.put("original_title", movie.path("original_title").asText(""));  // 영어 제목
+                        filtered.add(obj);
+                    }
+
+                    return filtered;
+                });
+    }
+
 }
