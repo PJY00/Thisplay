@@ -155,7 +155,8 @@ public class TmdbApiClient {
                     ArrayNode results = (ArrayNode) response.get("results");
                     ArrayNode filtered = mapper.createArrayNode();
 
-                    for (JsonNode movie : results) {
+                    for (int i = 0; i < Math.min(5, results.size()); i++) {
+                        JsonNode movie = results.get(i);
                         ObjectNode obj = mapper.createObjectNode();
                         obj.put("id", movie.path("id").asInt());
                         obj.put("title", movie.path("title").asText(""));  // 한국어 제목
