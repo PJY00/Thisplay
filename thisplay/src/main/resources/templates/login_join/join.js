@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // 서버로 POST 요청 (JSON)
-      const res = await axios.post("/signup", {
+      const res = await axios.post("http://localhost:8080/join", {
         nickname: nickname,
         password: password,
       });
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.valid) {
         alert("회원가입 성공");
         // 로그인 페이지 또는 직전 페이지로 이동
-        window.location.href = "/login";
+        window.location.href = "/join";
       } else {
         alert("회원가입 실패: " + data.message);
       }

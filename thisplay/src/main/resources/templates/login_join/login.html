@@ -24,7 +24,11 @@
           <div class="grid-overlay"></div>
           <div class="card-login">
             <h4>Log In</h4>
-            <form id="login-form">
+            <form
+              id="login-form"
+              action="http://localhost:8080/login"
+              method="POST"
+            >
               <div class="for-username">
                 <input
                   type="text"
@@ -54,7 +58,11 @@
 
           <div class="card-signup">
             <h4>Sign Up</h4>
-            <form action="http://localhost:8080/join" method="POST">
+            <form
+              action="http://localhost:8080/join"
+              method="POST"
+              id="signup-form"
+            >
               <div class="for-username">
                 <input
                   type="text"

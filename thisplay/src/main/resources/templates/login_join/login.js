@@ -47,7 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("log-password").value;
 
     // axios POST 요청
-    const res = await axios.post("/login", { username, password });
+    const res = await axios.get("http://localhost:8080/login", {
+      username,
+      password,
+    });
     if (res.data.valid) {
       window.location.href = "/main";
     } else {

@@ -48,7 +48,7 @@ function createNavbar() {
   const loginBtn = document.querySelector("#login-btn button");
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
-      window.location.href = "/login_join/login.html";
+      window.location.href = "../login_join/login.html";
     });
   }
 

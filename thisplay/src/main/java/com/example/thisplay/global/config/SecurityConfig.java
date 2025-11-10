@@ -1,5 +1,3 @@
-
-//Spring Security 설정 담당 파일
 package com.example.thisplay.global.config;
 
 import com.example.thisplay.global.jwt.JWTFilter;
@@ -21,55 +19,62 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity // 보안 설정 클래스
+@EnableWebSecurity
 @AllArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
-    private final UserRepository userRepository; // 추가
+    private final UserRepository userRepository;
 
-    //사용자 인증 처리
+    // ✅ AuthenticationManager 등록
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    //비밀번호 암호화
+    // ✅ 비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    //보안 규칙 정의
+    // ✅ 시큐리티 필터 체인 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        // 1️⃣ 기본 보안 기능 해제
         http
                 .csrf(csrf -> csrf.disable())
-                .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-                .logout(logout -> logout.disable()); // 기본 로그아웃 비활성화
+                .logout(logout -> logout.disable());
 
+        // 2️⃣ 경로별 권한 설정
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**","/api/likes/**", "/login_join/**").permitAll() //인증 없이 접근 가능
-                        .requestMatchers("/api/users/*/profile", "api/reviews/**", "api/likes/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/reviews/**", "api/likes/**").permitAll()
-                        .anyRequest().authenticated());
+                        .requestMatchers(
+                                "/", "/login", "/join", "/login_join/**",
+                                "/oauth2/**", "/login/oauth2/**",
+                                "/api/main/**", "/api/movies/show/**",
+                                "/api/likes/**", "/css/**", "/js/**", "/images/**"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/**", "/api/likes/**").permitAll()
+                        .anyRequest().authenticated()
+                );
 
-        // LoginFilter 등록
+        // 3️⃣ 폼 로그인 설정
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository),
-                        UsernamePasswordAuthenticationFilter.class);
+                .formLogin(form -> form
+                        .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
+                        .loginProcessingUrl("/login")      // POST /login → 로그인 처리
+                        .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
+                        .permitAll()
+                )
 
-        // JWTFilter 등록
-        http
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-
-
-        http
+        // 4️⃣ OAuth2 로그인 (구글 로그인)
                 .oauth2Login(oauth -> oauth
+                        .loginPage("/login")               // 같은 페이지에서 구글 로그인 버튼 제공
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/loginSuccess");
                         })
@@ -78,9 +83,15 @@ public class SecurityConfig {
                         })
                 );
 
-        http
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+        // 5️⃣ JWT / Login 필터 등록
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository);
+        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
+        // 6️⃣ 세션 정책 (JWT 기반이므로 비상시만 생성)
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        );
 
         return http.build();
     }
