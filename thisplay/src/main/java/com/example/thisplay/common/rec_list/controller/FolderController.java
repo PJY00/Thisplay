@@ -51,7 +51,7 @@ public class FolderController {
                 FolderVisibility.valueOf(visibility.toUpperCase()));
     }
 
-    // 폴더 내 영화 리스트 조회-> 폴더 ID말고 폴더 이름으로 할까 고민중
+    // 폴더 내 영화 리스트 조회
     @GetMapping("/{folderId}/movies")
     public ViewFolderDTO getMoviesByFolder(@PathVariable Long folderId,
                                                @AuthenticationPrincipal CustomUserDetails userDetails) {

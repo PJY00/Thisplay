@@ -1,6 +1,7 @@
 package com.example.thisplay.common.moviepage.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.friend.service.FriendshipService;
 import com.example.thisplay.common.moviepage.DTO.Movie_FolderDTO;
 import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
 import com.example.thisplay.common.moviepage.DTO.MovieDTO;
@@ -25,6 +26,7 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieFolderRepository folderRepository;
     private final TmdbApiClient tmdbApiClient;
+    private final FriendshipService friendshipService;
 
     // 영화 저장
     public movie_saveDTO saveMovie(Long folderId, int tmdbId, UserEntity loginUser) {
@@ -70,25 +72,24 @@ public class MovieService {
         MovieFolder folder = folderRepository.findById(folderId)
                 .orElseThrow(() -> new RuntimeException("폴더를 찾을 수 없습니다."));
 
-        // 1. 권한 확인
+        UserEntity owner = folder.getUser();
+
+        // ✅ PRIVATE → 본인만
         if (folder.getVisibility() == FolderVisibility.PRIVATE &&
-                !folder.getUser().getUserId().equals(requester.getUserId())) {
-            throw new RuntimeException("이 폴더는 비밀 폴더로 접근할 수 없습니다.");
+                !owner.getUserId().equals(requester.getUserId())) {
+            throw new RuntimeException("이 폴더는 비공개입니다.");
         }
 
-//        if (folder.getVisibility() == FolderVisibility.FRIENDS &&
-//                !isFriend(requester, folder.getUser())) {
-//            throw new RuntimeException("친구공개 폴더는 친구만 볼 수 있습니다.");
-//        }
+        // ✅ FRIENDS → 친구만
+        if (folder.getVisibility() == FolderVisibility.FRIENDS &&
+                !friendshipService.areFriends(requester, owner)) {
+            throw new RuntimeException("이 폴더는 친구에게만 공개됩니다.");
+        }
 
-        // 2. DTO 변환
+        // ✅ PUBLIC → 누구나 (검사 없음)
+
         return mapToViewFolderDTO(folder);
     }
-//임시 친구 처리...
-//    private boolean isFriend(UserEntity requester, UserEntity folderOwner) {
-//        // 친구 여부 확인 로직
-//        return requester.getFriends().contains(folderOwner); // 예시
-//    }
 
     private ViewFolderDTO mapToViewFolderDTO(MovieFolder folder) {
         List<MovieDTO> movies = folder.getMovies().stream().map(m -> {
@@ -129,5 +130,6 @@ public class MovieService {
         // 5️⃣ 결과 메시지 반환
         return String.format("폴더 '%s'에서 영화 '%s'가 삭제되었습니다.", folder.getName(), movie.getTitle());
     }
+
 
 }

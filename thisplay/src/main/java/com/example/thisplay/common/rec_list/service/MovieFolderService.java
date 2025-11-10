@@ -2,6 +2,7 @@ package com.example.thisplay.common.rec_list.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.Auth.repository.UserRepository;
+import com.example.thisplay.common.friend.service.FriendshipService;
 import com.example.thisplay.common.rec_list.DTO.FolderDTO;
 import com.example.thisplay.common.moviepage.DTO.MovieDTO;
 import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class MovieFolderService {
     private final MovieFolderRepository folderRepository;
     private final UserRepository userRepository;
+    private final FriendshipService friendshipService;
 
     // ✅ 본인 폴더 조회 (기존 그대로)
     public List<ViewFolderDTO> getFoldersByUser(UserEntity user) {
@@ -29,6 +31,7 @@ public class MovieFolderService {
                 .map(this::mapToViewFolderDTO)
                 .collect(Collectors.toList());
     }
+
     // ✅ 다른 유저 폴더 조회 (공개 범위 적용)
     public List<ViewFolderDTO> getFoldersByNicknameWithVisibility(String nickname, UserEntity viewer) {
         UserEntity folderOwner = userRepository.findByNickname(nickname)
@@ -48,10 +51,7 @@ public class MovieFolderService {
 
                     // 3️⃣ 친구만 공개
                     if (visibility == FolderVisibility.FRIENDS) {
-                        // TODO: 친구 관계 테이블을 나중에 만들어서 실제 친구 확인하도록 수정
-                        //return friendService.areFriends(viewer,folderOwner)와 같이 수정하면 된다고 함.
-                        // 지금은 임시로 false로 처리
-                        return false;
+                        return friendshipService.areFriends(viewer, folderOwner);
                     }
 
                     // 4️⃣ 비공개 폴더는 차단
