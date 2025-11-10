@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thisplay</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <section>
+      <div class="trans-wrapper">
+        <h6 class="trans-text">
+          <span>Log In</span>
+          <span>Sign Up</span>
+        </h6>
+
+        <!-- 체크박스 & 라벨 -->
+        <input type="checkbox" class="checkbox" id="reg-log" name="reg-log" />
+        <label for="reg-log"></label>
+
+        <!-- 카드 wrapper (같은 부모 안에 둬야 함) -->
+        <div class="card-wrapper">
+          <div class="noise-overlay"></div>
+          <div class="grid-overlay"></div>
+          <div class="card-login">
+            <h4>Log In</h4>
+            <form id="login-form">
+              <div class="for-username">
+                <input
+                  type="text"
+                  name="log-username"
+                  placeholder="Username"
+                  class="form-style"
+                  id="log-username"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="password">
+                <input
+                  type="password"
+                  name="log-password"
+                  placeholder="Password"
+                  class="form-style"
+                  id="log-password"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="submit">로그인</button>
+              <button type="button" class="google-btn" id="google-login-btn">
+                Google로 로그인
+              </button>
+            </form>
+          </div>
+
+          <div class="card-signup">
+            <h4>Sign Up</h4>
+            <form action="http://localhost:8080/join" method="POST">
+              <div class="for-username">
+                <input
+                  type="text"
+                  name="sign-username"
+                  id="sign-username"
+                  placeholder="Username"
+                  class="form-style"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="password">
+                <input
+                  type="password"
+                  name="sign-password"
+                  placeholder="Password"
+                  class="form-style"
+                  id="sign-password"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="password-check">
+                <input
+                  type="password"
+                  name="sign-password-check"
+                  placeholder="Password Again"
+                  class="form-style"
+                  id="sign-password-check"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="submit">회원가입</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="login.js"></script>
+    <script src="join.js"></script>
+  </body>
+</html>
