@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -141,15 +142,21 @@ public class TmdbApiClient {
 
     // 영화 제목 자동완성 (검색)
     // 현재 첫 번째 요청시 한글 query를 webclient가 제대로 인코딩 하지 못해 TMDB서버가 400을 반환하는 오류가 있음.
+    //이거 일차적으로 해결 했는데 여전히 가끔씩 발행: TMDB가 글자 길이가 짧으면 잘 인식을 못 한다고 함...
     public Mono<JsonNode> searchMovies(String query) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/search/movie")
-                        .queryParam("api_key", apiKey)
-                        .queryParam("language", "ko-KR")
-                        .queryParam("query", query)
-                        .queryParam("include_adult", false)
-                        .build())
+                .uri(uriBuilder -> {
+                    String uri = uriBuilder
+                            .path("/search/movie")
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "ko-KR")
+                            .queryParam("query", query)
+                            .queryParam("include_adult", false)
+                            .build()
+                            .toString();
+                    // 강제로 URI Encoding
+                    return UriComponentsBuilder.fromUriString(uri).encode().build().toUri();
+                })
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .map(response -> {
