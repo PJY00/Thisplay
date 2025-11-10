@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar</title>
+    <link rel="stylesheet" href="navbar.css" />
+  </head>
+
+  <body>
+    <!-- <nav class="navbar">
+      <div class="logo">THISPLAY</div>
+
+      <ul class="menu hidden">
+        <li class="item"><a href="#">Home</a></li>
+        <li class="item"><a href="#">About Us</a></li>
+        <li class="item"><a href="#">Contact Us</a></li>
+        <li class="item"><a href="#">Blog</a></li>
+      </ul>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="검색어를 입력하세요..."
+        />
+        <button id="search-btn" aria-label="검색">
+          <i class="uil uil-search"></i>
+        </button>
+      </div>
+
+      <ul class="menu">
+        <button id="login-btn" type="submit">log in</button>
+
+        <li id="profile-menu" class="hidden">
+          <img src="/images/profile.png" alt="프로필" id="profile-img" />
+          <ul class="dropdown hidden">
+            <li><a href="/mypage">마이페이지</a></li>
+            <li><a href="#" id="logout-btn">로그아웃</a></li>
+            <li><a href="/setting">설정</a></li>
+          </ul>
+        </li>
+      </ul> -->
+
+    <nav class="navbar">
+      <div class="nav-left">
+        <div class="logo">THISPLAY</div>
+      </div>
+
+      <div class="nav-center">
+        <div class="search-box">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="검색어를 입력하세요..."
+          />
+          <button id="search-btn" aria-label="검색">
+            <i class="uil uil-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <ul class="menu">
+          <li id="login-btn"><button type="button">LOG IN</button></li>
+          <li id="profile-menu" class="hidden">
+            <!-- <li id="profile-menu"> -->
+            <img src="profile.png" alt="프로필" id="profile-img" />
+            <ul class="dropdown hidden">
+              <li><a href="#">마이페이지</a></li>
+              <li><a href="#">설정</a></li>
+              <li><a href="#">로그아웃</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- </nav> -->
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="/js/api/axiosInstance.js"></script> -->
+    <script type="module" src="./navbar.js"></script>
+  </body>
+</html>
