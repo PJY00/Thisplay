@@ -34,15 +34,15 @@
 
                     <br>
                     <!-- ✅ [3] 별점 -->
-                    <label for="starRating">별점</label>
-                    <input type="number" min="1" max="5">
+                    <label for="starRating">별점 (1~5)</label><br>
+                    <input type="number" id="starRating" min="1" max="5" placeholder="1~5 사이 숫자를 입력하세요"><br>
+
 
 
                     <br>
                     <!-- ✅ [4] 감상평 -->
-                    <label for="reviewBody">감상평</label>
-                    <br>
-                    <textarea rows="5" placeholder="여러분의 감상평을 작성해주세요"></textarea><br>
+                    <label for="reviewBody">감상평</label><br>
+                    <textarea id="reviewBody" rows="5" placeholder="여러분의 감상평을 작성해주세요"></textarea><br>
 
                     <br>
 
@@ -55,7 +55,7 @@
             <div class="writingside">
                 <!-- ✅ [6] 공개 범위 -->
                 <label>
-                    <input type="radio" name="visibility" value="public">
+                    <input type="radio" name="visibility" value="public" checked>
                     전체 공개
                 </label>
                 <label>
@@ -72,6 +72,9 @@
         </div>
     </section>
 
+    <script type="module" src="../navbar/navbarDOM.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
     <script type="module" src="../reviewpage/writereview.js"></script>
 </body>
 
