@@ -1,3 +1,91 @@
+//
+////Spring Security 설정 담당 파일
+//package com.example.thisplay.global.config;
+//
+//import com.example.thisplay.global.jwt.JWTFilter;
+//import com.example.thisplay.global.jwt.JWTUtil;
+//import com.example.thisplay.global.jwt.LoginFilter;
+//import com.example.thisplay.common.Auth.repository.UserRepository;
+//import lombok.AllArgsConstructor;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.http.HttpMethod;
+//import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+//import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.http.SessionCreationPolicy;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.web.SecurityFilterChain;
+//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+//
+//@Configuration
+//@EnableWebSecurity // 보안 설정 클래스
+//@AllArgsConstructor
+//@EnableMethodSecurity(prePostEnabled = true)
+//public class SecurityConfig {
+//
+//    private final AuthenticationConfiguration authenticationConfiguration;
+//    private final JWTUtil jwtUtil;
+//    private final UserRepository userRepository; // 추가
+//
+//    //사용자 인증 처리
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//        return configuration.getAuthenticationManager();
+//    }
+//
+//    //비밀번호 암호화
+//    @Bean
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    //보안 규칙 정의
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .formLogin(form -> form.disable())
+//                .httpBasic(basic -> basic.disable())
+//                .logout(logout -> logout.disable()); // 기본 로그아웃 비활성화
+//
+//        http
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**","/api/likes/**", "/login_join/**").permitAll() //인증 없이 접근 가능
+//                        .requestMatchers("/api/users/*/profile", "api/reviews/**", "api/likes/**").authenticated()
+//                        .requestMatchers(HttpMethod.GET, "/api/reviews/**", "api/likes/**").permitAll()
+//                        .anyRequest().authenticated());
+//
+//        // LoginFilter 등록
+//        http
+//                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository),
+//                        UsernamePasswordAuthenticationFilter.class);
+//
+//        // JWTFilter 등록
+//        http
+//                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+//
+//
+//        http
+//                .oauth2Login(oauth -> oauth
+//                        .successHandler((request, response, authentication) -> {
+//                            response.sendRedirect("/loginSuccess");
+//                        })
+//                        .failureHandler((request, response, exception) -> {
+//                            response.sendRedirect("/loginFailure");
+//                        })
+//                );
+//
+//        http
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+//
+//        return http.build();
+//    }
+//}
+
 package com.example.thisplay.global.config;
 
 import com.example.thisplay.global.jwt.JWTFilter;
@@ -28,29 +116,29 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
 
-    // ✅ AuthenticationManager 등록
+    // AuthenticationManager 등록
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    // ✅ 비밀번호 암호화
+    // 비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ 시큐리티 필터 체인 설정
+    // 시큐리티 필터 체인 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        // 1️⃣ 기본 보안 기능 해제
+        // 기본 보안 기능 해제
         http
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(basic -> basic.disable())
                 .logout(logout -> logout.disable());
 
-        // 2️⃣ 경로별 권한 설정
+        // 경로별 권한 설정
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -63,7 +151,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 );
 
-        // 3️⃣ 폼 로그인 설정
+        // 폼 로그인 설정
         http
                 .formLogin(form -> form
                         .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
@@ -72,7 +160,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
-        // 4️⃣ OAuth2 로그인 (구글 로그인)
+        // OAuth2 로그인 (구글 로그인)
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")               // 같은 페이지에서 구글 로그인 버튼 제공
                         .successHandler((request, response, authentication) -> {
@@ -83,12 +171,12 @@ public class SecurityConfig {
                         })
                 );
 
-        // 5️⃣ JWT / Login 필터 등록
+        // JWT / Login 필터 등록
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository);
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
-        // 6️⃣ 세션 정책 (JWT 기반이므로 비상시만 생성)
+        // 세션 정책 (JWT 기반이므로 비상시만 생성)
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
