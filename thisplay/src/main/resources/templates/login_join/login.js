@@ -36,6 +36,8 @@
 //     }
 //   });
 // });
+import { api } from "../../static/js/api/axiosInstance.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("login-form");
   const googleBtn = document.getElementById("google-login-btn");
@@ -47,12 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("log-password").value;
 
     // axios POST 요청
-    const res = await axios.get("http://localhost:8080/login", {
-      username,
-      password,
+    const res = await axios.post("http://localhost:8080/api/login", {
+      nickname: username,
+      password: password,
     });
-    if (res.data.valid) {
-      window.location.href = "/main";
+
+    if (res.data.message === "로그인 성공") {
+      alert("로그인 성공!");
+      window.location.href = "/main"; // redirect
     } else {
       alert("로그인 실패: " + res.data.message);
     }

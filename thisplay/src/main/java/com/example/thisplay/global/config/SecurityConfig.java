@@ -149,16 +149,18 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/**", "/api/likes/**").permitAll()
                         .anyRequest().authenticated()
+                        .and()
+                        .formLogin().disable()
                 );
 
         // 폼 로그인 설정
         http
-                .formLogin(form -> form
-                        .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
-                        .loginProcessingUrl("/login")      // POST /login → 로그인 처리
-                        .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
-                        .permitAll()
-                )
+                // .formLogin(form -> form
+                //         .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
+                //         .loginProcessingUrl("/login")      // POST /login → 로그인 처리
+                //         .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
+                //         .permitAll()
+                // )
 
         // OAuth2 로그인 (구글 로그인)
                 .oauth2Login(oauth -> oauth

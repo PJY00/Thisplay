@@ -1,13 +1,13 @@
-import axios from "axios";
+// import axios from "axios";
 import { getToken, logout } from "../utils/auth.js";
 // 상단 import는 권한(토큰) 관련 페이지이므로 주석처리 해둠
 // login page와 연결시킬 예정
 
 //가져올 base url 나중에 주소 생기면 none 부분 그걸로 수정
-const BASE_URL =
-  window.location.hostname === "localhost" ? "http://localhost:8080" : "none";
+const BASE_URL = "http://localhost:8080";
+// window.location.hostname === "localhost" ? "http://localhost:8080" : "none";
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
