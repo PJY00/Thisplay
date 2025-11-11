@@ -11,47 +11,68 @@
     <section class="container">
         <div class="writingwrap">
             <div class="writingheader">
-                <a href="#">
+                <a href="#" id="submitReviewBtn">
                     등록
                 </a>
             </div>
             <div class="writingcontent">
                 <div class="writingeditor">
-                    <label>제목</label><br>
-                    <input type="text" placeholder="제목을 입력하세요">
+                    <!-- ✅ [1] 영화/폴더 정보 추가 -->
+                    <label for="movieTitle">영화</label><br>
+                    <input type="text" id="movieTitle" placeholder="영화 제목" readonly>
                     <br>
 
-                    <label>별점</label>
+                    <label for="folderSelect">폴더 선택</label><br>
+                    <select id="folderSelect">
+                        <option value="">폴더를 선택하세요</option>
+                    </select>
+
+                    <br>
+                    <!-- ✅ [2] 제목 -->
+                    <label for="reviewTitle">제목</label><br>
+                    <input type="text" id="reviewTitle" placeholder="제목을 입력하세요">
+
+                    <br>
+                    <!-- ✅ [3] 별점 -->
+                    <label for="starRating">별점</label>
                     <input type="number" min="1" max="5">
 
-                    <br>
 
-                    <label></label>
+                    <br>
+                    <!-- ✅ [4] 감상평 -->
+                    <label for="reviewBody">감상평</label>
+                    <br>
                     <textarea rows="5" placeholder="여러분의 감상평을 작성해주세요"></textarea><br>
 
-                    <button type="submit">저장하기</button>
-                    <hr>
-                    <label></label>
-                    <textarea rows="5" placeholder="이 영화를 한 줄로 말한다면.."></textarea><br>
-                </div>
-                <div class="writingside">
-                    <label>
-                        <input type="radio" name="visibility" value="public">
-                        전체 공개
-                    </label>
-                    <label>
-                        <input type="radio" name="visibility" value="friends">
-                        친구에게만 공개
-                    </label>
-                    <label>
-                        <input type="radio" name="visibility" value="private">
-                        나에게만 공개
-                    </label>
+                    <br>
+
+                    <!-- ✅ [5] 한줄평 -->
+                    <label for="oneLineReview">한줄평</label><br>
+                    <textarea id="oneLineReview" rows="3" placeholder="이 영화를 한 줄로 말한다면.."></textarea>
                 </div>
             </div>
 
+            <div class="writingside">
+                <!-- ✅ [6] 공개 범위 -->
+                <label>
+                    <input type="radio" name="visibility" value="public">
+                    전체 공개
+                </label>
+                <label>
+                    <input type="radio" name="visibility" value="friends">
+                    친구에게만 공개
+                </label>
+                <label>
+                    <input type="radio" name="visibility" value="private">
+                    나에게만 공개
+                </label>
+            </div>
+        </div>
+
         </div>
     </section>
+
+    <script type="module" src="../reviewpage/writereview.js"></script>
 </body>
 
 </html>
