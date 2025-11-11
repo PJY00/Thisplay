@@ -10,15 +10,6 @@
 </head>
 
 <body>
-    <!-- <header class="header-bar">
-        <nav class="header-nav-menu">
-            <a class="nav-item" href="/mainpage">로고</a>
-            <a class="nav-item" href="/mypage">마이페이지</a>
-            <a class="nav-item" href="/friend">친구</a>
-            <a class="nav-item" href="/login">로그인</a>
-            <a class="nav-item" href="/settings">설정</a>
-        </nav>
-    </header> -->
 
     <main class="main_content">
         <section class="search">
@@ -58,12 +49,17 @@
             <div class="card-container" id="folder-container">
                 <button class="arrow left" id="left-arrow">&#10094;</button>
                 <div id="folder-wrapper">
-                    <div class="folder-card">
-                        <p class="folder-title"></p>
-                    </div>
                 </div>
                 <button class="arrow right" id="right-arrow">&#10095;</button>
             </div>
+            <!-- 📦 팝업 모달 (새로 추가) -->
+            <div id="folder-modal" class="modal hidden">
+                <div class="modal-content">
+                    <button id="close-modal" class="close-btn">✕</button>
+                    <h3 id="modal-folder-name"></h3>
+                    <div id="modal-movie-list"></div>
+                </div>
+
         </section>
 
 
@@ -74,6 +70,7 @@
         <script type="module" src="../../static/js/api/axiosInstance.js"></script>
         <script type="module" src="./mainpage.js"></script>
         <script type="module" src="../moviefolder/folder.js"></script>
+        <script type="module" src="../moviefolder/folderDOM.js"></script>
 </body>
 
 </html>

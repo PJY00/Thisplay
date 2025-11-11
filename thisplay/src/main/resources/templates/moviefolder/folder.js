@@ -142,6 +142,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.log("✅ 폴더 생성 성공:", data);
 
                 resultText.textContent = `"${data.folderName}" 폴더가 생성되었습니다!`;
+                setTimeout(() => {
+                    resultText.textContent = "";
+                }, 5000);
                 resultText.style.color = "green";
 
                 // 새로고침 없이 바로 폴더 목록 갱신
