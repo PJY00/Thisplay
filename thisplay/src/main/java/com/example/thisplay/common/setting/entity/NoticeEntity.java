@@ -1,4 +1,4 @@
-package com.example.thisplay.common.notice.entity;
+package com.example.thisplay.common.setting.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
