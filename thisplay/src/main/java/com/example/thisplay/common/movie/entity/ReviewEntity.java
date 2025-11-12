@@ -50,6 +50,8 @@ public class ReviewEntity {
     @Builder.Default
     private List<LikeEntity> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEntity> comments = new ArrayList<>();
 
     @CreationTimestamp
     private Date createdAt;

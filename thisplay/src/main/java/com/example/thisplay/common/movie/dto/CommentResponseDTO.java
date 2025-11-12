@@ -1,4 +1,4 @@
-package com.example.thisplay.common.movie.controller;
+package com.example.thisplay.common.movie.dto;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentResponseDTO {
     private Long commentId;
-    private Long movieId;
+    private Long reviewId;
     private String content;
     private LocalDateTime createdAt;
     private String writer;

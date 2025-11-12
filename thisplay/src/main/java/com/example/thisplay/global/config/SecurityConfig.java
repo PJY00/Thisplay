@@ -97,6 +97,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -105,6 +106,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -128,13 +136,32 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
     // 시큐리티 필터 체인 설정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+        AuthenticationManager authenticationManager = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
+
+        LoginFilter loginFilter = new LoginFilter(authenticationManager, jwtUtil, userRepository);
+        loginFilter.setFilterProcessesUrl("/api/login");
+
         // 기본 보안 기능 해제
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .httpBasic(basic -> basic.disable())
                 .logout(logout -> logout.disable());
 
@@ -149,20 +176,18 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/**", "/api/likes/**").permitAll()
                         .anyRequest().authenticated()
-                        .and()
-                        .formLogin().disable()
                 );
 
         // 폼 로그인 설정
         http
-                // .formLogin(form -> form
-                //         .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
-                //         .loginProcessingUrl("/login")      // POST /login → 로그인 처리
-                //         .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
-                //         .permitAll()
-                // )
+                .formLogin(form -> form
+                        .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
+                        .loginProcessingUrl("/login")      // POST /login → 로그인 처리
+                        .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
+                        .permitAll()
+                )
 
-        // OAuth2 로그인 (구글 로그인)
+                // OAuth2 로그인 (구글 로그인)
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")               // 같은 페이지에서 구글 로그인 버튼 제공
                         .successHandler((request, response, authentication) -> {
@@ -174,7 +199,7 @@ public class SecurityConfig {
                 );
 
         // JWT / Login 필터 등록
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository);
+//        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, userRepository);
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
