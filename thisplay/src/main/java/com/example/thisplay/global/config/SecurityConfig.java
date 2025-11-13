@@ -156,7 +156,8 @@ public class SecurityConfig {
         AuthenticationManager authenticationManager = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
 
         LoginFilter loginFilter = new LoginFilter(authenticationManager, jwtUtil, userRepository);
-        loginFilter.setFilterProcessesUrl("/api/login");
+//        loginFilter.setFilterProcessesUrl("/api/login");
+        loginFilter.setFilterProcessesUrl("/login");
 
         // 기본 보안 기능 해제
         http
@@ -164,6 +165,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .httpBasic(basic -> basic.disable())
                 .logout(logout -> logout.disable());
+//                .formLogin(formLogin->formLogin.disable());
 
         // 경로별 권한 설정
         http
@@ -180,12 +182,12 @@ public class SecurityConfig {
 
         // 폼 로그인 설정
         http
-                .formLogin(form -> form
-                        .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
-                        .loginProcessingUrl("/login")      // POST /login → 로그인 처리
-                        .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
-                        .permitAll()
-                )
+//                .formLogin(form -> form
+//                        .loginPage("/login")               // GET /login → Controller에서 login.html 렌더링
+//                        .loginProcessingUrl("/login")      // POST /login → 로그인 처리
+//                        .defaultSuccessUrl("/", true)      // 로그인 성공 시 이동
+//                        .permitAll()
+//                )
 
                 // OAuth2 로그인 (구글 로그인)
                 .oauth2Login(oauth -> oauth
