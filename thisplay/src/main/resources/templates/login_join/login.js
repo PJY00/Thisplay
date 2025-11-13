@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("log-password").value;
 
     // axios POST 요청
-    const res = await axios.post("http://localhost:8080/api/login", {
+    const res = await axios.post("http://localhost:8080/login", {
       nickname: username,
       password: password,
     });
