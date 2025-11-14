@@ -1,0 +1,97 @@
+/* ===== 리뷰 작성 페이지 레이아웃 ===== */
+body {
+    padding-top: 4rem;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(0, 255, 170, 0.08);
+}
+
+/* 전체 묶음 */
+.writingwrap {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* ===== 상단 등록 버튼 ===== */
+.writingheader {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#submitReviewBtn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: var(--color-secondary);
+    border-radius: 6px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+#submitReviewBtn:hover {
+    background: var(--primary-glow);
+    color: black;
+}
+
+/* ===== 입력 영역 ===== */
+.writingcontent {
+    width: 100%;
+}
+
+.writingeditor label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* base.css의 input 스타일을 그대로 사용하되, width만 통일 */
+.writingeditor input,
+.writingeditor textarea,
+.writingeditor select {
+    width: 100%;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 포커스 시 base.css + 페이지 강조 */
+.writingeditor input:focus,
+.writingeditor textarea:focus,
+.writingeditor select:focus {
+    border-color: var(--primary-glow);
+    box-shadow: 0 0 6px var(--primary-glow);
+}
+
+/* textarea 높이 통일 */
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* ===== 오른쪽 공개 범위 박스 ===== */
+.writingside {
+    padding: 18px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.writingside label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.writingside input[type="radio"] {
+    margin-right: 6px;
+}
