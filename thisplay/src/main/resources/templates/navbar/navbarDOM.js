@@ -41,9 +41,23 @@ function createNavbar() {
     </nav>
   `;
 
-  /// ody에 navbar 추가
+  /// body에 navbar 추가
   document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
+  // login 버튼 연결
+  const loginBtn = document.querySelector("#login-btn button");
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "../login_join/login.html";
+    });
+  }
+
+  //   const loginBtn = document.querySelector("#login-btn button");
+  //   if (loginBtn) {
+  //     loginBtn.addEventListener("click", () => {
+  //       window.location.href = "./login_join/login.html";
+  //     });
+  //   }
   // dropdown
   const profileMenu = document.getElementById("profile-menu");
   const dropdown = profileMenu.querySelector(".dropdown");

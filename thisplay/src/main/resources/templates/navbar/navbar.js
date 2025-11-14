@@ -98,13 +98,13 @@
 
 //   if (!profileImg || !dropdown) return;
 
-//   // 1️⃣ 프로필 클릭 → 열기/닫기
+//   // 프로필 클릭 → 열기/닫기
 //   profileImg.addEventListener("click", (e) => {
 //     e.stopPropagation(); // 문서 전체 클릭 이벤트로 전파되지 않게 막기
 //     dropdown.classList.toggle("hidden");
 //   });
 
-//   // 2️⃣ 문서 아무 곳이나 클릭하면 닫힘
+//   // 문서 아무 곳이나 클릭하면 닫힘
 //   document.addEventListener("click", (e) => {
 //     // 클릭한 요소가 dropdown 내부나 profile 이미지가 아니면 닫기
 //     if (

@@ -1,0 +1,69 @@
+// document.addEventListener("DOMContentLoaded", () => {
+//   const form = document.getElementById("login-form");
+
+//   // 이전 페이지로 돌아가긴
+//   const previousPage = document.referrer; // 바로 직전 페이지 URL
+//   console.log("이전 페이지:", previousPage);
+
+//   form.addEventListener("submit", async (e) => {
+//     e.preventDefault();
+
+//     const username = document.getElementById("log-username").value;
+//     const password = document.getElementById("log-password").value;
+
+//     try {
+//       const res = await axios.post("/login", {
+//         username: username,
+//         password: password,
+//       });
+
+//       const data = res.data;
+//       if (data.valid) {
+//         alert("로그인 성공!");
+
+//         // 로그인 시 페이지 이동
+//         if (previousPage && !previousPage.includes("/login")) {
+//           window.location.href = previousPage;
+//         } else {
+//           window.location.href = "/main";
+//         }
+//       } else {
+//         alert("로그인 실패: " + data.message);
+//       }
+//     } catch (err) {
+//       alert("로그인 중 오류 발생");
+//       console.error(err);
+//     }
+//   });
+// });
+import { api } from "../../static/js/api/axiosInstance.js";
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("login-form");
+  const googleBtn = document.getElementById("google-login-btn");
+
+  // 일반 로그인
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("log-username").value;
+    const password = document.getElementById("log-password").value;
+
+    // axios POST 요청
+    const res = await axios.post("http://localhost:8080/login", {
+      nickname: username,
+      password: password,
+    });
+
+    if (res.data.message === "로그인 성공") {
+      alert("로그인 성공!");
+      window.location.href = "/main"; // redirect
+    } else {
+      alert("로그인 실패: " + res.data.message);
+    }
+  });
+
+  // Google 로그인 버튼
+  googleBtn.addEventListener("click", () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  });
+});
