@@ -139,12 +139,19 @@ public class ReviewController {
         }
     }
 
+    //단일폴더
     @GetMapping("/myfolders/{folderId}")
-    public List<ReviewDTO> getMyFolderReviews(
+    public Page<ReviewDTO> getMyFolderReviews(
             @PathVariable Long folderId,
-            @AuthenticationPrincipal CustomUserDetails user
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PageableDefault(size = 10, sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return reviewService.getMyFolderReviews(folderId, user.getUserEntity());
+        if (user == null) {
+            throw new RuntimeException("로그인이 필요합니다");
+        }
+
+        return reviewService.getMyFolderReviewsPaging(folderId, user.getUserEntity(), pageable);
     }
 
     // 전체 폴더 리뷰 (여러 폴더 id 포함, 페이징)

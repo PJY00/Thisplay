@@ -188,21 +188,29 @@ public class ReviewService {
 
     //단일폴더
     @Transactional(readOnly = true)
-    public List<ReviewDTO> getMyFolderReviews(Long folderId, UserEntity viewer) {
+    public Page<ReviewDTO> getMyFolderReviewsPaging(Long folderId,
+                                                    UserEntity viewer,
+                                                    Pageable pageable) {
 
         MovieFolder folder = folderRepository.findById(folderId)
-                .orElseThrow(() -> new IllegalArgumentException("폴더 없음"));
+                .orElseThrow(() -> new IllegalArgumentException("폴더를 찾을 수 없습니다. id=" + folderId));
 
-        List<Integer> tmdbIds = folder.getMovies()
-                .stream()
+        if (folder.getVisibility() == FolderVisibility.PRIVATE &&
+                !Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
+            throw new AccessDeniedException("폴더 접근 불가");
+        }
+
+        // 폴더 안 영화 tmdbId 목록
+        List<Integer> tmdbIds = folder.getMovies().stream()
                 .map(MovieEntity::getTmdbId)
                 .toList();
 
-        List<ReviewEntity> myReviews =
-                reviewRepository.findByUser_UserIdAndMovieIdIn(viewer.getUserId(), tmdbIds);
+        if (tmdbIds.isEmpty()) {
+            return Page.empty(pageable);
+        }
 
-        return myReviews.stream()
-                .map(ReviewDTO::toReviewDTO)
-                .toList();
+        return reviewRepository
+                .findByUser_UserIdAndMovieIdIn(viewer.getUserId(), tmdbIds, pageable)
+                .map(ReviewDTO::toReviewDTO);
     }
 }
