@@ -138,6 +138,8 @@ document.addEventListener("click", async (e) => {
                 <p>${r.oneLineReview ? r.oneLineReview : "(등록된 한줄평이 없습니다)"}</p>
                 </section>
 
+                <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
+                <br>
                 <button class="back-to-list">← 목록으로 돌아가기</button>
             </article>
         `;
@@ -146,6 +148,47 @@ document.addEventListener("click", async (e) => {
         detailContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
     }
 });
+
+// =====================================================
+// 🗑 리뷰 삭제 버튼
+// =====================================================
+document.addEventListener("click", async (e) => {
+    const deleteBtn = e.target.closest(".delete-review");
+    if (!deleteBtn) return;
+
+    const reviewId = deleteBtn.dataset.reviewid;
+
+    const confirmDelete = confirm("정말 이 리뷰를 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+
+    try {
+        const res = await api.delete(`/api/reviews/${reviewId}`, {
+            headers: { Authorization: `Bearer ${getToken()}` }
+        });
+
+        alert("리뷰가 삭제되었습니다!");
+
+        // 1. 삭제된 리뷰 항목을 목록에서 제거
+        const deletedItem = document.querySelector(
+            `.review-body-item[data-reviewid="${reviewId}"]`
+        );
+        if (deletedItem) deletedItem.remove();
+
+        // 2. 상세 화면 숨기기
+        document.querySelector(".review-detail").style.display = "none";
+
+        // 3. 리뷰 목록 화면 보이기
+        document.querySelector(".review-items").style.display = "block";
+
+        // 4. 전체 리스트를 새로 불러올 필요가 있다면
+        loadReviewList();
+
+    } catch (err) {
+        console.error("리뷰 삭제 실패:", err);
+        alert("리뷰 삭제 중 오류가 발생했습니다.");
+    }
+});
+
 
 
 // =====================================================
