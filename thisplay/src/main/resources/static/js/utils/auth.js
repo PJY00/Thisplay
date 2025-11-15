@@ -13,5 +13,7 @@ export function logout() {
 }
 
 export function isLoggedIn() {
-    return !!getToken();
+    // return !!getToken();
+    // 강제로 허용 
+    return true;
 }
