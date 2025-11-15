@@ -4,38 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Thisplay</title>
 </head>
 
 <body>
     <aside class="review-list">
         <h3>나의 감상평</h3>
         <details class="reviewlist-class">
-            <summary>디즈니</summary>
-            <ul>
-                <li><a href="/review/id" class="movie">인사이드 아웃2</a></li>
-                <li><a href="/review/id" class="movie">모아나</a></li>
-                <li><a href="/review/id" class="movie">겨울왕국</a></li>
-                <li><a href="/review/id" class="movie">주토피아2</a></li>
-            </ul>
+            <summary>내 리뷰 영화 목록</summary>
+            <ul></ul>
         </details>
-        <details class="reviewlist-class">
-            <summary>지브리</summary>
-        </details>
-        <details class="reviewlist-class">
-            <summary>개웃긴 영화</summary>
-        </details>
-        <details class="reviewlist-class">
-            <summary>치키니의 인생작</summary>
-        </details>
-        <details class="reviewlist-class">
-            <summary>OST가 좋은 영화</summary>
-        </details>
-        <details class="reviewlist-class">
-            <summary>코난</summary>
-        </details>
+
     </aside>
 
+    <!-- 오른쪽 콘텐츠 영역 -->
+    <main class="review-content">
+        <h2>리뷰 내용들</h2>
+        <div class="review-items">
+            <p>리뷰 내용들</p>
+        </div>
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+    <script type="module" src="./reviewlist.js"></script>
 </body>
 
 </html>
