@@ -90,9 +90,8 @@ function renderReviewTitles(list) {
 }
 
 
-
 // =====================================================
-// ⭐ 리뷰 제목 클릭 → 상세보기 표시
+// ⭐ 리뷰 제목 클릭 → 리뷰 내용 보기.
 // =====================================================
 document.addEventListener("click", async (e) => {
     const clicked = e.target.closest(".review-body-item");
@@ -129,6 +128,14 @@ document.addEventListener("click", async (e) => {
 
                 <section class="review-body">
                     <p>${r.reviewBody.replace(/\n/g, "<br>")}</p>
+                </section>
+
+                <section class="review-oneline">
+
+                <hr>
+                <h4>한줄평</h4>
+                <br>
+                <p>${r.oneLineReview ? r.oneLineReview : "(등록된 한줄평이 없습니다)"}</p>
                 </section>
 
                 <button class="back-to-list">← 목록으로 돌아가기</button>
