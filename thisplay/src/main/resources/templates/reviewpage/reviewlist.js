@@ -2,8 +2,14 @@ import api from "../../static/js/api/axiosInstance.js";
 import { getToken, isLoggedIn, logout } from "../../static/js/utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const rightContainer = document.querySelector(".review-items");
+    const listContainer = document.querySelector(".review-items"); // 리뷰 목록
     const leftContainer = document.querySelector(".reviewlist-class ul");
+
+    // ⭐ 상세보기 DOM 생성
+    const detailContainer = document.createElement("div");
+    detailContainer.classList.add("review-detail");
+    detailContainer.style.display = "none";   // 처음에는 숨김
+    document.querySelector(".review-content").appendChild(detailContainer);
 
     if (!isLoggedIn()) {
         alert("로그인이 필요합니다.");
@@ -11,10 +17,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    rightContainer.innerHTML = "<p>불러오는 중...</p>";
-    if (leftContainer) {
-        leftContainer.innerHTML = "<li>불러오는 중...</li>";
-    }
+    listContainer.innerHTML = "<p>불러오는 중...</p>";
+    leftContainer.innerHTML = "<li>불러오는 중...</li>";
 
     try {
         const res = await api.get("/api/reviews/me", {
@@ -24,47 +28,40 @@ document.addEventListener("DOMContentLoaded", async () => {
         const reviews = res.data;
 
         if (!reviews || reviews.length === 0) {
-            if (leftContainer) leftContainer.innerHTML = "<li>작성한 리뷰가 없습니다.</li>";
-            rightContainer.innerHTML = "<p>아직 작성한 리뷰가 없습니다.</p>";
+            leftContainer.innerHTML = "<li>작성한 리뷰가 없습니다.</li>";
+            listContainer.innerHTML = "<p>아직 작성한 리뷰가 없습니다.</p>";
             return;
         }
 
-        // ============================================
-        // 1️⃣ 왼쪽: 중복 제거한 영화 제목 렌더링
-        // ============================================
+        // 왼쪽 영화 목록
         const uniqueTitles = [...new Set(reviews.map(r => r.movieTitle))];
+        leftContainer.innerHTML = uniqueTitles
+            .map(title => `<li class="movie-title-item" data-title="${title}">🎬 ${title}</li>`)
+            .join("");
 
-        if (leftContainer) {
-            leftContainer.innerHTML = uniqueTitles
-                .map(title => `<li class="movie-title-item" data-title="${title}">🎬 ${title}</li>`)
-                .join("");
-        }
-
-        // ============================================
-        // 2️⃣ 오른쪽: 전체 리뷰제목 표시 (초기)
-        // ============================================
+        // 오른쪽 리뷰 제목 목록 표시
         renderReviewTitles(reviews);
 
-        // ============================================
-        // ⭐ 3️⃣ 왼쪽 영화 제목 클릭 → 해당 리뷰만 표시
-        // ============================================
+        // 왼쪽 영화 제목 클릭 시 필터링
         leftContainer.addEventListener("click", (e) => {
             const item = e.target.closest(".movie-title-item");
             if (!item) return;
 
             const selectedTitle = item.dataset.title;
-
-            // 선택된 영화 제목에 해당하는 리뷰만 필터링
             const filtered = reviews.filter(r => r.movieTitle === selectedTitle);
 
+            // 목록 업데이트
             renderReviewTitles(filtered);
+
+            // 상세보기 닫기
+            detailContainer.style.display = "none";
+            listContainer.style.display = "block";
         });
 
     } catch (err) {
         console.error("리뷰 불러오기 실패:", err);
-        rightContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
-
-        if (leftContainer) leftContainer.innerHTML = "<li>오류 발생</li>";
+        listContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
+        leftContainer.innerHTML = "<li>오류 발생</li>";
 
         if (err.response?.status === 401) {
             alert("세션이 만료되었습니다. 다시 로그인해주세요.");
@@ -75,23 +72,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 // =====================================================
-// 🧩 리뷰 제목 목록을 렌더링하는 함수 (재사용 가능)
+// 🧩 리뷰 제목 목록 렌더링
 // =====================================================
 function renderReviewTitles(list) {
-    const rightContainer = document.querySelector(".review-items");
+    const listContainer = document.querySelector(".review-items");
 
-    rightContainer.innerHTML = `
+    listContainer.innerHTML = `
         <h3>리뷰 제목</h3>
         <ul class="review-body-list">
-            ${list
-            .map(
-                (r) => `
+            ${list.map(r => `
                 <li class="review-body-item" data-reviewid="${r.reviewId}">
                     <h4>${r.reviewTitle || "(제목 없음)"}</h4>
                 </li>
-            `
-            )
-            .join("")}
+            `).join("")}
         </ul>
     `;
 }
@@ -99,16 +92,22 @@ function renderReviewTitles(list) {
 
 
 // =====================================================
-// ⭐ 4️⃣ 리뷰 제목 클릭 → 상세페이지로 표시
+// ⭐ 리뷰 제목 클릭 → 상세보기 표시
 // =====================================================
 document.addEventListener("click", async (e) => {
     const clicked = e.target.closest(".review-body-item");
     if (!clicked) return;
 
     const reviewId = clicked.dataset.reviewid;
-    const mainContent = document.querySelector(".review-content");
 
-    mainContent.innerHTML = "<p>리뷰 불러오는 중...</p>";
+    const listContainer = document.querySelector(".review-items");
+    const detailContainer = document.querySelector(".review-detail");
+
+    // 목록 숨기기
+    listContainer.style.display = "none";
+    detailContainer.style.display = "block";
+
+    detailContainer.innerHTML = "<p>리뷰 불러오는 중...</p>";
 
     try {
         const res = await api.get(`/api/reviews/${reviewId}`, {
@@ -117,7 +116,7 @@ document.addEventListener("click", async (e) => {
 
         const r = res.data;
 
-        mainContent.innerHTML = `
+        detailContainer.innerHTML = `
             <article class="review-fullpage">
                 <h2 class="review-title">${r.reviewTitle || "(제목 없음)"}</h2>
                 
@@ -137,16 +136,21 @@ document.addEventListener("click", async (e) => {
         `;
     } catch (err) {
         console.error("리뷰 상세 조회 실패:", err);
-        mainContent.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
+        detailContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
     }
 });
 
 
 // =====================================================
-// ⭐ 5️⃣ 목록으로 돌아가기 (새로고침 방식)
+// ⭐ 목록으로 돌아가기 버튼
 // =====================================================
 document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("back-to-list")) {
-        location.reload();
-    }
+    if (!e.target.classList.contains("back-to-list")) return;
+
+    const listContainer = document.querySelector(".review-items");
+    const detailContainer = document.querySelector(".review-detail");
+
+    // 상세보기 숨기고 목록 다시 표시
+    detailContainer.style.display = "none";
+    listContainer.style.display = "block";
 });
