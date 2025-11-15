@@ -196,9 +196,8 @@ public class ReviewService {
         MovieFolder folder = folderRepository.findById(folderId)
                 .orElseThrow(() -> new IllegalArgumentException("폴더를 찾을 수 없습니다. id=" + folderId));
 
-        if (folder.getVisibility() == FolderVisibility.PRIVATE &&
-                !Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
-            throw new AccessDeniedException("폴더 접근 불가");
+        if (!Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
+            throw new AccessDeniedException("본인이 생성한 폴더만 조회할 수 있습니다.");
         }
 
         // 폴더 안 영화 tmdbId 목록
