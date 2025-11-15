@@ -2,6 +2,7 @@ package com.example.thisplay.common.movie.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
 import com.example.thisplay.common.Auth.repository.UserRepository;
+import com.example.thisplay.common.movie.dto.OneLineReviewDTO;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.entity.ReviewEntity;
 import com.example.thisplay.common.movie.repository.ReviewRepository;
@@ -212,5 +213,25 @@ public class ReviewService {
         return reviewRepository
                 .findByUser_UserIdAndMovieIdIn(viewer.getUserId(), tmdbIds, pageable)
                 .map(ReviewDTO::toReviewDTO);
+    }
+
+    //한줄리뷰조회
+    public Page<OneLineReviewDTO> getOneLineReviewsByMovie(int movieId, Pageable pageable) {
+
+        Page<ReviewEntity> reviewPage = reviewRepository.findByMovieId(movieId, pageable);
+
+        return reviewPage.map(review -> {
+            UserEntity user = review.getUser();
+
+            return OneLineReviewDTO.builder()
+                    .reviewId(review.getReviewId())
+                    .movieId(review.getMovieId())              // int
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .profileImageUrl(user.getProfileImgUrl())
+                    .createdAt(review.getCreatedAt())
+                    .oneLineReview(review.getOneLineReview())
+                    .build();
+        });
     }
 }

@@ -1,6 +1,7 @@
 package com.example.thisplay.common.movie.controller;
 
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.movie.dto.OneLineReviewDTO;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.service.ReviewService;
 import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
@@ -164,5 +165,16 @@ public class ReviewController {
         }
         // 이미 있는 서비스 메서드 그대로 사용
         return movieFolderService.getFoldersByUser(user.getUserEntity());
+    }
+
+    //한줄리뷰 조회
+    @GetMapping("/{movieId}/oneline")
+    public ResponseEntity<Page<OneLineReviewDTO>> getMovieOneLineReviews(
+            @PathVariable int movieId,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        Page<OneLineReviewDTO> page = reviewService.getOneLineReviewsByMovie(movieId, pageable);
+        return ResponseEntity.ok(page);
     }
 }
