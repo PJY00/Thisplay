@@ -1,0 +1,414 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap");
+@import url('https://unicons.iconscout.com/release/v4.0.0/css/line.css');
+
+:root {
+    --primary-glow: rgba(0, 255, 170, 0.7);
+    --secondary-glow: rgba(255, 0, 170, 0.7);
+    --tertiary-glow: rgba(0, 170, 255, 0.7);
+    --danger-glow: rgba(255, 0, 0, 0.7);
+    --warning-glow: rgba(255, 255, 0, 0.7);
+    --card-bg: rgba(10, 15, 25, 0.85);
+    --terminal-bg: rgba(5, 10, 15, 0.9);
+    --grid-color: rgba(0, 255, 170, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #c4c3ca;
+    /* background-color: #1f2029; */
+    background-color: #050505;
+    /* overflow-x: hidden; */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* p {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.7;
+} */
+
+h4 {
+    font-weight: 600;
+}
+
+h6 span{
+    padding: 0 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.section{
+    position: relative;
+    width: 100%;
+    display: block;
+}
+
+/* 제목(Log In | Sign Up) */
+.trans-wrapper {
+    text-align: center;
+    margin-bottom: 2rem;
+    height: auto;
+    width: 400px;
+}
+
+.trans-text {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    /* color: #ffeba7; */
+    color: rgba(0, 255, 170, 0.7);
+    /* color: white; */
+    text-shadow: 0 0 1rem var(--primary-glow);
+    /* text-shadow: 0 0 15px var(--primary-glow); */
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.full-height{
+    min-height: 100vh;
+}
+
+/* 토글 버튼 */
+[type="checkbox"]:checked,
+[type="checkbox"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+
+.checkbox:checked + label,
+.checkbox:not(:checked) + label {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 16px;
+    border-radius: 8px;
+    margin: 10px auto;
+    cursor: pointer;
+    background-color: #ffeba7;
+    /* background-color: #318353; */
+}
+
+.checkbox:checked + label:before,
+.checkbox:not(:checked) + label:before {
+    font-family: 'unicons-line';
+    content: '\eb4f';
+    /* font-family: 'unicons'; */
+    position: absolute;
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #ffeba7;
+    background-color: #102770;
+    /* background-color: #318353; */
+    top: -10px;
+    left: -10px;
+    line-height: 36px;
+    text-align: center;
+    font-size: 1.2rem;
+    transition: all 0.5s ease;
+}
+
+.checkbox:checked + label:before,
+.checkbox:not(:checked) + label:before {
+    width: 2rem;
+    height: 2rem;
+    top: -0.4rem;
+    left: -0.4rem;
+    font-size: 1rem;
+    line-height: 2rem;
+}
+
+.checkbox:checked + label:before {
+    transform: translateX(44px) rotate(-270deg);
+}
+
+/* 카드 wrapper */
+.card-wrapper {
+    position: relative;
+    /* overflow: hidden; */
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 10/11;
+    perspective: 1000px;
+    margin: 1rem auto;
+}
+
+.noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 1; /* 카드 배경 위에 올라오게 */
+}
+
+/* .grid-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: linear-gradient(
+			to right,
+			var(--grid-color) 1px,
+			transparent 1px
+		),
+		linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+	background-size: 50px 50px;
+	opacity: 0.2;
+	pointer-events: none;
+	z-index: 1;
+	animation: gridPulse 8s infinite alternate;
+}
+
+@keyframes gridPulse {
+	0% {
+		opacity: 0.1;
+	}
+	50% {
+		opacity: 0.2;
+	}
+	100% {
+		opacity: 0.1;
+	}
+} */
+
+.card-login,
+.card-signup {
+    width: 100%;
+    height: 100%;
+    background: #2a2b38;
+    background: rgb(10, 15, 25, 0.85);
+    /* background: #2a2b38 url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg') no-repeat bottom center / 300%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2rem 1.5rem;
+    border-radius: 0.8rem;
+    border: 1px solid rgb(109, 109, 109);
+    box-sizing: border-box;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.3);
+    box-shadow: 0 0rem 1.25rem var(--primary-glow);
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: all 0.6s ease-out;
+}
+
+.card-login h4,
+.card-signup h4 {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    /* color: #ffeba7; */
+    /* color: rgba(0, 255, 170, 0.7); */
+    color: white;
+    text-shadow: 0 0 1.2rem var(--primary-glow);
+}
+
+.card-signup {
+    transform: rotateY(180deg);
+}
+
+/* flip 효과 */
+.checkbox:checked ~ .card-wrapper .card-login {
+    transform: rotateY(180deg);
+}
+.checkbox:checked ~ .card-wrapper .card-signup {
+    transform: rotateY(0deg);
+}
+
+/* 버튼 */
+button {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    height: 2.8rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background-color: #ffeba7;
+    /* background-color: rgba(255, 255, 0, 0.7); */
+    color: #102770;
+    /* color: rgba(5, 10, 15, 0.9); */
+    box-shadow: 0 0.6rem 1.5rem rgba(255,235,167,.4);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #102770;
+    /* background-color: rgba(5, 10, 15, 0.9); */
+    color: #ffeba7;
+    box-shadow: 0 6px 20px rgba(16, 39, 112, .4);
+}
+
+.google-btn{
+    background-color: rgb(255, 126, 126);
+    color: black;
+    box-shadow: 0 0.6rem 0.8rem rgba(203, 78, 62, 0.4);
+}
+
+.google-btn:hover {
+    background-color: black;
+    color: rgb(255, 126, 126);
+    box-shadow: 0 6px 20px rgba(71, 41, 41, 0.4);
+}
+
+/* 폼 입력 */
+.form-group{
+    position: relative;
+    display: block;
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+.form-style {
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    color: #c4c3ca;
+    /* background-color: #1f2029; */
+    background-color: rgba(5, 10, 15, 0.9);
+    border: none;
+    /* border: 1px solid rgb(109, 109, 109); */
+    outline: none;
+    /* box-shadow: 0 4px 8px rgba(21, 21, 21, 0.2); */
+    box-shadow: 0 0 12px rgba(137, 137, 137, 0.2);
+    /* box-shadow: 0 0.1rem 0.2rem rgba(0, 255, 170, 0.3); */
+    transition: all 0.2s linear;
+}
+
+.form-group input{
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 4px var(--primary-glow);
+}
+
+.form-style:focus {
+    box-shadow: 0 2px 12px var(--primary-glow);
+}
+
+.form-group input::placeholder  {
+    color: #c4c3ca;
+    opacity: 0.7;
+    transition: all 200ms linear;
+}
+
+.form-group input:focus::placeholder  {
+    opacity: 0;
+    transition: all 200ms linear;
+}
+
+
+/* 버튼 스타일
+button{
+  border-radius: 4px;
+  height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition : all 200ms linear;
+  padding: 0 30px;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: none;
+  background-color: #ffeba7;
+  color: #102770;
+  box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
+  cursor: pointer;
+}
+
+button:active,
+button:focus{
+  background-color: #102770;
+  color: #ffeba7;
+  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
+}
+button:hover{
+  background-color: #102770;
+  color: #ffeba7;
+  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
+} */
+
+/* .logo {
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	display: block;
+	z-index: 100;
+	transition: all 250ms linear;
+}
+.logo img {
+	height: 26px;
+	width: auto;
+	display: block;
+} */
+
+/* .card-wrap {
+  position: relative;
+  width: 440px;
+  max-width: 100%;
+  height: 400px;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  perspective: 800px;
+  margin-top: 60px;
+}
+
+.card-wrapper {
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  top: 0;
+  left: 0;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transition: all 600ms ease-out;
+}
+
+.card-login, .card-signup {
+  width: 100%;
+  height: 100%;
+  background-color: #2a2b38;
+  background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: 300%;
+  position: absolute;
+  border-radius: 6px;
+  left: 0;
+  top: 0;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+} */

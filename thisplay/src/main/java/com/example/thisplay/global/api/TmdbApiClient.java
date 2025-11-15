@@ -94,6 +94,10 @@ public class TmdbApiClient {
                     obj.put("overview", response.path("overview").asText(""));
                     obj.put("runtime", response.path("runtime").asInt(0));
 
+                    // TMDB 평점 정보 추가
+                    obj.put("vote_average", response.path("vote_average").asDouble(0.0));
+                    obj.put("vote_count", response.path("vote_count").asInt(0));
+
                     // 포스터 URL
                     String posterPath = response.hasNonNull("poster_path") ? response.get("poster_path").asText() : "";
                     obj.put("poster_path", "https://image.tmdb.org/t/p/w185" + posterPath);
