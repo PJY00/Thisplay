@@ -167,14 +167,12 @@ public class ReviewController {
         return movieFolderService.getFoldersByUser(user.getUserEntity());
     }
 
-    //한줄리뷰 조회
     @GetMapping("/{movieId}/oneline")
-    public ResponseEntity<Page<OneLineReviewDTO>> getMovieOneLineReviews(
+    public Page<OneLineReviewDTO> getOneLineReviewsByMovie(
             @PathVariable int movieId,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
-            Pageable pageable
+            @RequestParam(defaultValue = "latest") String sort,
+            @PageableDefault(size = 10) Pageable pageable
     ) {
-        Page<OneLineReviewDTO> page = reviewService.getOneLineReviewsByMovie(movieId, pageable);
-        return ResponseEntity.ok(page);
+        return reviewService.getOneLineReviewsByMovie(movieId, sort, pageable);
     }
 }

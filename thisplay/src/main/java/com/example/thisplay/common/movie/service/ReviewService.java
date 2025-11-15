@@ -13,9 +13,7 @@ import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -196,9 +194,8 @@ public class ReviewService {
         MovieFolder folder = folderRepository.findById(folderId)
                 .orElseThrow(() -> new IllegalArgumentException("폴더를 찾을 수 없습니다. id=" + folderId));
 
-        if (folder.getVisibility() == FolderVisibility.PRIVATE &&
-                !Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
-            throw new AccessDeniedException("폴더 접근 불가");
+        if (!Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
+            throw new AccessDeniedException("본인이 생성한 폴더만 조회할 수 있습니다.");
         }
 
         // 폴더 안 영화 tmdbId 목록
@@ -216,19 +213,36 @@ public class ReviewService {
     }
 
     //한줄리뷰조회
-    public Page<OneLineReviewDTO> getOneLineReviewsByMovie(int movieId, Pageable pageable) {
+    public Page<OneLineReviewDTO> getOneLineReviewsByMovie(int movieId, String sort, Pageable pageable) {
 
-        Page<ReviewEntity> reviewPage = reviewRepository.findByMovieId(movieId, pageable);
+        Sort sortOption;
+        switch (sort) {
+            case "like" ->
+                    sortOption = Sort.by(Sort.Direction.DESC, "likeCount");
+            case "latest" ->
+                    sortOption = Sort.by(Sort.Direction.DESC, "createdAt");
+            default ->
+                    sortOption = Sort.by(Sort.Direction.DESC, "createdAt");
+        }
+
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sortOption
+        );
+
+        Page<ReviewEntity> reviewPage = reviewRepository.findByMovieId(movieId, sortedPageable);
 
         return reviewPage.map(review -> {
             UserEntity user = review.getUser();
 
             return OneLineReviewDTO.builder()
                     .reviewId(review.getReviewId())
-                    .movieId(review.getMovieId())              // int
+                    .movieId(review.getMovieId())
                     .userId(user.getUserId())
                     .nickname(user.getNickname())
                     .profileImageUrl(user.getProfileImgUrl())
+                    .likeCount(review.getLikeCount())
                     .createdAt(review.getCreatedAt())
                     .oneLineReview(review.getOneLineReview())
                     .build();
