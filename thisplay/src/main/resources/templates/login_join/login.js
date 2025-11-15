@@ -49,14 +49,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("log-password").value;
 
     // axios POST 요청
-    const res = await axios.post("http://localhost:8080/api/login", {
+    const res = await axios.post("http://localhost:8080/login", {
       nickname: username,
       password: password,
     });
 
     if (res.data.message === "로그인 성공") {
       alert("로그인 성공!");
-      window.location.href = "/main"; // redirect
+      // window.location.href = "mainpage.html"; // redirect
+      window.location.href = "../mainpage.html";
     } else {
       alert("로그인 실패: " + res.data.message);
     }
