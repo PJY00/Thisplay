@@ -18,24 +18,12 @@ public class ProfileController {
 
     // 프로필 조회
     @GetMapping("/{id}/profile")
-    public ResponseEntity<?> getProfile(
-            @PathVariable Long id,
-            @AuthenticationPrincipal CustomUserDetails userDetails
-    ) {
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인 상태가 아닙니다");
-        }
-
-        if (!id.equals(userDetails.getUserEntity().getUserId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("권한이 없습니다");
-        }
+    public ResponseEntity<ProfileDTO> getProfile(@PathVariable Long id) {
         return ResponseEntity.ok(profileService.getProfile(id));
     }
 
     // 프로필 수정
-    @PutMapping("/{id}/profile")
+    @PatchMapping("/{id}/profile")
     public ResponseEntity<?> updateProfile(
             @PathVariable Long id,
             @RequestBody ProfileDTO dto,

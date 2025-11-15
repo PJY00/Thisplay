@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ProfileDTO {
+    private Long userId;
     private String nickname;
     private String profileImgUrl;
 }
