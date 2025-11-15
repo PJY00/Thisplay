@@ -5,7 +5,10 @@ import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.entity.ReviewEntity;
 import com.example.thisplay.common.movie.repository.ReviewRepository;
+import com.example.thisplay.common.moviepage.DTO.Movie_FolderDTO;
+import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
 import com.example.thisplay.common.rec_list.entity.FolderVisibility;
+import com.example.thisplay.common.rec_list.entity.MovieEntity;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import com.example.thisplay.common.rec_list.repository.MovieFolderRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final MovieFolderRepository folderRepository;
+    private final MovieFolderRepository movieFolderRepository;
+
 
     // 전체 리뷰 조회
     @Transactional
@@ -147,43 +152,57 @@ public class ReviewService {
                 .map(ReviewDTO::toReviewDTO);
     }
 
-    // 단일 폴더의 영화 리뷰 모아보기
+    // 전체 폴더
+    @Transactional(readOnly = true)
+    public List<movie_saveDTO> getMyFoldersMovies(UserEntity viewer) {
+        UserEntity persistentUser = userRepository.findByNickname(viewer.getNickname())
+                .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+
+
+        List<MovieFolder> folders = folderRepository.findAllByUser(persistentUser);
+        List<movie_saveDTO> result = new ArrayList<>();
+
+
+        for (MovieFolder folder : folders) {
+
+            Movie_FolderDTO folderDTO = new Movie_FolderDTO(
+                    folder.getId(),
+                    folder.getName()
+            );
+
+            for (MovieEntity movie : folder.getMovies()) {
+                movie_saveDTO movieDTO = new movie_saveDTO(
+                        movie.getTmdbId(),
+                        movie.getTitle(),
+                        movie.getOriginalTitle(),
+                        movie.getPosterPath(),
+                        folderDTO
+                );
+
+                result.add(movieDTO);
+            }
+        }
+
+        return result;
+    }
+
+    //단일폴더
     @Transactional(readOnly = true)
     public List<ReviewDTO> getMyFolderReviews(Long folderId, UserEntity viewer) {
+
         MovieFolder folder = folderRepository.findById(folderId)
-                .orElseThrow(() -> new IllegalArgumentException("폴더를 찾을 수 없습니다. id=" + folderId));
+                .orElseThrow(() -> new IllegalArgumentException("폴더 없음"));
 
-        // PRIVATE 접근 제한 (FRIENDS는 나중에 확장)
-        if (folder.getVisibility() == FolderVisibility.PRIVATE &&
-                !Objects.equals(folder.getUser().getUserId(), viewer.getUserId())) {
-            throw new AccessDeniedException("비밀 폴더 접근 불가");
-        }
+        List<Integer> tmdbIds = folder.getMovies()
+                .stream()
+                .map(MovieEntity::getTmdbId)
+                .toList();
 
-        List<Integer> tmdbIds = folderRepository.findTmdbIdsInFolder(folderId);
-        if (tmdbIds.isEmpty()) return Collections.emptyList();
+        List<ReviewEntity> myReviews =
+                reviewRepository.findByUser_UserIdAndMovieIdIn(viewer.getUserId(), tmdbIds);
 
-        List<ReviewEntity> reviews = reviewRepository.findByMovieIdIn(tmdbIds);
-        List<ReviewDTO> dtoList = new ArrayList<>();
-
-        for (ReviewEntity review : reviews) {
-            dtoList.add(ReviewDTO.toReviewDTO(review));
-        }
-        return dtoList;
+        return myReviews.stream()
+                .map(ReviewDTO::toReviewDTO)
+                .toList();
     }
-
-    //폴더 전체 모아보기
-    @Transactional(readOnly = true)
-    public List<ReviewDTO> getMyFoldersReviews(UserEntity viewer, List<Long> folderIds) {
-        List<Integer> tmdbIds = folderRepository.findTmdbIdsInMyFolders(viewer.getUserId(), folderIds);
-        if (tmdbIds.isEmpty()) return Collections.emptyList();
-
-        List<ReviewEntity> reviews = reviewRepository.findByMovieIdIn(tmdbIds);
-        List<ReviewDTO> dtoList = new ArrayList<>();
-
-        for (ReviewEntity review : reviews) {
-            dtoList.add(ReviewDTO.toReviewDTO(review));
-        }
-        return dtoList;
-    }
-
 }

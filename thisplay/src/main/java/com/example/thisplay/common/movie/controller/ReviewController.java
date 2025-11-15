@@ -3,6 +3,9 @@ package com.example.thisplay.common.movie.controller;
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.service.ReviewService;
+import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
+import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
+import com.example.thisplay.common.rec_list.service.MovieFolderService;
 import com.example.thisplay.global.api.TmdbApiClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
     private final TmdbApiClient tmdbApiClient;
+    private final MovieFolderService movieFolderService;
 
     // 전체 리뷰 조회
     @GetMapping
@@ -135,23 +139,23 @@ public class ReviewController {
         }
     }
 
-    //단일폴더리뷰
     @GetMapping("/myfolders/{folderId}")
     public List<ReviewDTO> getMyFolderReviews(
             @PathVariable Long folderId,
-            @AuthenticationPrincipal CustomUserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails user
     ) {
-        if (userDetails == null) throw new RuntimeException("로그인이 필요합니다");
-        return reviewService.getMyFolderReviews(folderId, userDetails.getUserEntity());
+        return reviewService.getMyFolderReviews(folderId, user.getUserEntity());
     }
 
-    //전체폴더리뷰
+    // 전체 폴더 리뷰 (여러 폴더 id 포함, 페이징)
     @GetMapping("/myfolders")
-    public List<ReviewDTO> getMyFoldersReviews(
-            @RequestParam(required = false) List<Long> ids,
-            @AuthenticationPrincipal CustomUserDetails userDetails
+    public List<ViewFolderDTO> getMyFolders(
+            @AuthenticationPrincipal CustomUserDetails user
     ) {
-        if (userDetails == null) throw new RuntimeException("로그인이 필요합니다");
-        return reviewService.getMyFoldersReviews(userDetails.getUserEntity(), ids);
+        if (user == null) {
+            throw new RuntimeException("로그인이 필요합니다");
+        }
+        // 이미 있는 서비스 메서드 그대로 사용
+        return movieFolderService.getFoldersByUser(user.getUserEntity());
     }
 }
