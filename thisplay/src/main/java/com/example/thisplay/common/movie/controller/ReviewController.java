@@ -1,8 +1,12 @@
 package com.example.thisplay.common.movie.controller;
 
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
+import com.example.thisplay.common.movie.dto.OneLineReviewDTO;
 import com.example.thisplay.common.movie.dto.ReviewDTO;
 import com.example.thisplay.common.movie.service.ReviewService;
+import com.example.thisplay.common.moviepage.DTO.movie_saveDTO;
+import com.example.thisplay.common.rec_list.DTO.ViewFolderDTO;
+import com.example.thisplay.common.rec_list.service.MovieFolderService;
 import com.example.thisplay.global.api.TmdbApiClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
     private final TmdbApiClient tmdbApiClient;
+    private final MovieFolderService movieFolderService;
 
     // 전체 리뷰 조회
     @GetMapping
@@ -60,6 +65,14 @@ public class ReviewController {
     @GetMapping("/user/{userId}")
     public List<ReviewDTO> getByUser(@PathVariable Long userId) {
         return reviewService.getReviewsByUser(userId);
+    }
+
+    // 내 리뷰 조회
+    @GetMapping("/me")
+    public List<ReviewDTO> getMyReviews(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) throw new RuntimeException("로그인이 필요합니다");
+        Long myId = userDetails.getUserEntity().getUserId();
+        return reviewService.getReviewsByUser(myId);
     }
 
     // 리뷰 작성
@@ -125,5 +138,43 @@ public class ReviewController {
         } catch (Exception e) {
             return "제목 없음";
         }
+    }
+
+    //단일폴더
+    @GetMapping("/myfolders/{folderId}")
+    public Page<ReviewDTO> getMyFolderReviews(
+            @PathVariable Long folderId,
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PageableDefault(size = 10, sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        if (user == null) {
+            throw new RuntimeException("로그인이 필요합니다");
+        }
+
+        return reviewService.getMyFolderReviewsPaging(folderId, user.getUserEntity(), pageable);
+    }
+
+    // 전체 폴더 리뷰 (여러 폴더 id 포함, 페이징)
+    @GetMapping("/myfolders")
+    public List<ViewFolderDTO> getMyFolders(
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        if (user == null) {
+            throw new RuntimeException("로그인이 필요합니다");
+        }
+        // 이미 있는 서비스 메서드 그대로 사용
+        return movieFolderService.getFoldersByUser(user.getUserEntity());
+    }
+
+    //한줄리뷰 조회
+    @GetMapping("/{movieId}/oneline")
+    public ResponseEntity<Page<OneLineReviewDTO>> getMovieOneLineReviews(
+            @PathVariable int movieId,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        Page<OneLineReviewDTO> page = reviewService.getOneLineReviewsByMovie(movieId, pageable);
+        return ResponseEntity.ok(page);
     }
 }
