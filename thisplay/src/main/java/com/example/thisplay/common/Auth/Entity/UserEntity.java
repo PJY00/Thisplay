@@ -37,7 +37,8 @@ public class UserEntity {
     private String refreshToken;
 
     @Column(name = "profile_img_url")
-    private String profileImgUrl;
+    @Builder.Default
+    private String profileImgUrl = "/images/profile/default.png";
 
     //유저의 상태(추천친구 or 일반 유저 구분 시 사용)
     @Enumerated(EnumType.STRING)
