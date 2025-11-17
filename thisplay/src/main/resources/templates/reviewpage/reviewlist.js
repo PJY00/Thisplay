@@ -1,4 +1,4 @@
-import api from "../../static/js/api/axiosInstance.js";
+import api, { BASE_URL } from "../../static/js/api/axiosInstance.js";
 import { getToken, isLoggedIn, logout } from "../../static/js/utils/auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -138,6 +138,7 @@ document.addEventListener("click", async (e) => {
                 <p>${r.oneLineReview ? r.oneLineReview : "(등록된 한줄평이 없습니다)"}</p>
                 </section>
 
+                <button class="edit-review" data-reviewid="${r.reviewId}">리뷰 수정</button>
                 <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
                 <br>
                 <button class="back-to-list">← 목록으로 돌아가기</button>
@@ -187,6 +188,19 @@ document.addEventListener("click", async (e) => {
         console.error("리뷰 삭제 실패:", err);
         alert("리뷰 삭제 중 오류가 발생했습니다.");
     }
+});
+
+// =====================================================
+// ✏ 리뷰 수정 버튼
+// =====================================================
+document.addEventListener("click", async (e) => {
+    const editBtn = e.target.closest(".edit-review");
+    if (!editBtn) return;
+
+    const reviewId = editBtn.dataset.reviewid;
+
+    // 수정 페이지로 이동 (쿼리 파라미터로 reviewId 전달)
+    location.href = `../reviewpage/writereview.html?edit=true&reviewId=${reviewId}`;
 });
 
 

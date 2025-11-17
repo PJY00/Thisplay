@@ -156,6 +156,26 @@
 }
 
 /* ============================
+   EDIT BUTTON
+============================ */
+.edit-review {
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: rgba(255, 215, 0, 0.18);
+    border-radius: 8px;
+    color: #e6b800;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+}
+
+.edit-review:hover {
+    background: rgba(255, 215, 0, 0.30);
+    /* Hover 시 조금 더 진해짐 */
+    color: #cc9a00;
+}
+
+
+/* ============================
    ANIMATION
 ============================ */
 @keyframes fadeIn {
