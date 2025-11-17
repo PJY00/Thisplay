@@ -36,6 +36,7 @@ public class JoinService {
                 .password(bCryptPasswordEncoder.encode(password))
                 .role("ROLE_USER")
                 .status(UserStatus.NORMAL)
+                .profileImgUrl("/images/profile/default.png")
                 .build();
 
         userRepository.save(user);
