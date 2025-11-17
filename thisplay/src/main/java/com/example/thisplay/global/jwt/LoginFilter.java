@@ -60,12 +60,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         UserEntity user = customUserDetails.getUserEntity();
 
+        Long userId = user.getUserId();
         String username = customUserDetails.getUsername();
         String role = customUserDetails.getAuthorities().iterator().next().getAuthority();
 
         // AccessToken, RefreshToken 발급
-        String accessToken = jwtUtil.createJwt(username, role, 10 * 60 * 1000L);  // 10분
-        String refreshToken = jwtUtil.createJwt(username, role, 24 * 60 * 60 * 1000L); // 24시간
+        String accessToken = jwtUtil.createJwt(userId, username, role, 10 * 60 * 1000L);  // 10분
+        String refreshToken = jwtUtil.createJwt(userId, username, role, 24 * 60 * 60 * 1000L); // 24시간
 
         // DB에 RefreshToken 저장
         user.setRefreshToken(refreshToken);

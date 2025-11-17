@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -21,6 +22,7 @@ public class TmdbApiClient {
         this.apiKey = apiKey;
         this.webClient = WebClient.builder()
                 .baseUrl(baseUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .build();
     }
 
@@ -92,6 +94,10 @@ public class TmdbApiClient {
                     obj.put("overview", response.path("overview").asText(""));
                     obj.put("runtime", response.path("runtime").asInt(0));
 
+                    // TMDB 평점 정보 추가
+                    obj.put("vote_average", response.path("vote_average").asDouble(0.0));
+                    obj.put("vote_count", response.path("vote_count").asInt(0));
+
                     // 포스터 URL
                     String posterPath = response.hasNonNull("poster_path") ? response.get("poster_path").asText() : "";
                     obj.put("poster_path", "https://image.tmdb.org/t/p/w185" + posterPath);
@@ -137,4 +143,49 @@ public class TmdbApiClient {
                     return obj;
                 });
     }
+
+    // 영화 제목 자동완성 (검색)
+    // 현재 첫 번째 요청시 한글 query를 webclient가 제대로 인코딩 하지 못해 TMDB서버가 400을 반환하는 오류가 있음.
+    //이거 일차적으로 해결 했는데 여전히 가끔씩 발행: TMDB가 글자 길이가 짧으면 잘 인식을 못 한다고 함...
+    public Mono<JsonNode> searchMovies(String query) {
+        return webClient.get()
+                .uri(uriBuilder -> {
+                    String uri = uriBuilder
+                            .path("/search/movie")
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "ko-KR")
+                            .queryParam("query", query)
+                            .queryParam("include_adult", false)
+                            .build()
+                            .toString();
+                    // 강제로 URI Encoding
+                    return UriComponentsBuilder.fromUriString(uri).encode().build().toUri();
+                })
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .map(response -> {
+                    ObjectMapper mapper = new ObjectMapper();
+                    ArrayNode results = (ArrayNode) response.get("results");
+                    ArrayNode filtered = mapper.createArrayNode();
+
+                    for (JsonNode movie : results) {
+                        String title = movie.path("title").asText("").trim();
+
+                        // 🔹 title이 query로 시작하는지 확인 (대소문자 구분 X)
+                        if (title.startsWith(query)) {
+                            ObjectNode obj = mapper.createObjectNode();
+                            obj.put("id", movie.path("id").asInt());
+                            obj.put("title", title);  // 한국어 제목
+                            obj.put("original_title", movie.path("original_title").asText(""));
+                            filtered.add(obj);
+
+                            // 최대 5개까지만
+                            if (filtered.size() >= 5) break;
+                        }
+                    }
+
+                    return filtered;
+                });
+    }
+
 }

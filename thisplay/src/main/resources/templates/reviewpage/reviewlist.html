@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thisplay</title>
+    <link rel="stylesheet" href="./reviewlist.css">
+</head>
+
+<body>
+    <div class="review-wrapper">
+
+        <!-- 왼쪽 -->
+        <aside class="review-list">
+            <h3>나의 감상평</h3>
+            <details class="reviewlist-class">
+                <ul></ul>
+            </details>
+        </aside>
+
+        <!-- 오른쪽 -->
+        <main class="review-content">
+            <div class="review-items"></div>
+        </main>
+
+    </div>
+
+    <script type="module" src="../navbar/navbarDOM.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+    <script type="module" src="./reviewlist.js"></script>
+</body>
+
+</html>
