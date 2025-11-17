@@ -259,3 +259,62 @@ body {
     background: var(--accent);
     transform: scale(1.2);
 }
+
+/* 장르선택 드롭다운 수정*/
+.movielist {
+    position: relative;
+    margin-top: 60px;   /* 🔥 이거만으로 드롭다운이 아래로 내려감 */
+    margin-left: 40px;  /* 선택사항: 왼쪽 정렬 이쁘게 맞추기 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;     /* select 클릭 안 되던 문제도 같이 해결됨 */
+}
+
+#genre-select {
+    background-color: #1c1f26;  
+    color: #ffffff;             
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+}
+
+#genre-select option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#visibility {
+background-color: #1c1f26;  
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+}
+
+#visibility option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#folderName {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;          
+    border-radius: 6px;         
+}
+
+#folderName::placeholder {
+    color: #999;      
+}
+
+#folderName:focus {
+    outline: none;
+    border-color: #00fff7;    
+    box-shadow: 0 0 6px #00fff7;
+}
+
+#create-folder-form {
+    display: flex;
+    gap: 12px;   
+    align-items: center;
+}
