@@ -2,6 +2,7 @@ function createNavbar() {
   // css 삽입
   const link = document.createElement("link");
   link.rel = "stylesheet";
+  link.href = "../navbar/navbar.css"; // 경로는 필요에 따라 수정
   link.href = "/thisplay/src/main/resources/templates/navbar/navbar.css"; // 경로는 필요에 따라 수정
   document.head.appendChild(link);
 
@@ -29,6 +30,7 @@ function createNavbar() {
         <ul class="menu">
           <li id="login-btn"><button type="button">LOG IN</button></li>
           <li id="profile-menu" class="hidden">
+            <img src="../navbar/profile.png" alt="프로필" id="profile-img" />
             <img src="/thisplay/src/main/resources/templates/navbar/profile.png" alt="프로필" id="profile-img" />
             <ul class="dropdown hidden">
               <li><a href="#">마이페이지</a></li>

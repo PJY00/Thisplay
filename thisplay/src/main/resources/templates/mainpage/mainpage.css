@@ -1,0 +1,320 @@
+@import url("../commonCss/base.css");
+
+:root {
+    --gap: 1.25rem;
+    --speed: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --closed: 6rem;
+    --open: 26rem;
+    --accent: #00ff00;
+}
+
+/* 기본 세팅 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Inter, sans-serif;
+    background: #07090d;
+    color: #c5c7ce;
+}
+
+/* 헤더 및 제목 스타일 (선택) */
+.head {
+    max-width: 1400px;
+    margin: auto;
+    padding: 60px 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+}
+
+.head h2 {
+    font-size: 2rem;
+    color: #fff;
+}
+
+/* 버튼 (prev, next) */
+#controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+#controls button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#controls button:hover {
+    background: var(--accent);
+}
+
+#controls button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+/* 슬라이더 */
+.slider {
+    max-width: 1400px;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* 스크롤 영역 */
+#wrap {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+#wrap::-webkit-scrollbar {
+    display: none;
+}
+
+/* 트랙 */
+#track {
+    display: flex;
+    gap: var(--gap);
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-bottom: 40px;
+}
+
+/* 카드 */
+.project-card {
+    position: relative;
+    flex: 0 0 var(--closed);
+    height: 24rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: flex-basis var(--speed), transform var(--speed);
+    background: #111;
+}
+
+.project-card[active] {
+    flex-basis: var(--open);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* 배경 이미지 */
+.project-card__bg {
+    background-color: #0000;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) saturate(80%);
+    transition: filter 0.3s, transform var(--speed);
+}
+
+.project-card:hover .project-card__bg {
+    filter: brightness(0.9) saturate(100%);
+    transform: scale(1.06);
+}
+
+/* 카드 내용 */
+.project-card__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.85));
+    z-index: 2;
+    padding: 1rem;
+}
+
+/* ✅ 썸네일(포스터) 항상 중앙 정렬 */
+.project-card__thumb {
+    width: 150px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+    /* 추가: 비활성 카드 중앙 정렬 고정 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease;
+}
+
+/* ✅ 활성화 카드에서는 원래 flex 정렬로 되돌리기 */
+.project-card[active] .project-card__thumb {
+    position: static;
+    transform: none;
+}
+
+/* 제목 - 기본 숨김 */
+.project-card__title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* 중앙(선택) 카드에서만 제목 표시 */
+.project-card[active] .project-card__title {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    font-size: 2rem;
+}
+
+/* 비활성 카드: 검정 배경 유지 */
+.project-card:not([active]) {
+    background-color: #000;
+}
+
+/* ✅ 포스터 이미지 컨트롤 */
+.project-card__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.6s ease, filter 0.4s ease, transform 0.4s ease;
+    filter: brightness(0.7) saturate(80%);
+}
+
+/* 비활성 카드는 포스터 숨김 */
+.project-card:not([active]) .project-card__bg {
+    opacity: 0;
+}
+
+/* 활성화된 카드만 포스터 표시 */
+.project-card[active] .project-card__bg {
+    opacity: 1;
+}
+
+/* 카드 hover 효과 (이미지 밝기만 살짝 변경) */
+.project-card[active]:hover .project-card__bg {
+    filter: brightness(0.9) saturate(100%);
+    transform: scale(1.04);
+}
+
+/* 카드가 활성화될 때의 내부 구조 변화 */
+.project-card[active] .project-card__content {
+    opacity: 1;
+    visibility: visible;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem 2rem;
+    gap: 1rem;
+}
+
+/* 썸네일 */
+.project-card__thumb {
+    width: 150px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+
+/* dots (페이지 네비게이션) */
+#dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 15px 0;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.dot.active {
+    background: var(--accent);
+    transform: scale(1.2);
+}
+
+/* 장르선택 드롭다운 수정*/
+.movielist {
+    position: relative;
+    margin-top: 60px;   /* 🔥 이거만으로 드롭다운이 아래로 내려감 */
+    margin-left: 40px;  /* 선택사항: 왼쪽 정렬 이쁘게 맞추기 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;     /* select 클릭 안 되던 문제도 같이 해결됨 */
+}
+
+#genre-select {
+    background-color: #1c1f26;  
+    color: #ffffff;             
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+}
+
+#genre-select option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#visibility {
+background-color: #1c1f26;  
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+}
+
+#visibility option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#folderName {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;          
+    border-radius: 6px;         
+}
+
+#folderName::placeholder {
+    color: #999;      
+}
+
+#folderName:focus {
+    outline: none;
+    border-color: #00fff7;    
+    box-shadow: 0 0 6px #00fff7;
+}
+
+#create-folder-form {
+    display: flex;
+    gap: 12px;   
+    align-items: center;
+}
