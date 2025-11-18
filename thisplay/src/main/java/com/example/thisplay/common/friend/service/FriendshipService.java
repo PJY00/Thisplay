@@ -1,8 +1,11 @@
 package com.example.thisplay.common.friend.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.Entity.UserStatus;
 import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.dto.FriendRecommendationDTO;
+import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.entity.Friendship;
 import com.example.thisplay.common.friend.entity.FriendshipStatus;
 import com.example.thisplay.common.friend.repository.FriendshipRepository;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,5 +118,57 @@ public class FriendshipService {
     public boolean areFriends(UserEntity userA, UserEntity userB) {
         return friendshipRepository.findBySendUserAndReceiveUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent()
                 || friendshipRepository.findByReceiveUserAndSendUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent();
+    }
+
+    public FriendSearchDTO searchFriend(UserEntity loginUser, String nickname) {
+
+        UserEntity targetUser = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
+
+        // ✅ 자기 자신 검색은 허용 (프로필 열람 가능하도록)
+        if (loginUser.getUserId().equals(targetUser.getUserId())) {
+            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+        }
+
+        // ✅ 친구가 아닐 경우 조회 불가
+        if (!areFriends(loginUser, targetUser)) {
+            throw new RuntimeException("해당 유저는 친구 목록에 없습니다.");
+        }
+
+        return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+    }
+
+    public List<FriendRecommendationDTO> getRecommendedFriends(Long loginUserId) {
+
+        UserEntity loginUser = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 없음"));
+
+        // 1. STAR 상태의 유저 전체 조회
+        List<UserEntity> stars = userRepository.findByStatus(UserStatus.STAR);
+
+        // 2. 현재 유저 자신은 제외
+        stars = stars.stream()
+                .filter(u -> !u.getUserId().equals(loginUserId))
+                .collect(Collectors.toList());
+
+        // 3. 이미 친구인 사람 제외
+        stars = stars.stream()
+                .filter(u -> !areFriends(loginUser, u))
+                .collect(Collectors.toList());
+
+        // 4. 랜덤 셔플
+        Collections.shuffle(stars);
+
+        // 5. 최대 10명만 반환
+        //친구인 경우 해당 유저를 배제하고 가져옴.
+        return stars.stream()
+                .limit(10)
+                .map(u -> new FriendRecommendationDTO(
+                        u.getUserId(),
+                        u.getNickname(),
+                        u.getProfileImgUrl(),   // ✅ 추가된 필드
+                        u.getStatus()           // ✅ UserStatus 전달
+                ))
+                .collect(Collectors.toList());
     }
 }

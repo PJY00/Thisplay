@@ -2,7 +2,9 @@ package com.example.thisplay.common.friend.controller;
 
 import com.example.thisplay.common.Auth.DTO.CustomUserDetails;
 import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.dto.FriendRecommendationDTO;
 import com.example.thisplay.common.friend.dto.FriendRequestDTO;
+import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/friends")
@@ -67,12 +70,34 @@ public class FriendshipController {
         );
     }
 
-    // 5️⃣ 친구 목록 조회
+    // 5️⃣ 친구 목록 조회(친구 리스트)
     @GetMapping("/list")
     public ResponseEntity<List<FriendDTO>> getFriendList(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         Long userId = userDetails.getUserId();
         return ResponseEntity.ok(friendshipService.getFriendList(userId));
+    }
+
+    // 6친구 찾기
+    @PostMapping("/search")
+    public ResponseEntity<?> searchFriend(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody Map<String, String> request
+    ) {
+        String nickname = request.get("nickname");
+
+        return ResponseEntity.ok(friendshipService.searchFriend(userDetails.getUserEntity(), nickname));
+    }
+
+    // 7️⃣ 추천 친구 조회
+    //만약 가능하다면 누르면 친구 프로필로 가서 친구 신청 가능하게끔...?
+    //유저가 STAR user라도 나와 친구이면 recommend에 안 뜸.
+    @GetMapping("/recommend")
+    public ResponseEntity<List<FriendRecommendationDTO>> getRecommendedFriends(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long userId = userDetails.getUserId();
+        return ResponseEntity.ok(friendshipService.getRecommendedFriends(userId));
     }
 }
