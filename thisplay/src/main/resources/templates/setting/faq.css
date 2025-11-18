@@ -1,0 +1,138 @@
+@import url("../commonCss/base.css");
+body {
+    margin: 0;
+    padding: 0;
+    background: #07090d;
+    color: var(--color-text, #f5f5f5);
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.faq-wrapper {
+    max-width: 900px;
+    margin: 100px auto 60px;
+    padding: 0 20px 40px;
+}
+
+.faq-content {
+    background: var(--card-bg, #11141b);
+    border-radius: 18px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    padding: 24px 0;
+}
+
+/* 헤더 */
+.faq-header {
+    padding: 0 24px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.faq-header h2 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+}
+
+.faq-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-muted, #a0a3b0);
+}
+
+/* FAQ 리스트 */
+.faq-items {
+    margin: 0;
+    padding: 0;
+}
+
+/* 각 질문 블록 */
+.faq-item {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.faq-item:first-child {
+    border-top: none;
+}
+
+/* 질문 버튼 */
+.faq-question {
+    width: 100%;
+    padding: 14px 20px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    cursor: pointer;
+    font-size: 0.98rem;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.faq-question-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.faq-q-label {
+    font-weight: 700;
+    color: #00ff9d;
+    font-size: 0.85rem;
+}
+
+.faq-question-text {
+    font-weight: 500;
+}
+
+/* 화살표 */
+.faq-arrow {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* 호버 */
+.faq-question:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* 답변 영역 (아코디언) */
+.faq-answer-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+
+.faq-answer {
+    padding: 0 20px 16px 44px;
+    font-size: 0.93rem;
+    color: var(--color-muted, #c2c5d1);
+    line-height: 1.6;
+}
+
+/* 열렸을 때 상태 */
+.faq-item.open .faq-answer-wrapper {
+    max-height: 400px; /* 필요하면 더 크게 */
+}
+
+.faq-item.open .faq-question {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.faq-item.open .faq-arrow {
+    transform: rotate(90deg);
+    opacity: 1;
+}
+
+/* 상태 메세지 */
+.faq-loading,
+.faq-empty,
+.faq-error {
+    padding: 20px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-muted, #b3b7c4);
+}
