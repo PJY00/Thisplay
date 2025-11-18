@@ -108,8 +108,9 @@ body {
 
 .faq-answer {
     padding: 0 20px 16px 44px;
-    font-size: 0.93rem;
-    color: var(--color-muted, #c2c5d1);
+    font-size: 17px;
+    color: #e4e7ee; 
+    margin-top: 14px; 
     line-height: 1.6;
 }
 
