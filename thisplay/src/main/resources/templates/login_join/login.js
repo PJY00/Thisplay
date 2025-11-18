@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (res.data.message === "로그인 성공") {
       alert("로그인 성공!");
       // window.location.href = "mainpage.html"; // redirect
-      window.location.href = "../mainpage.html";
+      window.location.href = "../mainpage/mainpage.html";
     } else {
       alert("로그인 실패: " + res.data.message);
     }

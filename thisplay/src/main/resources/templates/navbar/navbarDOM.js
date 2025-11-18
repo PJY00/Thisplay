@@ -45,6 +45,10 @@ function createNavbar() {
 
   /// body에 navbar 추가
   document.body.insertAdjacentHTML("afterbegin", navbarHTML);
+  const profileMenu = document.getElementById("profile-menu");
+  const dropdown = profileMenu.querySelector(".dropdown");
+  const profileImg = document.getElementById("profile-img");
+  const logoutBtn = document.getElementById("logout-btn");
 
   // login 버튼 연결
   const loginBtn = document.querySelector("#login-btn button");
@@ -54,6 +58,34 @@ function createNavbar() {
     });
   }
 
+  const isLoggedIn = () => !!localStorage.getItem("token");
+  console.log(loginBtn);
+
+  if (isLoggedIn()) {
+    loginBtn.classList.add("hidden");
+    profileMenu.classList.remove("hidden");
+  } else {
+    loginBtn.classList.remove("hidden");
+    profileMenu.classList.add("hidden");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    createNavbar();
+
+    const loginBtn = document.querySelector("#login-btn");
+    const profileMenu = document.getElementById("profile-menu");
+
+    const isLoggedIn = () => !!localStorage.getItem("token");
+
+    if (isLoggedIn()) {
+      loginBtn?.classList.add("hidden");
+      profileMenu?.classList.remove("hidden");
+    } else {
+      loginBtn?.classList.remove("hidden");
+      profileMenu?.classList.add("hidden");
+    }
+  });
+
   //   const loginBtn = document.querySelector("#login-btn button");
   //   if (loginBtn) {
   //     loginBtn.addEventListener("click", () => {
@@ -61,8 +93,6 @@ function createNavbar() {
   //     });
   //   }
   // dropdown
-  const profileMenu = document.getElementById("profile-menu");
-  const dropdown = profileMenu.querySelector(".dropdown");
 
   if (profileMenu && dropdown) {
     profileMenu.addEventListener("mouseenter", () => {
