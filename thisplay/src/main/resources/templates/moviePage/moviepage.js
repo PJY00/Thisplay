@@ -61,6 +61,11 @@ async function loadReviews() {
   }
 }
 
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href = "moviepage.css"; // CSS 경로
+document.head.appendChild(cssLink);
+
 // 리뷰 등록하기
 // document.getElementById("submit-review").addEventListener("click", async () => {
 //   const text = document.getElementById("review-text").value.trim();
@@ -86,6 +91,56 @@ async function loadReviews() {
 //     console.error("좋아요 실패:", err);
 //   }
 // });
+
+async function loadOneLineReviews(movieId, page = 0, sort = "latest") {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reviews/${movieId}/oneline`,
+      {
+        params: {
+          sort: sort,
+          page: page,
+          size: 10,
+        },
+      }
+    );
+
+    console.log("한줄 리뷰 응답:", res.data);
+    return res.data; // Page<DTO> 구조
+  } catch (err) {
+    console.error("한줄 리뷰 로드 실패:", err);
+  }
+}
+
+async function renderOneLineReviews() {
+  const reviewsDiv = document.getElementById("reviews");
+
+  const pageData = await loadOneLineReviews(movieId);
+
+  if (!pageData || pageData.content.length === 0) {
+    reviewsDiv.innerHTML = "<p>등록된 한 줄 리뷰가 없습니다.</p>";
+    return;
+  }
+
+  reviewsDiv.innerHTML = "";
+
+  pageData.content.forEach((review) => {
+    const item = document.createElement("div");
+    item.classList.add("review-item");
+
+    item.innerHTML = `
+      <div class="profile">${review.username ?? "익명"}</div>
+      <div class="review">
+        ${review.content}
+        <a href="/review/${review.reviewId}">자세히 보기</a>
+      </div>
+    `;
+    reviewsDiv.appendChild(item);
+  });
+}
+
+// const params = new URLSearchParams(window.location.search);
+// const movieId = params.get("id"); // 또는 movieId= 로 보낸 경우 수정 필요
 
 // 페이지 로드 시 실행
 loadMovieDetail();

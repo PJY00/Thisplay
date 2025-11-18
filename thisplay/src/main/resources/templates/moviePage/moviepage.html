@@ -4,19 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!-- <link rel="stylesheet" href="moviepage.css" /> -->
   </head>
 
   <body>
     <div class="container">
       <section class="movie-info">
         <img id="poster" alt="영화 포스터" />
-        <h3>
+        <!-- <h3>
           <div class="movie-name" id="title">영화의 제목을 로딩중입니다.</div>
-        </h3>
-        <div class="movie-addinfo" id="addinfo">
-          영화의 추가 정보를 로딩중입니다.
+        </h3> -->
+        <!-- <h3 id="title" class="movie-name"></h3> -->
+        <div>
+          <div id="title" class="movie-name"></div>
+          <div class="movie-addinfo" id="addinfo">
+            영화의 추가 정보를 로딩중입니다.
+          </div>
+          <div class="movie-explain" id="summary">
+            영화 요약을 로딩중입니다.
+          </div>
         </div>
-        <div class="movie-explain" id="summary">영화 요약을 로딩중입니다.</div>
       </section>
       <hr />
       <!-- <button class="like">좋아요 버튼</button> -->
@@ -35,6 +42,7 @@
           </div>
         </div>
       </div>
+      <a href="" class="more_review">더보기</a>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
