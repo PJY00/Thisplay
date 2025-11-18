@@ -22,6 +22,18 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getProfile(id));
     }
 
+    // 내 프로필 조회
+    @GetMapping("/me/profile")
+    public ResponseEntity<?> getMyProfile(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인이 필요합니다.");
+        }
+        Long id = userDetails.getUserEntity().getUserId();
+        ProfileDTO profile = profileService.getProfile(id);
+        return ResponseEntity.ok(profile);
+    }
+
     // 프로필 수정
     @PatchMapping("/{id}/profile")
     public ResponseEntity<?> updateProfile(
