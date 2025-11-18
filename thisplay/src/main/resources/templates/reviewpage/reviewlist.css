@@ -61,6 +61,7 @@
     background: var(--card-bg);
     border-radius: 14px;
     padding: 30px;
+    padding-bottom: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     min-height: 500px;
 }
@@ -88,6 +89,14 @@
 .review-body-item:hover {
     background: rgba(255, 255, 255, 0.12);
     transform: translateX(4px);
+}
+
+.review-body p {
+    line-height: 1.75;
+    font-size: 1.05rem;
+    white-space: pre-wrap;     
+    overflow-wrap: break-word; 
+    word-break: break-word;    
 }
 
 /* ============================
@@ -142,7 +151,7 @@
     display: flex;
     justify-content: space-between;      
     align-items: center;                
-    margin-top: 30px;
+    margin-top: 50px;
 }
 
 .right-buttons {
