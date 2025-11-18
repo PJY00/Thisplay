@@ -122,6 +122,8 @@ document.addEventListener("click", async (e) => {
                 <div class="review-meta">
                     <span>⭐ ${r.star}</span>
                     <span>작성일: ${r.createdAt}</span>
+                    <span>👍 좋아요: ${r.likeCount ?? 0}</span>
+                    <span>👁 조회수: ${r.viewCount ?? 0}</span>
                 </div>
 
                 <hr>
@@ -136,12 +138,16 @@ document.addEventListener("click", async (e) => {
                 <h4>한줄평</h4>
                 <br>
                 <p>${r.oneLineReview ? r.oneLineReview : "(등록된 한줄평이 없습니다)"}</p>
-                </section>
+                
+                <div class="review-action-row">
+                    <button class="back-to-list">← 목록으로 돌아가기</button>
 
-                <button class="edit-review" data-reviewid="${r.reviewId}">리뷰 수정</button>
-                <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
-                <br>
-                <button class="back-to-list">← 목록으로 돌아가기</button>
+                    <div class="right-buttons">
+                        <button class="edit-review" data-reviewid="${r.reviewId}">리뷰 수정</button>
+                        <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
+                    </div>
+                </div>
+
             </article>
         `;
     } catch (err) {
