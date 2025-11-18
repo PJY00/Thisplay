@@ -288,6 +288,7 @@ background-color: #1c1f26;
     color: #ffffff;              
     border: 1px solid #444;      
     padding: 8px 10px;           
+    margin-bottom: 15px;
 }
 
 #visibility option {
@@ -299,7 +300,8 @@ background-color: #1c1f26;
     background-color: #1c1f26;   
     color: #ffffff;              
     border: 1px solid #444;      
-    padding: 8px 10px;          
+    padding: 8px 10px;     
+    margin-bottom: 15px;     
     border-radius: 6px;         
 }
 
