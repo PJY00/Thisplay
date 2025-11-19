@@ -100,4 +100,13 @@ public class FriendshipController {
         Long userId = userDetails.getUserId();
         return ResponseEntity.ok(friendshipService.getRecommendedFriends(userId));
     }
+
+    // 8️⃣ 받은(들어온) 친구 요청 목록 조회
+    @GetMapping("/received")
+    public ResponseEntity<List<FriendDTO>> getReceivedRequests(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Long receiverId = userDetails.getUserId();
+        return ResponseEntity.ok(friendshipService.getReceivedRequests(receiverId));
+    }
 }
