@@ -122,21 +122,25 @@ public class FriendshipService {
 
     public FriendSearchDTO searchFriend(UserEntity loginUser, String nickname) {
 
+        // 1) 닉네임으로 사용자 검색
         UserEntity targetUser = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
 
-        // ✅ 자기 자신 검색은 허용 (프로필 열람 가능하도록)
-        if (loginUser.getUserId().equals(targetUser.getUserId())) {
-            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
-        }
+        // 2) 본인 검색 허용 뭔가  안되서 그냥 주석처리함. 시간남으면 해결함 ㅈㅅ
+//        if (loginUser.getUserId().equals(targetUser.getUserId())) {
+//            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+//        }
 
-        // ✅ 친구가 아닐 경우 조회 불가
-        if (!areFriends(loginUser, targetUser)) {
-            throw new RuntimeException("해당 유저는 친구 목록에 없습니다.");
-        }
+        // 3) 친구 여부는 단순 표시용으로만 사용 (검색 자체 막지 않음)
+        boolean isFriend = areFriends(loginUser, targetUser);
 
-        return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+        return new FriendSearchDTO(
+                targetUser.getUserId(),
+                targetUser.getNickname(),
+                isFriend    // 필요하면 DTO에 친구 여부도 포함
+        );
     }
+
 
     public List<FriendRecommendationDTO> getRecommendedFriends(Long loginUserId) {
 
