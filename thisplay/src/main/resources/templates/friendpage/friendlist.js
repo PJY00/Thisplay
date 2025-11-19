@@ -42,44 +42,41 @@ function renderFriendList(data) {
     const el = document.getElementById('friendsList');
     el.innerHTML = '';
 
-    if (!data || (Array.isArray(data) && data.length === 0)) {
+    if (!data || data.length === 0) {
         el.innerHTML = '<div class="muted">친구가 없습니다.</div>';
         return;
     }
 
-    let friends = [];
-    if (Array.isArray(data)) {
-        friends = data.filter(item => item.status === 'FRIEND' || !item.status);
-    } else if (Array.isArray(data.friends)) {
-        friends = data.friends;
-    }
+    // 🔥 여기에서 실제 친구만 필터링 — status === "ACCEPTED"
+    const friends = data.filter(f => f.status === 'ACCEPTED');
 
-    if (!friends || friends.length === 0) {
+    if (friends.length === 0) {
         el.innerHTML = '<div class="muted">친구가 없습니다.</div>';
         return;
     }
 
     friends.forEach(f => {
-        const fid = f.friendshipId || f.friendId || f.userId;
-        const nickname = f.nickname || f.name;
+        const fid = f.friendshipId;
+        const nickname = f.otherUserName;   // ❤️ 실제 필드명
+        const userId = f.otherUserId;       // ❤️ 실제 필드명
 
         const div = document.createElement('div');
         div.className = 'item';
         div.innerHTML = `
-                <div>
-                    <strong>${escapeHtml(nickname)}</strong>
-                    <span class="muted">#${f.userId || ''}</span>
-                </div>
-                <div>
-                    <button class="btn-unfriend" data-id="${fid}">친구 삭제</button>
-                </div>
-            `;
+            <div>
+                <strong>${escapeHtml(nickname)}</strong>
+                <span class="muted">#${userId}</span>
+            </div>
+            <div>
+                <button class="btn-unfriend" data-id="${fid}">친구 삭제</button>
+            </div>
+        `;
         el.appendChild(div);
     });
 
-    // 삭제 이벤트
+    // 삭제 이벤트(근데 지금 기능 없음ㅋ)
     el.querySelectorAll('.btn-unfriend').forEach(btn => {
-        btn.addEventListener('click', async e => {
+        btn.addEventListener('click', async () => {
             const id = btn.dataset.id;
             if (!id) return;
 
@@ -95,6 +92,7 @@ function renderFriendList(data) {
         });
     });
 }
+
 
 /** --------------------
  *  2) 요청 목록 불러오기
