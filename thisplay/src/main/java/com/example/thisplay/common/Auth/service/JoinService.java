@@ -2,6 +2,7 @@ package com.example.thisplay.common.Auth.service;
 
 import com.example.thisplay.common.Auth.DTO.JoinDTO;
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.Entity.UserStatus;
 import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.global.util.PasswordValidator;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,8 @@ public class JoinService {
                 .nickname(nickname)
                 .password(bCryptPasswordEncoder.encode(password))
                 .role("ROLE_USER")
+                .status(UserStatus.NORMAL)
+                .profileImgUrl("/images/profile/default.png")
                 .build();
 
         userRepository.save(user);

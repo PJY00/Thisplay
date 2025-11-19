@@ -9,21 +9,21 @@ import com.example.thisplay.common.Auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity // 보안 설정 클래스
 @AllArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -47,15 +47,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .logout(logout -> logout.disable()); // 기본 로그아웃 비활성화
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/", "/join", "/logout", "/api/main/genres/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**","/api/likes/**").permitAll() //인증 없이 접근 가능
-                        .requestMatchers("/api/users/*/profile", "api/reviews/**", "api/likes/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/reviews/**", "api/likes/**").permitAll()
+                        .requestMatchers( "/login","/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated());
 
         // LoginFilter 등록
@@ -83,5 +82,27 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        //addAllowedOrigin 대신 addAllowedOriginPattern 사용
+        config.addAllowedOriginPattern("http://localhost:*");
+        config.addAllowedOriginPattern("http://127.0.0.1:*");
+
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        // 쿠키 허용
+        config.setAllowCredentials(true);
+
+        // Set-Cookie 헤더 노출
+        config.addExposedHeader("Set-Cookie");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

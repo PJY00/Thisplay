@@ -34,7 +34,7 @@ public class ReviewEntity {
     @Column(length=50, nullable = false)
     private String reviewTitle;
 
-    @Column(nullable = false)
+    @Column(length=10000, nullable = false)
     private String reviewBody;
 
     @Column(length = 100, nullable = false)
