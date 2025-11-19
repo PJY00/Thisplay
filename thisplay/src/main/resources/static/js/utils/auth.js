@@ -9,7 +9,7 @@ export function getToken() {
 
 export function logout() {
   localStorage.removeItem("token");
-  location.href = "../login/login.html";
+  location.href = "../mainpage/mainpage.html";
 }
 
 export function isLoggedIn() {

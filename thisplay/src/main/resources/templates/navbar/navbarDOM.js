@@ -154,6 +154,12 @@ function createNavbar() {
   const profileMenu = document.getElementById("profile-menu");
   const dropdown = profileMenu.querySelector(".dropdown");
 
+  //로고 클릭시 메인으로
+  const logo = document.querySelector(".logo");
+  logo.addEventListener("click", () => {
+    window.location.href = "../mainpage/mainpage.html";
+  });
+
   // 로그인 여부
   const isLoggedIn = () => !!localStorage.getItem("token");
 
