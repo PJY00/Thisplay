@@ -1,93 +1,79 @@
 /* ===========================
-   공지사항 기본 레이아웃
+   NOTICE PAGE STYLE (Thisplay)
 =========================== */
 
-.notice-container,
-.notice-detail-container {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 0 20px;
-  font-family: "Noto Sans KR", sans-serif;
-  color: #222;
+.notice-wrapper {
+  padding-top: 60px;
+  padding-bottom: 60px;
+  color: var(--color-text);
 }
 
 /* 제목 */
 .notice-title {
-  font-size: 2rem;
+  font-family: var(--font-heading);
+  font-size: 2.3rem;
+  font-weight: 700;
   text-align: center;
   margin-bottom: 40px;
-  font-weight: 600;
 }
 
-/* ===========================
-   탭
-=========================== */
-
-.notice-tabs {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 25px;
-}
-
-.notice-tabs .tab {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  padding-bottom: 5px;
-  color: #666;
-}
-
-.notice-tabs .tab.active {
-  border-bottom: 2px solid black;
-  color: black;
-}
-
-/* ===========================
-   검색
-=========================== */
-
+/* 검색 */
 .notice-search {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
-  gap: 5px;
+  gap: 10px;
+  margin-bottom: 25px;
 }
 
 .notice-search input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  width: 240px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text);
 }
 
-.search-btn {
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
+.notice-search input:focus {
+  border-color: var(--primary-glow);
+  box-shadow: 0 0 6px var(--primary-glow);
 }
 
-/* ===========================
-   리스트
-=========================== */
+.notice-search .search-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: white;
+}
+
+/* ================
+   LIST
+================ */
 
 .notice-list {
   list-style: none;
   padding-left: 0;
+  margin-top: 10px;
 }
 
 .notice-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 10px;
-  border-bottom: 1px solid #eaeaea;
+  padding: 18px 18px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: 0.25s ease;
 }
 
 .notice-item:hover {
-  background: #f7f7f7;
+  transform: translateY(-3px);
+  background: rgba(0, 255, 170, 0.08);
+  box-shadow: 0 0 12px var(--primary-glow);
 }
 
 .notice-left {
@@ -96,105 +82,105 @@
   gap: 14px;
 }
 
-.notice-index {
-  font-weight: 600;
-  color: #444;
-}
-
 .notice-tag {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(0, 255, 170, 0.15);
+  color: var(--primary-glow);
   font-size: 0.85rem;
-  padding: 3px 8px;
-  border-radius: 12px;
-  background: #eee;
 }
 
 .notice-text {
-  font-size: 1rem;
-  color: #222;
-  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
 }
 
 .notice-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .notice-date {
-  color: #888;
+  color: var(--color-muted);
+  font-size: 0.9rem;
 }
 
-.notice-arrow {
-  font-size: 1.25rem;
+.arrow-icon {
+  font-size: 1.4rem;
+  color: var(--color-muted);
 }
 
-/* ===========================
-   페이지네이션
-=========================== */
-
-.pagination {
+/* Pagination */
+.notice-pagination {
   text-align: center;
   margin-top: 25px;
-  font-size: 1rem;
 }
 
-.pagination .page {
-  padding: 4px 8px;
+.notice-pagination .page {
+  margin: 0 6px;
   cursor: pointer;
-  margin: 0 4px;
-  color: #555;
+  font-size: 1.05rem;
+  color: #ccc;
 }
 
-.pagination .page.active {
-  font-weight: 600;
+.notice-pagination .page.active {
+  color: var(--primary-glow);
   text-decoration: underline;
 }
 
-/* ===========================
-   상세 페이지
-=========================== */
+/* =======================
+   DETAIL PAGE
+======================= */
 
-.detail-header {
-  border-bottom: 1px solid #eaeaea;
-  padding-bottom: 20px;
-  margin-bottom: 25px;
+.notice-detail-card {
+  background: var(--card-bg);
+  padding: 30px 32px;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .detail-tag {
-  background: #eee;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.85rem;
+  background: rgba(0, 255, 170, 0.15);
+  padding: 5px 12px;
+  border-radius: 8px;
+  color: var(--primary-glow);
+  font-size: 0.9rem;
 }
 
 .detail-title {
-  margin: 10px 0;
-  font-size: 1.6rem;
+  margin-top: 16px;
+  font-size: 1.8rem;
+  font-family: var(--font-heading);
   font-weight: 600;
 }
 
 .detail-date {
-  color: #888;
+  margin-top: 8px;
+  color: var(--color-muted);
   font-size: 0.9rem;
 }
 
 .detail-body {
-  font-size: 1rem;
-  line-height: 1.65;
+  margin-top: 28px;
+  font-size: 1.1rem;
+  line-height: 1.75;
   white-space: pre-line;
-  margin-top: 20px;
 }
 
 .detail-back {
-  margin-top: 40px;
-  font-size: 1rem;
-  background: none;
-  border: 1px solid #ccc;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  transition: 0.25s;
 }
 
 .detail-back:hover {
-  background: #eee;
+  background: rgba(0, 255, 170, 0.15);
+  box-shadow: 0 0 12px var(--primary-glow);
 }

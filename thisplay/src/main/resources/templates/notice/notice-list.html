@@ -7,53 +7,38 @@
   </head>
 
   <body>
-    <div class="notice-container">
+    <div class="notice-wrapper container">
       <h1 class="notice-title">공지사항</h1>
-
-      <!-- 상단 탭 -->
-      <div class="notice-tabs">
-        <button class="tab active">전체</button>
-        <button class="tab">알림</button>
-        <button class="tab">보도기사</button>
-      </div>
 
       <!-- 검색 -->
       <div class="notice-search">
         <input type="text" placeholder="검색어를 입력하세요" />
-        <button class="search-btn">🔍</button>
+        <button class="search-btn"><i class="uil uil-search"></i></button>
       </div>
 
       <!-- 리스트 -->
       <ul class="notice-list">
-        <!-- 한 줄 -->
+        <!-- 공지 Example -->
         <li class="notice-item">
           <div class="notice-left">
-            <span class="notice-index">1</span>
-            <span class="notice-tag">알림</span>
-            <a href="/notice/1" class="notice-text"
-              >[공지] 2019년 1월 정기휴관 안내</a
+            <span class="notice-tag">공지</span>
+            <a href="./notice-detail.html" class="notice-text"
+              >서비스 점검 안내 (12/10)</a
             >
           </div>
-
           <div class="notice-right">
-            <span class="notice-date">2018.12.05</span>
-            <span class="notice-arrow">→</span>
+            <span class="notice-date">2024.12.10</span>
+            <i class="uil uil-angle-right-b arrow-icon"></i>
           </div>
         </li>
-
-        <!-- 반복해서 여러 개 표시됨 -->
       </ul>
 
       <!-- 페이지네이션 -->
-      <div class="pagination">
+      <div class="notice-pagination">
         <span class="page active">1</span>
         <span class="page">2</span>
         <span class="page">3</span>
-        <span class="page">4</span>
-        <span class="page">5</span>
-        <span class="page">6</span>
-        <span class="page">7</span>
-        <span class="page">▶</span>
+        <span class="page"> ▶ </span>
       </div>
     </div>
   </body>
