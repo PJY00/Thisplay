@@ -128,9 +128,9 @@ public class FriendshipService {
                 .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
 
         // 2) 본인 검색 허용 뭔가  안되서 그냥 주석처리함. 시간남으면 해결함 ㅈㅅ
-//        if (loginUser.getUserId().equals(targetUser.getUserId())) {
-//            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
-//        }
+        if (loginUser.getUserId().equals(targetUser.getUserId())) {
+            throw new RuntimeException("본인은 검색할 수 없습니다.");
+        }
 
         // 3) 친구 여부는 단순 표시용으로만 사용 (검색 자체 막지 않음)
         boolean isFriend = areFriends(loginUser, targetUser);
