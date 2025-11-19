@@ -67,30 +67,31 @@ function renderFriendList(data) {
                 <strong>${escapeHtml(nickname)}</strong>
                 <span class="muted">#${userId}</span>
             </div>
-            <div>
-                <button class="btn-unfriend" data-id="${fid}">친구 삭제</button>
-            </div>
+            
         `;
         el.appendChild(div);
     });
+    //친구 삭제 버튼. 기능이없어 빼둠.
+    // <div>
+    //     <button class="btn-unfriend" data-id="${fid}">친구 삭제</button>
+    // </div>
+    // // 삭제 이벤트(근데 지금 기능 없음ㅋ)
+    // el.querySelectorAll('.btn-unfriend').forEach(btn => {
+    //     btn.addEventListener('click', async () => {
+    //         const id = btn.dataset.id;
+    //         if (!id) return;
 
-    // 삭제 이벤트(근데 지금 기능 없음ㅋ)
-    el.querySelectorAll('.btn-unfriend').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const id = btn.dataset.id;
-            if (!id) return;
+    //         if (!confirm('친구를 삭제하시겠습니까?')) return;
 
-            if (!confirm('친구를 삭제하시겠습니까?')) return;
-
-            try {
-                await request(`/${id}/reject`, { method: 'DELETE' });
-                showStatus('친구 삭제 완료');
-                await loadAll();
-            } catch (err) {
-                showStatus('삭제 실패: ' + err.message, true);
-            }
-        });
-    });
+    //         try {
+    //             await request(`/${id}/reject`, { method: 'DELETE' });
+    //             showStatus('친구 삭제 완료');
+    //             window.parent.location.reload();
+    //         } catch (err) {
+    //             showStatus('삭제 실패: ' + err.message, true);
+    //         }
+    //     });
+    // });
 }
 
 
@@ -102,7 +103,7 @@ async function loadRequests() {
     el.innerHTML = '불러오는 중...';
 
     try {
-        const data = await request('/list', { method: 'GET' });
+        const data = await request('/received', { method: 'GET' });
         renderRequests(data);
     } catch (err) {
         el.innerHTML = `<div style="color:red;">요청 불러오기 실패: ${err.message}</div>`;
@@ -113,13 +114,7 @@ function renderRequests(data) {
     const el = document.getElementById('requestsList');
     el.innerHTML = '';
 
-    let pending = [];
-
-    if (Array.isArray(data)) {
-        pending = data.filter(i => i.status !== 'FRIEND');
-    } else if (Array.isArray(data.pending)) {
-        pending = data.pending;
-    }
+    let pending = Array.isArray(data) ? data : [];
 
     if (pending.length === 0) {
         el.innerHTML = '<div class="muted">처리할 요청이 없습니다.</div>';
@@ -127,36 +122,44 @@ function renderRequests(data) {
     }
 
     pending.forEach(p => {
-        const fid = p.friendshipId || p.id || p.friendId;
-        const nickname = p.nickname || p.senderNickname || p.receiverNickname;
+        const fid = p.friendshipId;
 
-        const received = !(p.isSender || p.type === "SENT");
+        // 🔥 상대 닉네임 우선순위 적용
+        const nickname =
+            p.otherUserName ||
+            p.nickname ||
+            p.senderNickname ||
+            p.receiverNickname ||
+            '(이름 없음)';
+
+        // 🔥 받은 요청인지 여부
+        const received = (p.from === false); // from=false → 받은 요청
 
         const div = document.createElement('div');
         div.className = 'item';
         div.innerHTML = `
-                <div>
-                    <strong>${escapeHtml(nickname)}</strong>
-                    <span class="muted">#${p.userId || ''}</span>
-                    <div class="muted">${received ? '받은 요청' : '보낸 요청'}</div>
-                </div>
-                <div>
-                    ${received
+            <div>
+                <strong>${escapeHtml(nickname)}</strong>
+                <span class="muted">#${p.otherUserId || ''}</span>
+                <div class="muted">${received ? '받은 요청' : '보낸 요청'}</div>
+            </div>
+
+            <div>
+                ${received
                 ? `<button class="btn-accept" data-id="${fid}">수락</button>
-                               <button class="btn-reject" data-id="${fid}">거절</button>`
+                       <button class="btn-reject" data-id="${fid}">거절</button>`
                 : `<button class="btn-cancel" data-id="${fid}">취소</button>`
             }
-                </div>
-            `;
+            </div>
+        `;
         el.appendChild(div);
     });
 
-    // 이벤트 바인딩
+    // 이벤트 바인딩 (기존 유지)
     el.querySelectorAll('.btn-accept').forEach(btn => {
-        btn.addEventListener('click', async e => {
-            const id = btn.dataset.id;
+        btn.addEventListener('click', async () => {
             try {
-                await request(`/${id}/accept`, { method: 'POST' });
+                await request(`/${btn.dataset.id}/accept`, { method: 'POST' });
                 showStatus('요청 수락됨');
                 await loadAll();
             } catch (err) {
@@ -166,10 +169,9 @@ function renderRequests(data) {
     });
 
     el.querySelectorAll('.btn-reject').forEach(btn => {
-        btn.addEventListener('click', async e => {
-            const id = btn.dataset.id;
+        btn.addEventListener('click', async () => {
             try {
-                await request(`/${id}/reject`, { method: 'DELETE' });
+                await request(`/${btn.dataset.id}/reject`, { method: 'DELETE' });
                 showStatus('거절 완료');
                 await loadAll();
             } catch (err) {
@@ -179,10 +181,9 @@ function renderRequests(data) {
     });
 
     el.querySelectorAll('.btn-cancel').forEach(btn => {
-        btn.addEventListener('click', async e => {
-            const id = btn.dataset.id;
+        btn.addEventListener('click', async () => {
             try {
-                await request(`/${id}/cancel`, { method: 'DELETE' });
+                await request(`/${btn.dataset.id}/cancel`, { method: 'DELETE' });
                 showStatus('요청 취소됨');
                 await loadAll();
             } catch (err) {
@@ -191,6 +192,7 @@ function renderRequests(data) {
         });
     });
 }
+
 
 /** 공용 함수들 */
 function showStatus(msg, isErr = false) {
@@ -218,9 +220,9 @@ async function loadAll() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', loadAll);
-
-let autoInterval = setInterval(loadAll, 10000);
-window.addEventListener('beforeunload', () => clearInterval(autoInterval));
+//자동 새로고침 없앰
+// let autoInterval = setInterval(loadAll, 10000);
+// window.addEventListener('beforeunload', () => clearInterval(autoInterval));
 
 // 첫 로드
 loadAll();

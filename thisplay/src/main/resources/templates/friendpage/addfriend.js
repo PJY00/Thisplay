@@ -67,23 +67,45 @@ function renderSearchResults(data) {
 
     const list = Array.isArray(data) ? data : [data];
 
+    // 🔥 현재 로그인한 내 정보 가져오기 (JWT에서 가져옴)
+    const stored = localStorage.getItem("user");
+    let myId = null;
+    if (stored) {
+        try {
+            myId = JSON.parse(stored).userId;
+        } catch (e) { }
+    }
+
     list.forEach((u) => {
         const div = document.createElement("div");
         div.className = "user-card";
+
+        const nickname = escapeHtml(u.nickname || u.name || "");
+        const uid = u.userId;
+
+        // 🔥 버튼 표시 여부 조건
+        const isMe = (myId && uid && myId === uid);
+        const isFriend = (u.isFriend === true) || (u.friend === true);
+
+        const showAddBtn = !(isMe || isFriend);
+
         div.innerHTML = `
-                <div>
-                    <strong>${escapeHtml(u.nickname || u.name || '')}</strong>
-                    <span class="muted">#${u.userId || ""}</span>
-                </div>
-                <div>
-                    <button class="btn-add" data-nickname="${escapeHtml(
-            u.nickname || u.name || ""
-        )}">친구 추가</button>
-                </div>
-            `;
+            <div>
+                <strong>${nickname}</strong>
+                <span class="muted">#${uid || ""}</span>
+            </div>
+            <div>
+                ${showAddBtn
+                ? `<button class="btn-add" data-nickname="${nickname}">친구 추가</button>`
+                : `<span class="muted">${isMe ? "본인" : "이미 친구입니다"}</span>`
+            }
+            </div>
+        `;
+
         container.appendChild(div);
     });
 
+    // 🔥 친구 추가 버튼 이벤트
     container.querySelectorAll(".btn-add").forEach((btn) => {
         btn.addEventListener("click", async (e) => {
             const receiverNickname = btn.dataset.nickname;
@@ -98,7 +120,7 @@ function renderSearchResults(data) {
                 });
 
                 showMessage(res || "친구 요청 완료");
-                window.parent.postMessage({ type: "refresh-manage" }, "*");
+                window.parent.location.reload();
 
                 btn.textContent = "요청 보냄";
             } catch (err) {
@@ -109,6 +131,7 @@ function renderSearchResults(data) {
         });
     });
 }
+
 
 // -------------------------
 // 4) 추천 친구 불러오기
@@ -160,7 +183,7 @@ async function loadRecommendations() {
                     });
 
                     showMessage(res || "친구 요청 완료");
-                    window.parent.postMessage({ type: "refresh-manage" }, "*");
+                    window.parent.location.reload();
 
                     btn.textContent = "요청 보냄";
                 } catch (err) {
