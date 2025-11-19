@@ -171,4 +171,22 @@ public class FriendshipService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public List<FriendDTO> getReceivedRequests(Long receiverId) {
+
+        // 1) receiver(UserEntity) 찾기
+        UserEntity receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+
+        // 2) 받은 친구 요청 목록 가져오기 (상태: PENDING)
+        List<Friendship> requests = friendshipRepository
+                .findByReceiveUserAndStatus(receiver, FriendshipStatus.PENDING);
+
+        // 3) DTO 반환
+        return requests.stream()
+                .map(f -> FriendDTO.fromEntity(f, receiverId))  // receiverId 전달
+                .collect(Collectors.toList());
+    }
+
+
 }

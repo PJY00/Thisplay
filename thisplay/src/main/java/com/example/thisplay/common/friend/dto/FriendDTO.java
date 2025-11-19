@@ -16,6 +16,8 @@ public class FriendDTO {
     private String otherUserName;   // 상대방 닉네임
     private FriendshipStatus status;// 관계 상태
     private boolean isFrom;         // 내가 보낸 요청이면 true
+    private String nickname; // ❌ 이거 하나면 누가 보냈는지 구분 불가
+
 
 
     public static FriendDTO fromEntity(Friendship friendship, Long loginUserId) {
