@@ -5,33 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Friends - Page</title>
-    <style>
-        body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            margin: 16px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            height: calc(100vh - 48px);
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
-
-        header {
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    </style>
+    <link rel="stylesheet" href="friendpage.css" />
 </head>
 
 <body>
@@ -48,7 +22,7 @@
         <iframe id="listFrame" src="friendlist.html" title="친구 목록"></iframe>
     </div>
     <!-- 잠깐 처리 -->
-    <!-- <script type="module" src="../navbar/navbarDOM.js"></script> -->
+    <script type="module" src="../navbar/navbarDOM.js"></script>
 
     <script>
         // 부모에서 iframe 간 통신(선택): 친구 요청 보낸 후 관리 영역에 알려서 자동 새로고침 하도록 메시지 보냄

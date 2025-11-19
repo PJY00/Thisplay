@@ -220,6 +220,7 @@ async function loadAll() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', loadAll);
+
 //자동 새로고침 없앰
 // let autoInterval = setInterval(loadAll, 10000);
 // window.addEventListener('beforeunload', () => clearInterval(autoInterval));
