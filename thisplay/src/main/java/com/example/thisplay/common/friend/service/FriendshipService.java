@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -122,21 +123,25 @@ public class FriendshipService {
 
     public FriendSearchDTO searchFriend(UserEntity loginUser, String nickname) {
 
+        // 1) 닉네임으로 사용자 검색
         UserEntity targetUser = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
 
-        // ✅ 자기 자신 검색은 허용 (프로필 열람 가능하도록)
-        if (loginUser.getUserId().equals(targetUser.getUserId())) {
-            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
-        }
+        // 2) 본인 검색 허용 뭔가  안되서 그냥 주석처리함. 시간남으면 해결함 ㅈㅅ
+//        if (loginUser.getUserId().equals(targetUser.getUserId())) {
+//            return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+//        }
 
-        // ✅ 친구가 아닐 경우 조회 불가
-        if (!areFriends(loginUser, targetUser)) {
-            throw new RuntimeException("해당 유저는 친구 목록에 없습니다.");
-        }
+        // 3) 친구 여부는 단순 표시용으로만 사용 (검색 자체 막지 않음)
+        boolean isFriend = areFriends(loginUser, targetUser);
 
-        return new FriendSearchDTO(targetUser.getUserId(), targetUser.getNickname());
+        return new FriendSearchDTO(
+                targetUser.getUserId(),
+                targetUser.getNickname(),
+                isFriend    // 필요하면 DTO에 친구 여부도 포함
+        );
     }
+
 
     public List<FriendRecommendationDTO> getRecommendedFriends(Long loginUserId) {
 
@@ -174,19 +179,27 @@ public class FriendshipService {
 
     public List<FriendDTO> getReceivedRequests(Long receiverId) {
 
-        // 1) receiver(UserEntity) 찾기
-        UserEntity receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+        // 1) receiverId → UserEntity 변환
+        UserEntity me = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 2) 받은 친구 요청 목록 가져오기 (상태: PENDING)
-        List<Friendship> requests = friendshipRepository
-                .findByReceiveUserAndStatus(receiver, FriendshipStatus.PENDING);
+        // 2) 내가 받은 요청 (상대 → 나)
+        List<Friendship> receivedRequests =
+                friendshipRepository.findByReceiveUserAndStatus(me, FriendshipStatus.PENDING);
 
-        // 3) DTO 반환
-        return requests.stream()
-                .map(f -> FriendDTO.fromEntity(f, receiverId))  // receiverId 전달
+        // 3) 내가 보낸 요청 (나 → 상대)
+        List<Friendship> sentRequests =
+                friendshipRepository.findBySendUserAndStatus(me, FriendshipStatus.PENDING);
+
+        // 4) 두 리스트 합치기
+        List<Friendship> all = new ArrayList<>();
+        all.addAll(receivedRequests);
+        all.addAll(sentRequests);
+
+        // 5) DTO 변환
+        return all.stream()
+                .map(f -> FriendDTO.fromEntity(f, receiverId))
                 .collect(Collectors.toList());
     }
-
 
 }

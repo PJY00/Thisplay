@@ -18,8 +18,6 @@ public class FriendDTO {
     private boolean isFrom;         // 내가 보낸 요청이면 true
     private String nickname; // ❌ 이거 하나면 누가 보냈는지 구분 불가
 
-
-
     public static FriendDTO fromEntity(Friendship friendship, Long loginUserId) {
         FriendDTO dto = new FriendDTO();
         dto.setFriendshipId(friendship.getFriendshipId());
