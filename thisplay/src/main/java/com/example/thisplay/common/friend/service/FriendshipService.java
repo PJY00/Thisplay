@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -178,19 +179,27 @@ public class FriendshipService {
 
     public List<FriendDTO> getReceivedRequests(Long receiverId) {
 
-        // 1) receiver(UserEntity) 찾기
-        UserEntity receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+        // 1) receiverId → UserEntity 변환
+        UserEntity me = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 2) 받은 친구 요청 목록 가져오기 (상태: PENDING)
-        List<Friendship> requests = friendshipRepository
-                .findByReceiveUserAndStatus(receiver, FriendshipStatus.PENDING);
+        // 2) 내가 받은 요청 (상대 → 나)
+        List<Friendship> receivedRequests =
+                friendshipRepository.findByReceiveUserAndStatus(me, FriendshipStatus.PENDING);
 
-        // 3) DTO 반환
-        return requests.stream()
-                .map(f -> FriendDTO.fromEntity(f, receiverId))  // receiverId 전달
+        // 3) 내가 보낸 요청 (나 → 상대)
+        List<Friendship> sentRequests =
+                friendshipRepository.findBySendUserAndStatus(me, FriendshipStatus.PENDING);
+
+        // 4) 두 리스트 합치기
+        List<Friendship> all = new ArrayList<>();
+        all.addAll(receivedRequests);
+        all.addAll(sentRequests);
+
+        // 5) DTO 변환
+        return all.stream()
+                .map(f -> FriendDTO.fromEntity(f, receiverId))
                 .collect(Collectors.toList());
     }
-
 
 }
