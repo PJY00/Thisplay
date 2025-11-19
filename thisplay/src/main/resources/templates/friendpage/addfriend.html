@@ -1,36 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <title>친구 찾기 / 요청 보내기</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial;
+            padding: 12px;
+        }
+
+        .box {
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            margin-right: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 10px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .user-card {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 
 <body>
-    <section class="search-nickname">
-        <search>
-            <form action="/nickname-search">
-                <input type="search" id="nickname" name="q" placeholder="닉네임으로 친구 검색" />
-                <button type="submit">Search</button>
-            </form>
-        </search>
-    </section>
-    <section class="recommend-friend">
+    <div class="box">
+        <h3>친구 검색</h3>
+        <div class="row">
+            <input id="searchInput" type="text" placeholder="닉네임으로 검색하세요" />
+            <button id="searchBtn">검색</button>
+            <button id="clearBtn">초기화</button>
+        </div>
+
+        <div id="searchResults"></div>
+    </div>
+
+    <div class="box">
         <h3>추천 친구</h3>
-        <div class="friend-item">
-            이동진 평론가
-            <button class="add-friend">친구 추가</button>
-        </div>
-        <div class="friend-item">
-            양념치킨
-            <button class="add-friend">친구 추가</button>
-        </div>
-        <div class="friend-item">
-            도시락 속 치킨
-            <button class="add-friend">친구 추가</button>
-        </div>
-    </section>
+        <div id="recommendations" class="muted">불러오는 중...</div>
+    </div>
+
+    <div id="message" style="margin-top:8px;color:green;"></div>
+
+    <script type="module" src="../friendpage/addfriend.js"></script>
+
 </body>
 
 </html>
