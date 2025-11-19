@@ -19,11 +19,11 @@ api.interceptors.request.use(
   (config) => {
     const token = getToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; //토큰 자동 첨부
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  }
-  // (error) => Promise.reject(error)
+  },
+  (error) => Promise.reject(error)
 );
 
 // 전역 에러

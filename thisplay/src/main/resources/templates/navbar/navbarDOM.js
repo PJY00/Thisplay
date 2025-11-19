@@ -1,3 +1,4 @@
+import { logout } from "../../static/js/utils/auth.js";
 function createNavbar() {
   // css 삽입
   const link = document.createElement("link");
@@ -30,12 +31,11 @@ function createNavbar() {
         <ul class="menu">
           <li id="login-btn"><button type="button">LOG IN</button></li>
           <li id="profile-menu" class="hidden">
-            <img src="../navbar/profile.png" alt="프로필" id="profile-img" />
             <img src="/thisplay/src/main/resources/templates/navbar/profile.png" alt="프로필" id="profile-img" />
             <ul class="dropdown hidden">
               <li><a href="#">마이페이지</a></li>
               <li><a href="#">설정</a></li>
-              <li><a href="#">로그아웃</a></li>
+              <li><a href="#" id="logout-btn">로그아웃</a></li>
             </ul>
           </li>
         </ul>
@@ -86,12 +86,6 @@ function createNavbar() {
     }
   });
 
-  //   const loginBtn = document.querySelector("#login-btn button");
-  //   if (loginBtn) {
-  //     loginBtn.addEventListener("click", () => {
-  //       window.location.href = "./login_join/login.html";
-  //     });
-  //   }
   // dropdown
 
   if (profileMenu && dropdown) {
@@ -103,6 +97,10 @@ function createNavbar() {
       dropdown.classList.add("hidden");
     });
   }
+
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    logout();
+  });
 }
 
 document.addEventListener("DOMContentLoaded", createNavbar);
