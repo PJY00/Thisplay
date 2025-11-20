@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thisplay - 공지사항 수정</title>
+    <link rel="stylesheet" href="./notice.css" />
+  </head>
+
+  <body>
+    <div class="notice-wrapper container">
+      <h1 class="notice-title">공지사항 수정</h1>
+
+      <div class="notice-detail-card">
+        <label class="input-label">제목</label>
+        <input
+          id="notice-title"
+          type="text"
+          class="notice-input"
+          placeholder="제목을 입력하세요"
+        />
+
+        <label class="input-label">내용</label>
+        <textarea
+          id="notice-content"
+          class="notice-textarea"
+          placeholder="내용을 입력하세요"
+        ></textarea>
+
+        <div class="detail-buttons">
+          <a href="/notice/list" class="detail-back">← 목록으로</a>
+          <button id="notice-save" class="detail-edit">수정 완료</button>
+          <button id="notice-delete" class="detail-delete">삭제</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./notice-edit.js"></script>
+  </body>
+</html>
