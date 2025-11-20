@@ -40,6 +40,7 @@
 
 #nicknameInput {
     width: 100%;
+    max-width: 480px;
     padding: 8px 10px;
     border-radius: 6px;
     background-color: #1c1f26;

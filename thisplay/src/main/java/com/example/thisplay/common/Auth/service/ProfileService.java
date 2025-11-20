@@ -28,6 +28,7 @@ public class ProfileService {
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .profileImgUrl(user.getProfileImgUrl())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
@@ -58,6 +59,7 @@ public class ProfileService {
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
                 .profileImgUrl(user.getProfileImgUrl())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 }
