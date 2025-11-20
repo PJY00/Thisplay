@@ -1,0 +1,80 @@
+.profile-edit-wrapper {
+    display: flex;
+    gap: 26px;
+    padding: 20px;
+    color: #ffffff;
+}
+
+.side-info {
+    width: 200px;
+    background-color: #11141c;
+    border: 1px solid #333;
+    padding: 16px;
+    border-radius: 10px;
+    height: fit-content;
+}
+
+.profile-content {
+    flex: 1;
+}
+
+.profile-card {
+    background-color: #11141c;
+    border: 1px solid #333;
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.profile-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+.profile-row {
+    margin-bottom: 16px;
+}
+
+.profile-label {
+    font-size: 0.9rem;
+    color: #bbbbbb;
+}
+
+.profile-value {
+    font-size: 1rem;
+}
+
+#nicknameInput {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background-color: #1c1f26;
+    border: 1px solid #444;
+    color: white;
+}
+
+.profile-img-box {
+    margin-bottom: 18px;
+}
+
+.profile-img-box img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #00fff7;
+    object-fit: cover;
+    background-color: #1c1f26;
+}
+
+button.save-btn {
+    background-color: #00fff7;
+    color: #111;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button.save-btn:hover {
+    filter: brightness(1.1);
+}
