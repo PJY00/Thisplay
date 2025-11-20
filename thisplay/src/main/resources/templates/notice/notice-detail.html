@@ -12,28 +12,24 @@
 
       <div class="notice-detail-card">
         <span class="detail-tag">공지</span>
-        <h2 class="detail-title">서비스 점검 안내 (12/10)</h2>
-        <p class="detail-date">2024.12.10</p>
+        <h2 class="detail-title">제목 로딩중...</h2>
+        <p class="detail-date">날짜 로딩중...</p>
 
         <div class="detail-body">
-          <p>
-            안녕하세요, Thisplay입니다.
-            <br /><br />
-            더 안정적인 서비스 제공을 위해 아래 일정 동안 시스템 점검을
-            진행합니다.
-            <br /><br />
-            ● 점검 일시: 2024년 12월 10일 02:00 ~ 05:00
-            <br />
-            ● 영향: 서비스 전체 이용 불가
-            <br /><br />
-            이용에 불편을 드려 죄송합니다.
-          </p>
+          <p>내용 로딩중...</p>
         </div>
 
-        <a href="./notice-list.html" class="detail-back">
-          ← 목록으로 돌아가기
-        </a>
+        <div class="detail-buttons">
+          <a href="/notice/list" class="detail-back">← 목록으로</a>
+
+          <!-- 관리자만 보이게 할 수도 있음 -->
+          <a id="editBtn" class="detail-edit">수정</a>
+          <a id="deleteBtn" class="detail-delete">삭제</a>
+        </div>
       </div>
     </div>
+
+    <!-- JS 연결 -->
+    <script type="module" src="./notice-detail.js"></script>
   </body>
 </html>
