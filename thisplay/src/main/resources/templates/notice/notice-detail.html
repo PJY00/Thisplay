@@ -2,34 +2,45 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>Thisplay - 공지사항 상세</title>
+    <title>Thisplay - 공지사항</title>
     <link rel="stylesheet" href="./notice.css" />
   </head>
 
   <body>
-    <div class="notice-wrapper container">
-      <h1 class="notice-title">공지사항</h1>
+    <div class="detail-wrapper container">
+      <!-- 상단 카테고리 -->
+      <div class="detail-category">
+        <span>공지사항</span>
+      </div>
 
-      <div class="notice-detail-card">
-        <span class="detail-tag">공지</span>
-        <h2 class="detail-title">제목 로딩중...</h2>
-        <p class="detail-date">날짜 로딩중...</p>
+      <!-- 제목 -->
+      <h1 class="detail-title">로딩중...</h1>
 
-        <div class="detail-body">
-          <p>내용 로딩중...</p>
-        </div>
+      <!-- 작성 정보 -->
+      <div class="detail-info">
+        <span class="writer">관리자</span>
+        <span class="dot">·</span>
+        <span class="date">0000-00-00</span>
+        <span class="dot">·</span>
+        <span class="views">조회 0</span>
+      </div>
 
-        <div class="detail-buttons">
-          <a href="/notice/list" class="detail-back">← 목록으로</a>
+      <!-- 본문 -->
+      <div class="detail-content-box">
+        <div class="detail-content">내용을 불러오는 중입니다...</div>
+      </div>
 
-          <!-- 관리자만 보이게 할 수도 있음 -->
-          <a id="editBtn" class="detail-edit">수정</a>
-          <a id="deleteBtn" class="detail-delete">삭제</a>
+      <!-- 버튼 영역 -->
+      <div class="detail-bottom">
+        <a href="/notice/list" class="back-btn">목록</a>
+
+        <div class="detail-actions">
+          <button id="editBtn" class="edit-btn">수정</button>
+          <button id="deleteBtn" class="delete-btn">삭제</button>
         </div>
       </div>
     </div>
 
-    <!-- JS 연결 -->
     <script type="module" src="./notice-detail.js"></script>
   </body>
 </html>

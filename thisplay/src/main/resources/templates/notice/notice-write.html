@@ -2,34 +2,37 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>Thisplay - 공지사항 작성</title>
+    <title>Thisplay - 공지 작성</title>
     <link rel="stylesheet" href="./notice.css" />
   </head>
 
   <body>
-    <div class="notice-wrapper container">
-      <h1 class="notice-title">공지사항 작성</h1>
+    <div class="write-wrapper container">
+      <!-- 상단: 제목 -->
+      <div class="write-header">
+        <h1>공지 작성</h1>
 
-      <div class="notice-detail-card">
-        <label class="input-label">제목</label>
-        <input
-          id="notice-title"
-          type="text"
-          class="notice-input"
-          placeholder="제목을 입력하세요"
-        />
-
-        <label class="input-label">내용</label>
-        <textarea
-          id="notice-content"
-          class="notice-textarea"
-          placeholder="내용을 입력하세요"
-        ></textarea>
-
-        <div class="detail-buttons">
-          <a href="/notice/list" class="detail-back">← 목록으로</a>
-          <button id="notice-submit" class="detail-edit">등록하기</button>
+        <div class="write-actions">
+          <button class="temp-btn">임시등록</button>
+          <button id="writeSubmit" class="submit-btn">등록</button>
         </div>
+      </div>
+
+      <!-- 제목 입력 -->
+      <div class="write-title-box">
+        <input
+          type="text"
+          id="writeTitle"
+          placeholder="제목을 입력해 주세요."
+        />
+      </div>
+
+      <!-- 내용 입력 -->
+      <div class="write-content-box">
+        <textarea
+          id="writeContent"
+          placeholder="내용을 입력해 주세요."
+        ></textarea>
       </div>
     </div>
 

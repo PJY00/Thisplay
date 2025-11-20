@@ -1,52 +1,47 @@
-import api from "../../static/js/api/axiosInstance.js";
+import api from "../api/axiosInstance.js";
 
 // URL에서 ID 가져오기
-const noticeId = window.location.pathname.split("/").pop();
+const pathParts = window.location.pathname.split("/");
+const noticeId = pathParts[pathParts.length - 1];
 
-const titleInput = document.querySelector("#notice-title");
-const contentInput = document.querySelector("#notice-content");
-const saveBtn = document.querySelector("#notice-save");
-const deleteBtn = document.querySelector("#notice-delete");
+const titleInput = document.querySelector("#editTitle");
+const contentInput = document.querySelector("#editContent");
+const submitBtn = document.querySelector("#editSubmit");
 
-// 수정 페이지 진입 시 기존 데이터 불러오기
+// 1) 기존 데이터 불러오기
 async function loadNotice() {
   try {
     const res = await api.get(`/notice/${noticeId}`);
-    const n = res.data;
+    const data = res.data;
 
-    titleInput.value = n.title;
-    contentInput.value = n.content;
+    titleInput.value = data.title;
+    contentInput.value = data.content;
   } catch (err) {
     console.error(err);
+    alert("공지사항 정보를 불러오지 못했습니다.");
   }
 }
 
-saveBtn.addEventListener("click", async () => {
-  const dto = {
-    title: titleInput.value,
-    content: contentInput.value,
-  };
+loadNotice();
+
+// 2) 수정 요청
+submitBtn.addEventListener("click", async () => {
+  const title = titleInput.value.trim();
+  const content = contentInput.value.trim();
+
+  if (!title) return alert("제목을 입력해주세요.");
+  if (!content) return alert("내용을 입력해주세요.");
 
   try {
-    await api.put(`/notice/${noticeId}`, dto);
-    alert("수정 완료");
+    await api.put(`/notice/${noticeId}`, {
+      title,
+      content,
+    });
+
+    alert("수정이 완료되었습니다.");
     window.location.href = `/notice/${noticeId}`;
   } catch (err) {
     console.error(err);
-    alert("수정 실패");
+    alert("수정 중 오류가 발생했습니다.");
   }
 });
-
-deleteBtn.addEventListener("click", async () => {
-  if (!confirm("정말 삭제하시겠습니까?")) return;
-
-  try {
-    await api.delete(`/notice/${noticeId}`);
-    alert("삭제 완료");
-    window.location.href = "/notice/list";
-  } catch (err) {
-    alert("삭제 실패");
-  }
-});
-
-loadNotice();
