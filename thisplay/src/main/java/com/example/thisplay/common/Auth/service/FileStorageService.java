@@ -14,9 +14,10 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class FileStorageService {
 
-    private final Path uploadDir = Paths.get("uploads/profile");
-
+//    private final Path uploadDir = Paths.get("uploads/profile");
+    private final Path uploadDir = Paths.get("C:/thisplay-uploads/profile");
     public String saveProfileImage(Long userId, MultipartFile file) throws IOException {
+        System.out.println("[FileStorage] uploadDir = " + uploadDir.toAbsolutePath()); // 어디에 저장하려는지 로그
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
