@@ -91,6 +91,24 @@
   box-shadow: 0 0 1rem rgba(0, 255, 170, 0.8);
 }
 
+.container button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 255, 170, 0.2);
+  color: var(--primary-glow);
+  border: 1px solid rgba(0, 255, 170, 0.5);
+  border-radius: 1rem;
+  font-weight: 600;
+  text-shadow: 0 0 0.5rem var(--primary-glow);
+  transition: all 0.25s ease;
+}
+
+.container button:hover {
+  background: rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 1rem rgba(0, 255, 170, 0.8);
+}
+
 /* 한줄 감상평 섹션 */
 .oneline-review {
   width: 80%;
@@ -126,7 +144,7 @@
 }
 
 /* 프로필 영역 */
-.review-item .profile {
+.review-item .profile_img {
   width: 3rem;
   height: 3rem;
   background: rgba(255, 255, 255, 0.1);
