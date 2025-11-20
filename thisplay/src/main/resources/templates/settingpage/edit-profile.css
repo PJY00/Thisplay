@@ -2,17 +2,12 @@
     display: flex;
     gap: 26px;
     padding: 20px;
+    margin: 100px auto;
+    margin-top: 80px;
     color: #ffffff;
+    max-width: 1000px;
 }
 
-.side-info {
-    width: 200px;
-    background-color: #11141c;
-    border: 1px solid #333;
-    padding: 16px;
-    border-radius: 10px;
-    height: fit-content;
-}
 
 .profile-content {
     flex: 1;

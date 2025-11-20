@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = "<p>불러오는 중...</p>";
 
     try {
-        const res = await api.get("/api/users/me", {
+        const res = await api.get("/api/users/me/profile", {
             headers: { Authorization: `Bearer ${getToken()}` }
         });
 
@@ -29,16 +29,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <input type="file" id="profileImage" accept="image/*">
             </div>
 
-            <div class="profile-row">
-                <span class="profile-label">가입일</span><br>
-                <span class="profile-value">${user.createdAt}</span>
-            </div>
-
-            <div class="profile-row">
+                        <div class="profile-row">
                 <label class="profile-label" for="nicknameInput">닉네임</label><br>
                 <input type="text" id="nicknameInput" value="${user.nickname}">
             </div>
 
+            <div class="profile-row">
+                <span class="profile-label">가입일</span><br>
+                <span class="profile-value">${user.createdAt}</span>
+            </div>
             <button class="save-btn">저장하기</button>
         `;
     } catch (err) {
