@@ -1,0 +1,69 @@
+/* ==========================
+   NOTICE DETAIL PAGE
+========================== */
+
+.detail-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+.detail-category {
+  font-size: 0.95rem;
+  color: #20c997;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.detail-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.detail-info {
+  display: flex;
+  gap: 6px;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+}
+
+.detail-content-box {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 25px;
+  min-height: 250px;
+  color: white;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.detail-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.back-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 8px;
+}
+
+.edit-btn {
+  padding: 8px 14px;
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  color: #ffd700;
+}
+
+.delete-btn {
+  padding: 8px 14px;
+  background: rgba(255, 0, 0, 0.25);
+  border-radius: 8px;
+  color: #ff6b6b;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thisplay - 공지사항</title>
+    <link rel="stylesheet" href="./notice-detail.css" />
+  </head>
+
+  <body>
+    <div class="detail-wrapper container">
+      <!-- 상단 카테고리 -->
+      <div class="detail-category">
+        <span>공지사항</span>
+      </div>
+
+      <!-- 제목 -->
+      <h1 class="detail-title">로딩중...</h1>
+
+      <!-- 작성 정보 -->
+      <div class="detail-info">
+        <span class="writer">관리자</span>
+        <span class="dot">·</span>
+        <span class="date">0000-00-00</span>
+        <span class="dot">·</span>
+        <span class="views">조회 0</span>
+      </div>
+
+      <!-- 본문 -->
+      <div class="detail-content-box">
+        <div class="detail-content">내용을 불러오는 중입니다...</div>
+      </div>
+
+      <!-- 버튼 영역 -->
+      <div class="detail-bottom">
+        <a href="/notice/list" class="back-btn">목록</a>
+
+        <div class="detail-actions">
+          <button id="editBtn" class="edit-btn">수정</button>
+          <button id="deleteBtn" class="delete-btn">삭제</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./notice-detail.js"></script>
+  </body>
+</html>
