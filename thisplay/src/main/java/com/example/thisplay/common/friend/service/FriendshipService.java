@@ -1,8 +1,11 @@
 package com.example.thisplay.common.friend.service;
 
 import com.example.thisplay.common.Auth.Entity.UserEntity;
+import com.example.thisplay.common.Auth.Entity.UserStatus;
 import com.example.thisplay.common.Auth.repository.UserRepository;
 import com.example.thisplay.common.friend.dto.FriendDTO;
+import com.example.thisplay.common.friend.dto.FriendRecommendationDTO;
+import com.example.thisplay.common.friend.dto.FriendSearchDTO;
 import com.example.thisplay.common.friend.entity.Friendship;
 import com.example.thisplay.common.friend.entity.FriendshipStatus;
 import com.example.thisplay.common.friend.repository.FriendshipRepository;
@@ -10,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -115,4 +120,86 @@ public class FriendshipService {
         return friendshipRepository.findBySendUserAndReceiveUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent()
                 || friendshipRepository.findByReceiveUserAndSendUserAndStatus(userA, userB, FriendshipStatus.ACCEPTED).isPresent();
     }
+
+    public FriendSearchDTO searchFriend(UserEntity loginUser, String nickname) {
+
+        // 1) 닉네임으로 사용자 검색
+        UserEntity targetUser = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RuntimeException("해당 닉네임의 사용자를 찾을 수 없습니다."));
+
+        // 2) 본인 검색 허용 뭔가  안되서 그냥 주석처리함. 시간남으면 해결함 ㅈㅅ
+        if (loginUser.getUserId().equals(targetUser.getUserId())) {
+            throw new RuntimeException("본인은 검색할 수 없습니다.");
+        }
+
+        // 3) 친구 여부는 단순 표시용으로만 사용 (검색 자체 막지 않음)
+        boolean isFriend = areFriends(loginUser, targetUser);
+
+        return new FriendSearchDTO(
+                targetUser.getUserId(),
+                targetUser.getNickname(),
+                isFriend    // 필요하면 DTO에 친구 여부도 포함
+        );
+    }
+
+
+    public List<FriendRecommendationDTO> getRecommendedFriends(Long loginUserId) {
+
+        UserEntity loginUser = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 없음"));
+
+        // 1. STAR 상태의 유저 전체 조회
+        List<UserEntity> stars = userRepository.findByStatus(UserStatus.STAR);
+
+        // 2. 현재 유저 자신은 제외
+        stars = stars.stream()
+                .filter(u -> !u.getUserId().equals(loginUserId))
+                .collect(Collectors.toList());
+
+        // 3. 이미 친구인 사람 제외
+        stars = stars.stream()
+                .filter(u -> !areFriends(loginUser, u))
+                .collect(Collectors.toList());
+
+        // 4. 랜덤 셔플
+        Collections.shuffle(stars);
+
+        // 5. 최대 10명만 반환
+        //친구인 경우 해당 유저를 배제하고 가져옴.
+        return stars.stream()
+                .limit(10)
+                .map(u -> new FriendRecommendationDTO(
+                        u.getUserId(),
+                        u.getNickname(),
+                        u.getProfileImgUrl(),   // ✅ 추가된 필드
+                        u.getStatus()           // ✅ UserStatus 전달
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<FriendDTO> getReceivedRequests(Long receiverId) {
+
+        // 1) receiverId → UserEntity 변환
+        UserEntity me = userRepository.findById(receiverId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 2) 내가 받은 요청 (상대 → 나)
+        List<Friendship> receivedRequests =
+                friendshipRepository.findByReceiveUserAndStatus(me, FriendshipStatus.PENDING);
+
+        // 3) 내가 보낸 요청 (나 → 상대)
+        List<Friendship> sentRequests =
+                friendshipRepository.findBySendUserAndStatus(me, FriendshipStatus.PENDING);
+
+        // 4) 두 리스트 합치기
+        List<Friendship> all = new ArrayList<>();
+        all.addAll(receivedRequests);
+        all.addAll(sentRequests);
+
+        // 5) DTO 변환
+        return all.stream()
+                .map(f -> FriendDTO.fromEntity(f, receiverId))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,0 +1,46 @@
+/* @import url("../commonCSS/base.css"); */
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial;
+    padding: 12px;
+    background-color: var(--color-bg, #fff);
+    /* base.css 변수 활용, 없으면 흰색 지금은 글자 잘 보이려고 임시로 한거 */
+}
+
+.box {
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+input[type="text"] {
+    width: 70%;
+    padding: 8px;
+    margin-right: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 8px 10px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.user-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+}
+
+.muted {
+    color: #666;
+    font-size: 0.9em;
+}
