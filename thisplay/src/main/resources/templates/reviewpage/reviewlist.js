@@ -1,6 +1,8 @@
 import api, { BASE_URL } from "../../static/js/api/axiosInstance.js";
 import { getToken, isLoggedIn, logout } from "../../static/js/utils/auth.js";
 
+console.log("✅ reviewlist.js 연결 완료");
+
 document.addEventListener("DOMContentLoaded", async () => {
     const listContainer = document.querySelector(".review-items"); // 리뷰 목록
     const leftContainer = document.querySelector(".reviewlist-class ul");
