@@ -19,7 +19,6 @@
 
 /* 검색 + 글쓰기 */
 .notice-top-bar {
-  margin-top: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
