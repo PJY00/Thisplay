@@ -23,6 +23,12 @@ public class UserEntity {
     @GeneratedValue
     private Long userId;
 
+    @Column(nullable = true, unique = true)
+    private String googleId;
+
+    @Column(nullable = true, unique = true)
+    private String email;
+
     @Column(nullable = false, unique = true)
     private String nickname;
 
@@ -45,6 +51,7 @@ public class UserEntity {
     //유저의 상태(추천친구 or 일반 유저 구분 시 사용)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private UserStatus status=UserStatus.NORMAL;
 
     // 유저가 가진 폴더 리스트 (1:N)
@@ -60,4 +67,6 @@ public class UserEntity {
 
     @CreationTimestamp
     private Date createdAt;
+
+
 }
