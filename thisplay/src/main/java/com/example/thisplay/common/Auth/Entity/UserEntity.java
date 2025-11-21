@@ -4,8 +4,10 @@ import com.example.thisplay.common.friend.entity.Friendship;
 import com.example.thisplay.common.rec_list.entity.MovieFolder;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -55,4 +57,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "receiveUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friendship> receivedFriendships = new ArrayList<>();
+
+    @CreationTimestamp
+    private Date createdAt;
 }
