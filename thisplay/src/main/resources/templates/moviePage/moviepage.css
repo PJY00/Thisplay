@@ -1,0 +1,210 @@
+/* 페이지 전체 컨테이너 */
+.container {
+  margin-top: 5rem !important;
+  max-width: 100vw;
+  padding: 0 2rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 영화 정보 섹션 */
+.movie-info {
+  display: grid;
+  /* display: flex; */
+  grid-template-columns: 230px 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+  padding: 2rem 0;
+}
+
+/* #title {
+  order: 1;
+}
+#addinfo {
+  order: 2;
+}
+#summary {
+  order: 3;
+} */
+
+/* 포스터 */
+#poster {
+  /* grid-column: 1; */
+  /* grid-row: 1; */
+  width: 80%;
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 255, 170, 0.4);
+  border: 2px solid rgba(0, 255, 170, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 영화 제목 */
+.movie-name {
+  /* grid-row: 2 / 1; */
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  color: var(--primary-glow);
+  text-shadow: 0 0 1rem var(--primary-glow);
+  margin-bottom: 0.5rem;
+}
+
+/* 추가 정보 */
+.movie-addinfo {
+  /* grid-row: 2; */
+  /* grid-column: 2 / 1; */
+  /* margin-top: 1rem; */
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+/* 요약 정보 */
+.movie-explain {
+  /* grid-row: 2; */
+    /* grid-column: 2 / 1; */
+  /* margin-top: 1.5rem; */
+  /* grid-row: 2/1; */
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--color-text);
+  align-self: start;
+}
+
+/* 감상평 이동 버튼 */
+.container a {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 255, 170, 0.2);
+  color: var(--primary-glow);
+  border: 1px solid rgba(0, 255, 170, 0.5);
+  border-radius: 1rem;
+  font-weight: 600;
+  text-shadow: 0 0 0.5rem var(--primary-glow);
+  transition: all 0.25s ease;
+}
+
+.container a:hover {
+  background: rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 1rem rgba(0, 255, 170, 0.8);
+}
+
+.container button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 255, 170, 0.2);
+  color: var(--primary-glow);
+  border: 1px solid rgba(0, 255, 170, 0.5);
+  border-radius: 1rem;
+  font-weight: 600;
+  text-shadow: 0 0 0.5rem var(--primary-glow);
+  transition: all 0.25s ease;
+}
+
+.container button:hover {
+  background: rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 1rem rgba(0, 255, 170, 0.8);
+}
+
+/* 한줄 감상평 섹션 */
+.oneline-review {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.oneline-review h4 {
+  font-size: 1.5rem;
+  font-family: var(--font-heading);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 1rem rgba(0, 170, 255, 0.7);
+}
+
+/* 리뷰 목록 */
+#reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* 리뷰 한 개 */
+.review-item {
+  display: flex;
+  gap: 1rem;
+  background: rgba(10, 15, 25, 0.8);
+  padding: 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(0, 255, 170, 0.2);
+  box-shadow: 0 0 0.6rem rgba(0, 255, 170, 0.15);
+}
+
+/* 프로필 영역 */
+.review-item .profile_img {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 170, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(0, 255, 170, 0.8);
+}
+
+/* 리뷰 텍스트 */
+.review-item .review {
+  flex: 1;
+  color: white;
+  line-height: 1.6;
+}
+
+.review-item a {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--tertiary-glow);
+}
+
+.review-item a:hover {
+  text-shadow: 0 0 0.5rem var(--tertiary-glow);
+}
+
+.more_review {
+  float: right;
+  /* display: inline-block; */
+  color: var(--primary-glow);
+  cursor: pointer;
+}
+
+.more_review:hover {
+  /* color: var(--primary-glow);
+  text-align: right; */
+  text-decoration: underline;
+}
+
+/* 반응형 처리  */
+
+@media (max-width: 768px) {
+  .movie-info {
+    grid-template-columns: 1fr;
+  }
+
+  #poster {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .container {
+    margin-top: 8rem;
+    padding: 0 1rem;
+  }
+
+  .search-box input {
+    width: 18rem;
+  }
+}

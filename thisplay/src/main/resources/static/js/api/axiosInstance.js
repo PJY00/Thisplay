@@ -12,18 +12,18 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // 쿠키 포함 요청 허용
+  // withCredentials: true, // 쿠키 포함 요청 허용
 });
 
 api.interceptors.request.use(
   (config) => {
     const token = getToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; //토큰 자동 첨부
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  }
-  // (error) => Promise.reject(error)
+  },
+  (error) => Promise.reject(error)
 );
 
 // 전역 에러

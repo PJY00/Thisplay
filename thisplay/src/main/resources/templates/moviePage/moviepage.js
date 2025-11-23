@@ -1,0 +1,288 @@
+// URL에서 영화 ID 추출
+const params = new URLSearchParams(window.location.search);
+// const movieId = params.get("id");
+let movieId = params.get("movieId");
+
+if (!movieId) {
+  movieId = 1218925; // 여기 원하는 ID 넣기 (Fight Club 예시)
+}
+
+// 영화 상세정보 불러오기
+async function loadMovieDetail() {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/movies/show/${movieId}`
+    );
+    const movie = res.data;
+
+    // HTML에 데이터 삽입
+    document.getElementById("poster").src = movie.poster_path;
+    document.getElementById("title").textContent = movie.title;
+    document.getElementById("summary").textContent = movie.overview;
+    document.querySelector("#addinfo").innerHTML = `
+        원제: ${movie.original_title} <br>
+        개봉일: ${movie.release_date.substring(0, 10)} <br>
+        러닝타임: ${movie.runtime}분 <br>
+        평점: ${movie.vote_average}점
+    `;
+    // document.getElementById("likes-count").textContent = movie.likes || 0;
+    // document.getElementById("rating-score").textContent =
+    //   movie.vote_average || "0.0";
+  } catch (err) {
+    console.error("영화 데이터 로드 실패:", err);
+  }
+}
+
+// 리뷰 목록 불러오기
+// async function loadReviews() {
+//   try {
+//     const res = await axios.get(
+//       `http://localhost:8080/api/reviews/movie/${movieId}`
+//     );
+
+//     const reviews = res.data.reviews;
+
+//     const list = document.querySelector("#reviews");
+//     list.innerHTML = "";
+
+//     if (!reviews || reviews.length === 0) {
+//       list.innerHTML = "<p>아직 등록된 감상평이 없습니다.</p>";
+//       return;
+//     }
+//     console.log(reviews);
+
+//     reviews.forEach((r) => {
+//       const div = document.createElement("div");
+//       div.classList.add("review-item");
+//       div.textContent = r.content;
+//       list.appendChild(div);
+//     });
+//   } catch (err) {
+//     console.error("리뷰 로드 실패:", err);
+//   }
+// }
+
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href = "moviepage.css";
+document.head.appendChild(cssLink);
+
+// 좋아요 버튼
+// document.getElementById("like-btn").addEventListener("click", async () => {
+//   try {
+//     await axios.post(`http://localhost:8080/api/movies/${movieId}/like`);
+//     loadMovieDetail(); // 좋아요 수 갱신
+//   } catch (err) {
+//     console.error("좋아요 실패:", err);
+//   }
+// });
+
+async function loadOneLineReviews(movieId, page = 0, sort = "latest") {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reviews/${movieId}/oneline`,
+      {
+        params: {
+          sort: sort,
+          page: page,
+          size: 10,
+        },
+      }
+    );
+
+    console.log("한줄 리뷰 응답:", res.data);
+    return res.data; // Page<DTO> 구조
+  } catch (err) {
+    console.error("한줄 리뷰 로드 실패:", err);
+  }
+}
+
+// async function renderOneLineReviews() {
+//   const reviewsDiv = document.getElementById("reviews");
+
+//   const pageData = await loadOneLineReviews(movieId);
+
+//   if (!pageData || pageData.content.length === 0) {
+//     reviewsDiv.innerHTML = "<p>등록된 한 줄 리뷰가 없습니다.</p>";
+//     return;
+//   }
+
+//   reviewsDiv.innerHTML = "";
+
+//   pageData.content.forEach((review) => {
+//     const item = document.createElement("div");
+//     item.classList.add("review-item");
+
+//     item.innerHTML = `
+//       <div class="profile">${review.username ?? "익명"}</div>
+//       <div class="review">
+//         ${review.content}
+//         <a href="/review/${review.reviewId}">자세히 보기</a>
+//       </div>
+//     `;
+//     reviewsDiv.appendChild(item);
+//   });
+// }
+
+// const params = new URLSearchParams(window.location.search);
+// const movieId = params.get("id"); // 또는 movieId= 로 보낸 경우 수정 필요
+
+async function renderOneLineReviews() {
+  const reviewsDiv = document.getElementById("reviews");
+
+  if (!reviewsDiv) {
+    console.error("reviews 요소를 찾을 수 없습니다.");
+    return;
+  }
+
+  const pageData = await loadOneLineReviews(movieId);
+
+  console.log("한줄 리뷰 응답:", pageData);
+
+  if (!pageData || !pageData.content || pageData.content.length === 0) {
+    reviewsDiv.innerHTML = `<p>등록된 한 줄 리뷰가 없습니다.</p>`;
+    return;
+  }
+
+  reviewsDiv.innerHTML = "";
+
+  const escapeHTML = (str) => {
+    if (!str) return "";
+    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+
+  pageData.content.forEach((review) => {
+    const nickname = review.nickname ?? "익명";
+    const oneLineReview = escapeHTML(review.oneLineReview);
+    const reviewId = review.reviewId;
+    const profileImage = review.profileImageUrl
+      ? `<img src="${review.profileImageUrl}" class="profile-img">`
+      : `<div class="profile-img empty"></div>`;
+
+    const item = document.createElement("div");
+    item.classList.add("review-item");
+
+    item.innerHTML = `
+      <div class="profile_img">${profileImage}</div>
+      <div class="profile">${nickname}</div>
+      <div class="review">
+        ${oneLineReview}
+        <a href="/review?id=${reviewId}">자세히 보기</a>
+      </div>
+    `;
+
+    reviewsDiv.appendChild(item);
+  });
+}
+
+// 페이지 로드 시 실행
+loadMovieDetail();
+// renderOneLineReviews();
+renderOneLineReviews();
+// loadReviews();
+
+// 폴더 팝업 dom 요소
+const folderPopup = document.getElementById("folderPopup");
+const folderListUI = document.getElementById("fp-folder-list");
+const closeBtn = document.getElementById("fp-close");
+const createFolderBtn = document.getElementById("fp-create-folder");
+
+// 폴더 팝업 열기
+document.getElementById("addfolder").addEventListener("click", openFolderPopup);
+
+async function openFolderPopup() {
+  folderListUI.innerHTML = ""; // 초기화
+
+  try {
+    const res = await axios.get("http://localhost:8080/api/folders/me", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const folders = res.data;
+
+    if (!folders || folders.length === 0) {
+      folderListUI.innerHTML = `<li>폴더가 없습니다. 먼저 새 폴더를 만들어주세요.</li>`;
+    } else {
+      folders.forEach((folder) => {
+        const li = document.createElement("li");
+        li.textContent = folder.folderName;
+        li.addEventListener("click", () => saveMovieToFolder(folder.folderId)); // 영화 저장
+        folderListUI.appendChild(li);
+      });
+    }
+
+    folderPopup.classList.remove("hidden"); // 팝업 열기
+  } catch (error) {
+    console.error("폴더 목록 로딩 실패:", error);
+    alert("폴더 목록을 불러오는 중 문제가 발생했습니다.");
+  }
+}
+
+// 팝업 닫기
+closeBtn.addEventListener("click", () => {
+  folderPopup.classList.add("hidden");
+});
+
+// 팝업 밖 클릭 시 닫기
+folderPopup.addEventListener("click", (e) => {
+  if (e.target === folderPopup) folderPopup.classList.add("hidden");
+});
+
+// 새 폴더 만들기
+createFolderBtn.addEventListener("click", createNewFolder);
+
+async function createNewFolder() {
+  const folderName = prompt("새 폴더 이름을 입력하세요:");
+
+  if (!folderName || folderName.trim() === "") {
+    alert("폴더 이름을 입력해주세요.");
+    return;
+  }
+
+  try {
+    await axios.post(
+      `http://localhost:8080/api/folders/create?folderName=${encodeURIComponent(
+        folderName
+      )}&visibility=PRIVATE`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    alert("새 폴더가 생성되었습니다!");
+
+    // 폴더 목록 다시 불러오기
+    openFolderPopup();
+  } catch (error) {
+    console.error("폴더 생성 실패:", error);
+    alert("폴더 생성 중 오류가 발생했습니다.");
+  }
+}
+
+// 영화 폴더에 저장
+async function saveMovieToFolder(folderId) {
+  try {
+    const tmdbId = movieId; // 기존에 사용하는 영화 ID
+
+    await axios.post(
+      `http://localhost:8080/api/movies/save/${folderId}/${tmdbId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    alert("영화가 해당 폴더에 추가되었습니다!");
+    folderPopup.classList.add("hidden");
+  } catch (error) {
+    console.error("영화 저장 실패:", error);
+    alert("영화를 폴더에 추가하는 데 실패했습니다.");
+  }
+}
