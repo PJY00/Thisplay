@@ -72,35 +72,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-
-// =====================================================
-// 🧩 리뷰 제목 목록 렌더링
-// =====================================================
-function renderReviewTitles(list) {
-    const listContainer = document.querySelector(".review-items");
-
-    listContainer.innerHTML = `
-        <h3>리뷰 제목</h3>
-        <ul class="review-body-list">
-            ${list.map(r => `
-                <li class="review-body-item" data-reviewid="${r.reviewId}">
-                    <h4>${r.reviewTitle || "(제목 없음)"}</h4>
-                </li>
-            `).join("")}
-        </ul>
-    `;
-}
-
-
-// =====================================================
-// ⭐ 리뷰 제목 클릭 → 리뷰 내용 보기.
-// =====================================================
-document.addEventListener("click", async (e) => {
+document.addEventListener("click", (e) => {
     const clicked = e.target.closest(".review-body-item");
     if (!clicked) return;
 
     const reviewId = clicked.dataset.reviewid;
+    loadReviewDetail(reviewId);  // ⭐ 공통 함수 호출
+});
 
+// =====================================================
+// 📌 공통: 리뷰 상세보기 함수
+// =====================================================
+async function loadReviewDetail(reviewId) {
     const listContainer = document.querySelector(".review-items");
     const detailContainer = document.querySelector(".review-detail");
 
@@ -135,12 +118,11 @@ document.addEventListener("click", async (e) => {
                 </section>
 
                 <section class="review-oneline">
+                    <hr>
+                    <h4>한줄평</h4>
+                    <p>${r.oneLineReview || "(등록된 한줄평이 없습니다)"}</p>
+                </section>
 
-                <hr>
-                <h4>한줄평</h4>
-                <br>
-                <p>${r.oneLineReview ? r.oneLineReview : "(등록된 한줄평이 없습니다)"}</p>
-                
                 <div class="review-action-row">
                     <button class="back-to-list">← 목록으로 돌아가기</button>
 
@@ -149,14 +131,32 @@ document.addEventListener("click", async (e) => {
                         <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
                     </div>
                 </div>
-
             </article>
         `;
     } catch (err) {
         console.error("리뷰 상세 조회 실패:", err);
         detailContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
     }
-});
+}
+
+// =====================================================
+// 🧩 리뷰 제목 목록 렌더링
+// =====================================================
+function renderReviewTitles(list) {
+    const listContainer = document.querySelector(".review-items");
+
+    listContainer.innerHTML = `
+        <h3>리뷰 제목</h3>
+        <ul class="review-body-list">
+            ${list.map(r => `
+                <li class="review-body-item" data-reviewid="${r.reviewId}">
+                    <h4>${r.reviewTitle || "(제목 없음)"}</h4>
+                </li>
+            `).join("")}
+        </ul>
+    `;
+}
+
 
 // =====================================================
 // 🗑 리뷰 삭제 버튼

@@ -60,7 +60,7 @@ async function loadMyReviews() {
             <div class="slider-wrap" id="wrap">
               <div class="slider-track" id="track">
                 ${reviews.map(r => `
-                  <article class="slider-card review-card">
+                  <article class="slider-card review-card" data-reviewid="${r.reviewId}">
                     <div class="review-card-content">
                       <h3 class="review-card-title">${r.reviewTitle}</h3>
                       <p class="review-card-oneline">${r.oneLineReview || "내용 없음"}</p>
@@ -89,6 +89,19 @@ async function loadMyReviews() {
   }
 }
 
+// ==============================================
+//  리뷰 카드 클릭 → 리뷰 상세 페이지로 이동
+// ==============================================
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".slider-card");
+  if (!card) return;
+
+  const reviewId = card.dataset.reviewid;
+  if (!reviewId) return;
+
+  // 리뷰 상세 페이지로 이동
+  location.href = `../reviewpage/reviewlist.html?reviewId=${reviewId}`;
+});
 
 
 //----------------------카드 슬라이더-----------------------------
