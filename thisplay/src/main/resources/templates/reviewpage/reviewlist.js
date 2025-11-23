@@ -198,6 +198,17 @@ document.addEventListener("click", async (e) => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(location.search);
+    const reviewId = params.get("reviewId");
+
+    if (reviewId) {
+        console.log("🔍 URL에서 reviewId 감지:", reviewId);
+        loadReviewDetail(reviewId);
+    }
+});
+
+
 // =====================================================
 // ✏ 리뷰 수정 버튼
 // =====================================================
