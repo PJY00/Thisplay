@@ -38,20 +38,37 @@
     flex: 0 0 auto;
     width: 180px;
     height: 240px;
-    border-radius: 12px;
-    background: #e5e5e5;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 18px;
+    background: rgba(20, 20, 30, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+
+    box-shadow:
+        0 0 12px rgba(0, 255, 255, 0.25),
+        inset 0 0 20px rgba(255, 0, 255, 0.15);
+
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    transition: transform 0.3s ease,
+        box-shadow 0.35s ease,
+        border-color 0.3s ease;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
+
+/* Hover 시 네온 발광 */
 .folder-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow:
+        0 0 30px rgba(0, 255, 255, 0.45),
+        0 0 50px rgba(255, 0, 255, 0.35),
+        inset 0 0 25px rgba(0, 255, 255, 0.25);
+    border-color: rgba(0, 255, 255, 0.6);
 }
 
 .folder-card img {
@@ -60,24 +77,57 @@
     object-fit: cover;
 }
 
+/* ✨ 카드 상단을 더 입체적으로 보이게 하는 highlight */
+.folder-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(rgba(255, 255, 255, 0.35),
+            rgba(255, 255, 255, 0));
+    opacity: 0.35;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
 
+.folder-card:hover::before {
+    opacity: 0.55;
+}
+
+/* 상단 이미지 / 썸네일 */
 .folder-thumbnail {
     flex: 1;
     width: 100%;
-    border-radius: 12px 12px 0 0;
-    background: linear-gradient(135deg, #ccc, #aaa);
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+
+    background: linear-gradient(135deg,
+            rgba(0, 255, 255, 0.15),
+            rgba(255, 0, 255, 0.15));
 }
 
+
+/* 폴더 제목(사이버 느낌) */
 .folder-title {
-    color: black;
-    background-color: white;
     width: 100%;
-    text-align: center;
-    padding: 8px 0;
+    padding: 12px 0;
     font-weight: 600;
-    border-top: 1px solid #ddd;
-    border-radius: 0 0 12px 12px;
+    text-align: center;
+
+    background: rgba(10, 10, 20, 0.7);
+    color: #b9fff7;
+
+    border-top: 1px solid rgba(0, 255, 255, 0.35);
+    border-radius: 0 0 18px 18px;
+
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
+    font-size: 1rem;
 }
+
+
 
 /* 좌우 화살표 버튼 */
 .arrow {
@@ -269,4 +319,11 @@
 .modal-content::-webkit-scrollbar-thumb {
     background-color: #444;
     border-radius: 3px;
+}
+
+.myfolder,
+.card-container,
+#folder-wrapper,
+.folder-card {
+    overflow: visible !important;
 }

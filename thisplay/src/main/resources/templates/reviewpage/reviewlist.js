@@ -101,38 +101,44 @@ async function loadReviewDetail(reviewId) {
         const r = res.data;
 
         detailContainer.innerHTML = `
-            <article class="review-fullpage">
-                <h2 class="review-title">${r.reviewTitle || "(제목 없음)"}</h2>
-                
-                <div class="review-meta">
-                    <span>⭐ ${r.star}</span>
-                    <span>작성일: ${r.createdAt}</span>
-                    <span>👍 좋아요: ${r.likeCount ?? 0}</span>
-                    <span>👁 조회수: ${r.viewCount ?? 0}</span>
-                </div>
+    <article class="review-fullpage">
 
-                <hr>
+        <div class="review-action-row top-row">
+            <button class="back-to-list">← 목록으로 돌아가기</button>
+        </div>
 
-                <section class="review-body">
-                    <p>${r.reviewBody.replace(/\n/g, "<br>")}</p>
-                </section>
+        <h2 class="review-title">${r.reviewTitle || "(제목 없음)"}</h2>
+        
+        <div class="review-meta">
+            <span>⭐ ${r.star}</span>
+            <span>작성일: ${r.createdAt}</span>
+            <span>👍 좋아요: ${r.likeCount ?? 0}</span>
+            <span>👁 조회수: ${r.viewCount ?? 0}</span>
+        </div>
 
-                <section class="review-oneline">
-                    <hr>
-                    <h4>한줄평</h4>
-                    <p>${r.oneLineReview || "(등록된 한줄평이 없습니다)"}</p>
-                </section>
+        <hr>
 
-                <div class="review-action-row">
-                    <button class="back-to-list">← 목록으로 돌아가기</button>
+        <section class="review-body">
+            <p>${r.reviewBody.replace(/\n/g, "<br>")}</p>
+        </section>
 
-                    <div class="right-buttons">
-                        <button class="edit-review" data-reviewid="${r.reviewId}">리뷰 수정</button>
-                        <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
-                    </div>
-                </div>
-            </article>
-        `;
+        <section class="review-oneline">
+            <hr>
+            <h4>한줄평</h4>
+            <p>${r.oneLineReview || "(등록된 한줄평이 없습니다)"}</p>
+        </section>
+
+        <div class="review-action-row">
+            <div></div> <!-- 빈 영역(좌측 정렬 유지용) -->
+            <div class="right-buttons">
+                <button class="edit-review" data-reviewid="${r.reviewId}">리뷰 수정</button>
+                <button class="delete-review" data-reviewid="${r.reviewId}">리뷰 삭제</button>
+            </div>
+        </div>
+
+    </article>
+`;
+
     } catch (err) {
         console.error("리뷰 상세 조회 실패:", err);
         detailContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
