@@ -1,71 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="moviepage.css" /> -->
-  </head>
 
-  <body>
-    <div class="container">
-      <section class="movie-info">
-        <img id="poster" alt="영화 포스터" />
-        <!-- <h3>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="moviepage.css" /> -->
+</head>
+
+<body>
+  <div class="container">
+    <section class="movie-info">
+      <img id="poster" alt="영화 포스터" />
+      <!-- <h3>
           <div class="movie-name" id="title">영화의 제목을 로딩중입니다.</div>
         </h3> -->
-        <!-- <h3 id="title" class="movie-name"></h3> -->
-        <div>
-          <div id="title" class="movie-name"></div>
-          <div class="movie-addinfo" id="addinfo">
-            영화의 추가 정보를 로딩중입니다.
-          </div>
-          <div class="movie-explain" id="summary">
-            영화 요약을 로딩중입니다.
-          </div>
+      <!-- <h3 id="title" class="movie-name"></h3> -->
+      <div>
+        <div id="title" class="movie-name"></div>
+        <div class="movie-addinfo" id="addinfo">
+          영화의 추가 정보를 로딩중입니다.
         </div>
-      </section>
-      <hr />
-      <!-- <button class="like">좋아요 버튼</button> -->
-      <!-- 감상평 쓰러가기 링크는 js로 수정 -->
-      <a href="/review?movieId={movieId}">감상평 쓰러가기</a>
-      <button id="addfolder">폴더에 추가하기</button>
-      <div id="folderPopup" class="folder-popup hidden">
-        <div class="folder-popup-content">
-          <div class="fp-header">
-            <span>폴더에 추가하기</span>
-            <button id="fp-close" class="fp-close">✕</button>
-          </div>
+        <div class="movie-explain" id="summary">
+          영화 요약을 로딩중입니다.
+        </div>
+      </div>
+    </section>
+    <hr />
+    <!-- <button class="like">좋아요 버튼</button> -->
+    <!-- 감상평 쓰러가기 링크는 js로 수정 -->
+    <a id="goReviewBtn">감상평 쓰러가기</a>
+    <button id="addfolder">폴더에 추가하기</button>
+    <div id="folderPopup" class="folder-popup hidden">
+      <div class="folder-popup-content">
+        <div class="fp-header">
+          <span>폴더에 추가하기</span>
+          <button id="fp-close" class="fp-close">✕</button>
+        </div>
 
-          <ul id="fp-folder-list" class="fp-folder-list">
-            <!-- JS로 폴더 리스트 삽입 -->
-          </ul>
+        <ul id="fp-folder-list" class="fp-folder-list">
+          <!-- JS로 폴더 리스트 삽입 -->
+        </ul>
 
-          <button id="fp-create-folder" class="fp-create-btn">
-            + 새 폴더 만들기
-          </button>
+        <button id="fp-create-folder" class="fp-create-btn">
+          + 새 폴더 만들기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="oneline-review">
+    <h4>한 줄로 보는 감상평</h4>
+    <div id="reviews">
+      <div class="review-item">
+        <div class="profile_img">loading</div>
+        <div class="profile">loading</div>
+        <div class="review">
+          loading
+          <a href="/review/id">자세히 보기</a>
         </div>
       </div>
     </div>
+    <a href="" class="more_review">더보기</a>
+  </section>
 
-    <section class="oneline-review">
-      <h4>한 줄로 보는 감상평</h4>
-      <div id="reviews">
-        <div class="review-item">
-          <div class="profile_img">loading</div>
-          <div class="profile">loading</div>
-          <div class="review">
-            loading
-            <a href="/review/id">자세히 보기</a>
-          </div>
-        </div>
-      </div>
-      <a href="" class="more_review">더보기</a>
-    </section>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+  <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+  <script type="module" src="../navbar/navbarDOM.js"></script>
+  <script src="moviepage.js"></script>
+</body>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
-    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
-    <script type="module" src="../navbar/navbarDOM.js"></script>
-    <script src="moviepage.js"></script>
-  </body>
 </html>
