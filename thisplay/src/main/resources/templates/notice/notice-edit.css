@@ -9,6 +9,7 @@
 }
 
 .write-header {
+  padding-top: 60px;
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
