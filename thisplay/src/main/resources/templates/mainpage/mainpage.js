@@ -188,7 +188,8 @@ cards.forEach((card, i) => {
   //   card.addEventListener("mouseenter", () => activate(i, true));
   //   card.addEventListener("click", () => activate(i, true));
   // });
-  
+
+
 
   // 창 크기 변경 시 중앙 유지
   addEventListener("resize", () => center(current));
