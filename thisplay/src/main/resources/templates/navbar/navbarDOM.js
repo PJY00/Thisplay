@@ -65,6 +65,7 @@ function createNavbar() {
 
   // 로그인 버튼 클릭
   loginBtn.addEventListener("click", () => {
+    localStorage.setItem("previousPage", window.location.href);
     window.location.href = "../login_join/login.html";
   });
 
