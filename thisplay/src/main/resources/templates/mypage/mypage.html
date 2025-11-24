@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thisplay</title>
+    <link rel="stylesheet" href="./mypage.css">
+    <link rel="stylesheet" href="../moviefolder/folder.css">
+</head>
+
+<body>
+    <section class="profile-section">
+        <div class="profile-box">
+            <div class="profile-info">
+                <div class="profile-icon">👤</div>
+                <span class="profile-name" id="profileName">닉네임</span>
+            </div>
+            <button class="edit-btn" id="editProfileBtn">✏️</button>
+        </div>
+    </section>
+
+    <section>
+        <!-- <h3 class="section-title">나만의 감상평</h3> -->
+        <div class="review-slider"></div>
+    </section>
+
+    <hr>
+    <section class="myfolder">
+        <h3 class="folderlist">나의 추천 영화 폴더</h3>
+        <!-- ✅ 새 폴더 만들기 폼 추가 -->
+        <div class="create-folder-box">
+            <form id="create-folder-form">
+                <input type="text" id="folderName" placeholder="새 폴더 이름 입력" required />
+                <select id="visibility">
+                    <option value="PRIVATE">비공개</option>
+                    <option value="FRIEND">친구 공개</option>
+                    <option value="PUBLIC">전체 공개</option>
+                </select>
+                <button type="submit">폴더 생성</button>
+            </form>
+            <p id="folder-result"></p>
+        </div>
+        <!-- ✅ 여기까지 폴더 생성 영역 -->
+        <div class="card-container" id="folder-container">
+            <button class="arrow left" id="left-arrow">&#10094;</button>
+            <div id="folder-wrapper">
+            </div>
+            <button class="arrow right" id="right-arrow">&#10095;</button>
+        </div>
+        <!-- 📦 팝업 모달 (새로 추가) -->
+        <div id="folder-modal" class="modal hidden">
+            <div class="modal-content">
+                <button id="close-modal" class="close-btn">✕</button>
+                <h3 id="modal-folder-name"></h3>
+                <div id="modal-movie-list"></div>
+            </div>
+
+    </section>
+
+    <script type="module" src="../navbar/navbarDOM.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/utils/auth.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+    <script type="module" src="./mypage.js"></script>
+    <script type="module" src="../moviefolder/folder.js"></script>
+    <script type="module" src="../moviefolder/folderDOM.js"></script>
+
+</body>
+
+</html>
