@@ -1,0 +1,170 @@
+@import url("../commonCss/base.css");
+
+/* ============================
+   전체 레이아웃 기본
+============================ */
+body {
+    background: #07090d;
+    color: var(--color-text, #f5f5f5);
+    font-family: Inter, system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 공통 너비 */
+.my-profile,
+.settings,
+#logout {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* ============================
+   프로필 버튼 카드
+============================ */
+.my-profile {
+    margin-top: 80px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#profileBtn {
+    width: 100%;
+    padding: 18px 22px;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    background: var(--card-bg, #12151c);
+    color: inherit;
+
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    transition: 0.25s ease;
+}
+
+#profileBtn:hover {
+    background: #181c26;
+    transform: translateY(-2px);
+}
+
+/* 프로필 이미지 */
+#profileBtn img {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* 사용자 이름 */
+#profilename {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* 화살표 아이콘 */
+#profileBtn svg {
+    margin-left: auto;
+    opacity: 0.75;
+}
+
+/* 구분선 */
+hr {
+    width: 100%;
+    max-width: 600px;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin: 10px 0;
+}
+
+/* ============================
+   설정 메뉴 List
+============================ */
+.settings{
+    padding-top:20px;
+}
+
+.settings-menu {
+    background: var(--card-bg, #12151c);
+    border-radius: 16px;
+    padding: 12px 0;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32);
+}
+
+.menu-item {
+    padding: 16px 20px;
+    font-size: 0.98rem;
+    color: var(--color-text, #eaeaea);
+    text-decoration: none;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    transition: 0.25s;
+}
+
+.menu-item + .menu-item {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ============================
+   로그아웃 버튼
+============================ */
+#logout {
+    margin-top: 24px;
+    margin-bottom: 40px;
+
+    padding: 12px 20px;
+    width: 100%;
+
+    background: rgba(255, 0, 0, 0.18);
+    color: #ff7272;
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+
+    transition: 0.25s ease;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+#logout:hover {
+    background: rgba(255, 0, 0, 0.28);
+    color: #ff4d4d;
+    transform: translateY(-1px);
+}
+
+/* ============================
+   반응형
+============================ */
+@media (max-width: 768px) {
+    body {
+        padding: 0 14px;
+    }
+
+    #profileBtn img {
+        width: 52px;
+        height: 52px;
+    }
+}
