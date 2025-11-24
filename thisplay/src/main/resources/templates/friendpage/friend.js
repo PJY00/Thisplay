@@ -93,6 +93,7 @@ function renderSearchResults(data) {
     const showAddBtn = !(isMe || isFriend);
 
     div.innerHTML = `
+    <img class="pf" src="http://localhost:8080${u.profileImgUrl}" alt="pf">
             <div>
                 <strong>${nickname}</strong>
                 <span class="muted">#${uid || ""}</span>
@@ -158,7 +159,11 @@ async function loadRecommendations() {
       const row = document.createElement("div");
       row.className = "user-card";
       row.innerHTML = `
-                    <div>
+                    <img class="pf" src="http://localhost:8080${
+                      r.profileImgUrl
+                    }" alt="pf">
+
+                    <div>   
                         <strong>${escapeHtml(r.nickname || r.name)}</strong>
                         <span class="muted">#${r.userId || ""}</span>
                     </div>
@@ -268,6 +273,7 @@ function renderFriendList(data) {
     const div = document.createElement("div");
     div.className = "item";
     div.innerHTML = `
+    <img class="pf" src="http://localhost:8080${f.profileImgUrl}" alt="pf">
             <div>
                 <strong>${escapeHtml(nickname)}</strong>
                 <span class="muted">#${userId}</span>
@@ -353,6 +359,7 @@ function renderRequests(data) {
       const div = document.createElement("div");
       div.className = "item";
       div.innerHTML = `
+      <img class="pf" src="http://localhost:8080${p.profileImgUrl}" alt="pf">
         <div>
           <strong>${escapeHtml(nickname)}</strong>
           <span class="muted">${p.otherUserId || ""}</span>
@@ -382,6 +389,8 @@ function renderRequests(data) {
       const div = document.createElement("div");
       div.className = "item";
       div.innerHTML = `
+      <img class="pf" src="http://localhost:8080${p.profileImgUrl}" alt="pf">
+
         <div>
           <strong>${escapeHtml(nickname)}</strong>
           <span class="muted">${p.otherUserId || ""}</span>
