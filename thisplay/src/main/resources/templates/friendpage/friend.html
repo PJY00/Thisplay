@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Friends - Page</title>
+    <!-- <link rel="stylesheet" href="friendpage.css" />
+    <link rel="stylesheet" href="addfriend.css" />
+    <link rel="stylesheet" href="friendlist.css" /> -->
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>친구 페이지</h2>
+      <!-- 왼쪽: 친구 추가 / 추천 / 검색 -->
+      <div class="inner-flex">
+        <div class="left-container">
+          <div class="box">
+            <h3>친구 검색</h3>
+            <div class="row">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="닉네임으로 검색하세요"
+              />
+              <button id="searchBtn">검색</button>
+              <button id="clearBtn">초기화</button>
+            </div>
+
+            <div id="searchResults"></div>
+          </div>
+
+          <div class="box">
+            <h3>추천 친구</h3>
+            <div id="recommendations" class="muted">불러오는 중...</div>
+          </div>
+
+          <div id="message" style="margin-top: 8px; color: green"></div>
+        </div>
+
+        <!-- 오른쪽: 친구 목록 (수락/거절/취소) -->
+        <div class="right-container">
+          <div class="box">
+            <div class="section-title">
+              <h3 color="white">내 친구 목록</h3>
+              <div>
+                <button id="refreshBtn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-arrow-clockwise"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                    />
+                    <path
+                      d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="friendsList" class="list">불러오는 중...</div>
+          </div>
+
+          <div class="box">
+            <h3>요청 관리</h3>
+            <h4>들어온 요청</h4>
+            <div id="requestsList" class="list">불러오는 중...</div>
+            <h4>보낸 요청</h4>
+            <div id="sendList" class="list">불러오는 중...</div>
+          </div>
+
+          <div id="statusMsg" style="margin-top: 8px; color: green"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+    <script type="module" src="../../static/js/utils/auth.js"></script>
+    <script type="module" src="../navbar/navbarDOM.js"></script>
+    <script type="module" src="friend.js"></script>
+  </body>
+</html>
