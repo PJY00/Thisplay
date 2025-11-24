@@ -95,7 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const accessToken = res.data.data.accessToken;
 
         // token 저장
+        // localStorage.setItem("token", accessToken);
         localStorage.setItem("token", accessToken);
+        localStorage.setItem("userId", res.data.data.userId);
 
         alert("로그인 성공!");
         window.location.href = "../mainpage/mainpage.html";
