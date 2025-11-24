@@ -187,6 +187,124 @@
   text-decoration: underline;
 }
 
+/* 폴더 팝업 전체 오버레이*/
+.folder-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* 팝업 박스 */
+.folder-popup-content {
+  background: rgba(10, 20, 20, 0.95);
+  border: 1px solid rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 2rem rgba(0, 255, 170, 0.4);
+  padding: 2rem;
+  width: 380px;
+  border-radius: 1.2rem;
+  animation: popupShow 0.25s ease-out;
+}
+
+/* 팝업 등장 애니메이션 */
+@keyframes popupShow {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 팝업 헤더 */
+.fp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.fp-header span {
+  font-size: 1.4rem;
+  font-family: var(--font-heading);
+  color: var(--primary-glow);
+  text-shadow: 0 0 1rem var(--primary-glow);
+}
+
+/* X 버튼 */
+/* .fp-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 170, 0.5);
+  background: transparent;
+  color: var(--primary-glow);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.2s;
+} */
+
+/* .fp-close:hover {
+  background: rgba(0, 255, 170, 0.2);
+  box-shadow: 0 0 1rem rgba(0, 255, 170, 0.5);
+} */
+
+/* 폴더 리스트 */
+.fp-folder-list {
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.fp-folder-list li {
+  padding: 0.7rem 1rem;
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(0, 255, 170, 0.25);
+  color: white;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: all 0.12s ease-in-out;
+}
+
+.fp-folder-list li:hover {
+  background: rgba(0, 255, 170, 0.3);
+  box-shadow: 0 0 0.8rem rgba(0, 255, 170, 0.5);
+}
+
+/* 새 폴더 버튼 */
+.fp-create-btn {
+  width: 100%;
+  padding: 0.8rem 0;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 255, 170, 0.5);
+  background: rgba(0, 255, 170, 0.12);
+  color: var(--primary-glow);
+  cursor: pointer;
+  font-weight: 600;
+  text-shadow: 0 0 0.5rem var(--primary-glow);
+  transition: all 0.2s;
+}
+
+.fp-create-btn:hover {
+  background: rgba(0, 255, 170, 0.25);
+  box-shadow: 0 0 1rem rgba(0, 255, 170, 0.8);
+}
+
+
 /* 반응형 처리  */
 
 @media (max-width: 768px) {
