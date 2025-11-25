@@ -3,14 +3,59 @@ import { getToken, isLoggedIn, logout } from "../../static/js/utils/auth.js";
 
 console.log("✅ reviewlist.js 연결 완료");
 
+
+// =====================================================
+// ⭐ 추가된 함수: 리뷰 목록 다시 불러오기
+//    👉 삭제 후 화면이 즉시 갱신되도록 하기 위함!
+// =====================================================
+async function loadReviewList() {   // ← ★ 추가된 부분
+    const listContainer = document.querySelector(".review-items");
+    const leftContainer = document.querySelector(".reviewlist-class ul");
+
+    listContainer.innerHTML = "<p>불러오는 중...</p>";
+    leftContainer.innerHTML = "<li>불러오는 중...</li>";
+
+    try {
+        const res = await api.get("/api/reviews/me", {
+            headers: { Authorization: `Bearer ${getToken()}` }
+        });
+
+        const reviews = res.data;
+
+        if (!reviews || reviews.length === 0) {
+            leftContainer.innerHTML = "<li>작성한 리뷰가 없습니다.</li>";
+            listContainer.innerHTML = "<p>아직 작성한 리뷰가 없습니다.</p>";
+            return;
+        }
+
+        // 왼쪽 영화 목록
+        const uniqueTitles = [...new Set(reviews.map(r => r.movieTitle))];
+        leftContainer.innerHTML = uniqueTitles
+            .map(title => `<li class="movie-title-item" data-title="${title}">🎬 ${title}</li>`)
+            .join("");
+
+        // 오른쪽 목록 다시 렌더링
+        renderReviewTitles(reviews);
+
+    } catch (err) {
+        console.error("리뷰 목록 새로고침 실패:", err);
+        listContainer.innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
+        leftContainer.innerHTML = "<li>오류 발생</li>";
+    }
+}
+
+
+// =====================================================
+// 페이지 최초 로드 시 리뷰 목록 불러오기
+// =====================================================
 document.addEventListener("DOMContentLoaded", async () => {
-    const listContainer = document.querySelector(".review-items"); // 리뷰 목록
+    const listContainer = document.querySelector(".review-items");
     const leftContainer = document.querySelector(".reviewlist-class ul");
 
     // ⭐ 상세보기 DOM 생성
     const detailContainer = document.createElement("div");
     detailContainer.classList.add("review-detail");
-    detailContainer.style.display = "none";   // 처음에는 숨김
+    detailContainer.style.display = "none";
     document.querySelector(".review-content").appendChild(detailContainer);
 
     if (!isLoggedIn()) {
@@ -44,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 오른쪽 리뷰 제목 목록 표시
         renderReviewTitles(reviews);
 
-        // 왼쪽 영화 제목 클릭 시 필터링
+        // 왼쪽 클릭 시 필터링
         leftContainer.addEventListener("click", (e) => {
             const item = e.target.closest(".movie-title-item");
             if (!item) return;
@@ -52,10 +97,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const selectedTitle = item.dataset.title;
             const filtered = reviews.filter(r => r.movieTitle === selectedTitle);
 
-            // 목록 업데이트
             renderReviewTitles(filtered);
 
-            // 상세보기 닫기
             detailContainer.style.display = "none";
             listContainer.style.display = "block";
         });
@@ -71,6 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 });
+
 
 document.addEventListener("click", (e) => {
     const clicked = e.target.closest(".review-body-item");
@@ -227,7 +271,6 @@ document.addEventListener("click", async (e) => {
     // 수정 페이지로 이동 (쿼리 파라미터로 reviewId 전달)
     location.href = `../reviewpage/writereview.html?edit=true&reviewId=${reviewId}`;
 });
-
 
 
 // =====================================================

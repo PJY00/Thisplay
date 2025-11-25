@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ${movies
           .map(
             (m) => `
-                <article class="project-card">
+                <article class="project-card" data-movie-id ="${m.id}">
                   <img class="project-card__bg" src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="">
                   <div class="project-card__content">
                     <img class="project-card__thumb" src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="">
@@ -82,6 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
       initSlider();
+      // 카드 클릭 시 영화 상세 페이지 이동
+      document.querySelectorAll(".project-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          const movieId = card.dataset.movieId;
+          location.href = `../moviepage/moviepage.html?movieId=${movieId}`;
+        });
+      });
+
     } catch (error) {
       console.error("❌ 영화 불러오기 실패:", error);
       container.innerHTML = `<p style="color:red;">영화 정보를 불러오지 못했습니다.</p>`;
