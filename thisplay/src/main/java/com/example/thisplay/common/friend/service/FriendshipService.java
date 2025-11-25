@@ -138,6 +138,7 @@ public class FriendshipService {
         return new FriendSearchDTO(
                 targetUser.getUserId(),
                 targetUser.getNickname(),
+                targetUser.getProfileImgUrl(),
                 isFriend    // 필요하면 DTO에 친구 여부도 포함
         );
     }

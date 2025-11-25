@@ -100,7 +100,16 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("userId", res.data.data.userId);
 
         alert("로그인 성공!");
-        window.location.href = "../mainpage/mainpage.html";
+        const previousPage = localStorage.getItem("previousPage");
+
+        if (previousPage && !previousPage.includes("/login")) {
+          window.location.href = previousPage;
+        } else {
+          window.location.href = "../mainpage/mainpage.html";
+        }
+
+        // 사용 후 삭제
+        localStorage.removeItem("previousPage");
       } else {
         alert("로그인 실패: " + res.data.message);
       }
