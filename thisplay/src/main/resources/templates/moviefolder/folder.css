@@ -57,7 +57,7 @@
         border-color 0.3s ease;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 
@@ -168,6 +168,8 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+    color: #ffffff;
+    z-index: 50;
 }
 
 .menu-dropdown {
@@ -247,6 +249,38 @@
     }
 }
 
+/* 🎬 폴더 모달 영화 카드 삭제 버튼 */
+.delete-movie-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: background 0.25s ease, transform 0.2s ease;
+    z-index: 5;
+}
+
+.delete-movie-btn:hover {
+    background: rgba(255, 80, 80, 0.9);
+    transform: scale(1.1);
+}
+
+
 /* 닫기 버튼 */
 .close-btn {
     position: absolute;
@@ -291,6 +325,8 @@
     overflow: hidden;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    /* 🔥 이거 추가해야 함 */
 }
 
 .movie-card:hover {

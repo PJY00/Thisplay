@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             btn.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 const card = e.currentTarget.closest(".folder-card");
-                const folderId = card.dataset.folderId;
+                const folderId = card.dataset.folderid;
                 const folderName = card.querySelector(".folder-title").textContent;
 
                 if (confirm(`'${folderName}' 폴더를 삭제하시겠습니까?`)) {
