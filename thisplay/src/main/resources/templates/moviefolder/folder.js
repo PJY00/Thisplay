@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             folderWrapper.innerHTML = folders
                 .map(
                     (f) => `
-        <div class="folder-card" data-folder-id="${f.folderId}">
+        <div class="folder-card" data-folderid="${f.folderId}">
             <div class="folder-thumbnail"></div>
             <p class="folder-title">${f.folderName}</p>
 
