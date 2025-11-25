@@ -85,7 +85,6 @@ function createNavbar() {
     logout();
   });
 
-
   // 마이페이지 이동
   document.getElementById("mypage-btn").addEventListener("click", (e) => {
     e.preventDefault();
