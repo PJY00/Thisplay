@@ -25,10 +25,12 @@ async function loadMovieDetail() {
         러닝타임: ${movie.runtime}분 <br>
         평점: ${movie.vote_average}점
     `;
-    document.getElementById("goReviewBtn").addEventListener("click", function (e) {
-      e.preventDefault();
-      location.href = `../reviewpage/writereview.html?movieId=${movieId}`;
-    });
+    document
+      .getElementById("goReviewBtn")
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+        location.href = `../reviewpage/writereview.html?movieId=${movieId}`;
+      });
 
     // document.getElementById("likes-count").textContent = movie.likes || 0;
     // document.getElementById("rating-score").textContent =
@@ -66,7 +68,6 @@ async function loadMovieDetail() {
 //     console.error("리뷰 로드 실패:", err);
 //   }
 // }
-
 
 const cssLink = document.createElement("link");
 cssLink.rel = "stylesheet";
@@ -173,13 +174,85 @@ async function renderOneLineReviews() {
       <div class="profile">${nickname}</div>
       <div class="review">
         ${oneLineReview}
-        <a href="/review?id=${reviewId}">자세히 보기</a>
+        <a 
+          href="/review?id=${reviewId}" 
+          class="open-review-detail"
+          data-reviewid="${reviewId}"
+        >자세히 보기</a>
       </div>
     `;
 
     reviewsDiv.appendChild(item);
   });
 }
+
+// 리뷰 상세보기 모달 열기
+document.addEventListener("click", async (e) => {
+  const link = e.target.closest(".open-review-detail");
+  if (!link) return;
+
+  e.preventDefault();
+
+  const reviewId = link.dataset.reviewid;
+  openReviewDetailModal(reviewId);
+});
+
+async function openReviewDetailModal(reviewId) {
+  const modal = document.getElementById("reviewDetailModal");
+
+  document.getElementById("detailReviewTitle").textContent = "로딩 중...";
+  document.getElementById("detailMeta").innerHTML = "";
+  document.getElementById("detailBody").innerHTML = "";
+  document.getElementById("detailOneLine").innerHTML = "";
+
+  modal.classList.remove("hidden");
+
+  function formatDate(str) {
+    const fixed = str.replace(/\+00:00$/, "Z");
+
+    const date = new Date(fixed);
+
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+
+    const hh = String(date.getHours()).padStart(2, "0");
+    const mm = String(date.getMinutes()).padStart(2, "0");
+
+    return `${y}-${m}-${d} ${hh}:${mm}`;
+  }
+
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reviews/${reviewId}`,
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+    );
+
+    const r = res.data;
+    document.getElementById("detailReviewTitle").textContent =
+      r.reviewTitle ?? "(제목 없음)";
+
+    document.getElementById("detailMeta").innerHTML = `
+      ⭐ ${r.star ?? 0} · 작성일 ${formatDate(r.createdAt)}
+      · 👍 ${r.likeCount ?? 0} · 👁 ${r.viewCount ?? 0}
+    `;
+
+    document.getElementById("detailBody").innerHTML =
+      r.reviewBody?.replace(/\n/g, "<br>") ?? "본문 없음";
+
+    document.getElementById("detailOneLine").innerHTML = `
+      <strong>한줄평:</strong> ${r.oneLineReview ?? "(없음)"}
+    `;
+  } catch (err) {
+    console.error("리뷰 상세 조회 실패:", err);
+    alert("리뷰 정보를 불러올 수 없습니다.");
+  }
+}
+
+// 모달 닫기
+document.getElementById("modalCloseBtn").addEventListener("click", () => {
+  document.getElementById("reviewDetailModal").classList.add("hidden");
+});
 
 // 페이지 로드 시 실행
 loadMovieDetail();

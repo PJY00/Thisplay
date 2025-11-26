@@ -187,6 +187,66 @@
   text-decoration: underline;
 }
 
+/* 리뷰 상세 모달 오버레이 */
+.review-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+/* 모달 박스 */
+.review-modal-content {
+  width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: rgba(15, 25, 25, 0.95);
+  border: 1px solid rgba(0,255,170,0.4);
+  padding: 2rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 0 2rem rgba(0,255,170,0.7);
+  animation: popupShow 0.25s ease-out;
+}
+
+.review-modal-close {
+  float: right;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  color: var(--primary-glow);
+  cursor: pointer;
+}
+
+.review-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.review-meta {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.review-body-full {
+  color: white;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.review-oneline {
+  color: var(--primary-glow);
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+
 /* 폴더 팝업 전체 오버레이*/
 .folder-popup {
   position: fixed;
