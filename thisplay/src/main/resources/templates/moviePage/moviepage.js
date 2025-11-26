@@ -181,17 +181,39 @@ loadMovieDetail();
 renderOneLineReviews();
 // loadReviews();
 
-// 폴더 팝업 dom 요소
-const folderPopup = document.getElementById("folderPopup");
-const folderListUI = document.getElementById("fp-folder-list");
-const closeBtn = document.getElementById("fp-close");
-const createFolderBtn = document.getElementById("fp-create-folder");
+// 리뷰 작성 링크
+document.getElementById(
+  "goReview"
+).href = `../reviewpage/writereview.html?movieId=${movieId}`;
 
-// 폴더 팝업 열기
+// 폴더 팝업
+// 폴더 팝업 요소
+const folderPopup = document.getElementById("folderPopup");
+
+// 선택 모드
+const selectMode = document.getElementById("fp-select-mode");
+const folderListUI = document.getElementById("fp-folder-list");
+const openCreateModeBtn = document.getElementById("fp-create-folder");
+
+// 생성 모드
+const createMode = document.getElementById("fp-create-mode");
+const backBtn = document.getElementById("fp-back");
+const newFolderNameInput = document.getElementById("fp-new-folder-name");
+const visibilitySelect = document.getElementById("fp-visibility-select");
+const createFolderBtn = document.getElementById("fp-create-folder-btn");
+
+// 닫기 버튼
+const closeBtn = document.getElementById("fp-close");
+
+// 팝업 열기
 document.getElementById("addfolder").addEventListener("click", openFolderPopup);
 
 async function openFolderPopup() {
-  folderListUI.innerHTML = ""; // 초기화
+  folderListUI.innerHTML = "";
+
+  // 기본 모드는 폴더 선택 모드
+  selectMode.classList.remove("hidden");
+  createMode.classList.add("hidden");
 
   try {
     const res = await axios.get("http://localhost:8080/api/folders/me", {
@@ -200,23 +222,23 @@ async function openFolderPopup() {
       },
     });
 
-    const folders = res.data;
+    const folders = res.data || [];
 
-    if (!folders || folders.length === 0) {
-      folderListUI.innerHTML = `<li>폴더가 없습니다. 먼저 새 폴더를 만들어주세요.</li>`;
+    if (folders.length === 0) {
+      folderListUI.innerHTML = `<li>폴더가 없습니다.</li>`;
     } else {
       folders.forEach((folder) => {
         const li = document.createElement("li");
         li.textContent = folder.folderName;
-        li.addEventListener("click", () => saveMovieToFolder(folder.folderId)); // 영화 저장
+        li.addEventListener("click", () => saveMovieToFolder(folder.folderId));
         folderListUI.appendChild(li);
       });
     }
 
-    folderPopup.classList.remove("hidden"); // 팝업 열기
-  } catch (error) {
-    console.error("폴더 목록 로딩 실패:", error);
-    alert("폴더 목록을 불러오는 중 문제가 발생했습니다.");
+    folderPopup.classList.remove("hidden");
+  } catch (err) {
+    console.error("폴더 목록 불러오기 실패:", err);
+    alert("폴더 목록을 불러오는 중 오류 발생");
   }
 }
 
@@ -225,19 +247,32 @@ closeBtn.addEventListener("click", () => {
   folderPopup.classList.add("hidden");
 });
 
-// 팝업 밖 클릭 시 닫기
+// 검은 배경 클릭 시 닫기
 folderPopup.addEventListener("click", (e) => {
   if (e.target === folderPopup) folderPopup.classList.add("hidden");
 });
 
-// 새 폴더 만들기
+// 새 폴더 만들기 전환
+openCreateModeBtn.addEventListener("click", () => {
+  selectMode.classList.add("hidden");
+  createMode.classList.remove("hidden");
+});
+
+// 돌아가기 버튼
+backBtn.addEventListener("click", () => {
+  createMode.classList.add("hidden");
+  selectMode.classList.remove("hidden");
+});
+
+// 새 폴더 생성
 createFolderBtn.addEventListener("click", createNewFolder);
 
 async function createNewFolder() {
-  const folderName = prompt("새 폴더 이름을 입력하세요:");
+  const folderName = newFolderNameInput.value.trim();
+  const visibility = visibilitySelect.value;
 
-  if (!folderName || folderName.trim() === "") {
-    alert("폴더 이름을 입력해주세요.");
+  if (!folderName) {
+    alert("폴더 이름을 입력하세요.");
     return;
   }
 
@@ -245,7 +280,7 @@ async function createNewFolder() {
     await axios.post(
       `http://localhost:8080/api/folders/create?folderName=${encodeURIComponent(
         folderName
-      )}&visibility=PRIVATE`,
+      )}&visibility=${visibility}`,
       {},
       {
         headers: {
@@ -254,9 +289,8 @@ async function createNewFolder() {
       }
     );
 
-    alert("새 폴더가 생성되었습니다!");
-
-    // 폴더 목록 다시 불러오기
+    alert("폴더가 생성되었습니다!");
+    newFolderNameInput.value = "";
     openFolderPopup();
   } catch (error) {
     console.error("폴더 생성 실패:", error);
@@ -264,13 +298,11 @@ async function createNewFolder() {
   }
 }
 
-// 영화 폴더에 저장
+// 영화 저장
 async function saveMovieToFolder(folderId) {
   try {
-    const tmdbId = movieId; // 기존에 사용하는 영화 ID
-
     await axios.post(
-      `http://localhost:8080/api/movies/save/${folderId}/${tmdbId}`,
+      `http://localhost:8080/api/movies/save/${folderId}/${movieId}`,
       {},
       {
         headers: {
@@ -279,10 +311,10 @@ async function saveMovieToFolder(folderId) {
       }
     );
 
-    alert("영화가 해당 폴더에 추가되었습니다!");
+    alert("영화가 폴더에 추가되었습니다!");
     folderPopup.classList.add("hidden");
-  } catch (error) {
-    console.error("영화 저장 실패:", error);
-    alert("영화를 폴더에 추가하는 데 실패했습니다.");
+  } catch (err) {
+    console.error("영화 저장 실패:", err);
+    alert("영화를 폴더에 저장하지 못했습니다.");
   }
 }

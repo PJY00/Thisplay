@@ -28,22 +28,52 @@
       <hr />
       <!-- <button class="like">좋아요 버튼</button> -->
       <!-- 감상평 쓰러가기 링크는 js로 수정 -->
-      <a href="/review?movieId={movieId}">감상평 쓰러가기</a>
+      <a id="goReview">감상평 쓰러가기</a>
+
       <button id="addfolder">폴더에 추가하기</button>
+      <!-- 폴더 선택 모드(기본 모드임) -->
       <div id="folderPopup" class="folder-popup hidden">
         <div class="folder-popup-content">
-          <div class="fp-header">
-            <span>폴더에 추가하기</span>
-            <button id="fp-close" class="fp-close">✕</button>
+          <div id="fp-select-mode">
+            <div class="fp-header">
+              <span>폴더에 추가하기</span>
+              <button id="fp-close" class="fp-close">✕</button>
+            </div>
+
+            <ul id="fp-folder-list" class="fp-folder-list">
+              <!-- JS로 폴더 리스트 삽입 -->
+            </ul>
+
+            <button id="fp-create-folder" class="fp-create-btn">
+              + 새 폴더 만들기
+            </button>
           </div>
 
-          <ul id="fp-folder-list" class="fp-folder-list">
-            <!-- JS로 폴더 리스트 삽입 -->
-          </ul>
+          <!-- 새 폴더 만들기 -->
+          <div id="fp-create-mode" class="hidden">
+            <div class="fp-header">
+              <span>새 폴더 만들기</span>
+              <button id="fp-back" class="fp-close">←</button>
+            </div>
 
-          <button id="fp-create-folder" class="fp-create-btn">
-            + 새 폴더 만들기
-          </button>
+            <select id="fp-visibility-select">
+              <option value="PRIVATE">비공개</option>
+              <option value="FRIEND">친구 공개</option>
+              <option value="PUBLIC">전체 공개</option>
+            </select>
+
+            <div class="fp-create-form">
+              <input
+                type="text"
+                id="fp-new-folder-name"
+                placeholder="폴더 이름 입력"
+              />
+
+              <button id="fp-create-folder-btn" class="fp-create-submit">
+                폴더 생성
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
