@@ -28,8 +28,8 @@ function createNavbar() {
           <li id="profile-menu" class="hidden">
             <img  id="profile-img">
             <ul class="dropdown hidden">
-              <li><a href="#">마이페이지</a></li>
-              <li><a href="#">설정</a></li>
+              <li><a href="#" id ="mypage-btn">마이페이지</a></li>
+              <li><a href="#" id = "setting-btn">설정</a></li>
               <li><a href="#" id="logout-btn">로그아웃</a></li>
             </ul>
           </li>
@@ -65,6 +65,7 @@ function createNavbar() {
 
   // 로그인 버튼 클릭
   loginBtn.addEventListener("click", () => {
+    localStorage.setItem("previousPage", window.location.href);
     window.location.href = "../login_join/login.html";
   });
 
@@ -83,6 +84,18 @@ function createNavbar() {
 
   document.getElementById("logout-btn").addEventListener("click", () => {
     logout();
+  });
+
+  // 마이페이지 이동
+  document.getElementById("mypage-btn").addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "../mypage/mypage.html";
+  });
+
+  // 설정 페이지 이동
+  document.getElementById("setting-btn").addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "../settingpage/settingspage.html";
   });
 
   // 로그인 상태면 프로필 이미지 API 호출
@@ -187,6 +200,7 @@ function createNavbar() {
 }
 
 document.addEventListener("DOMContentLoaded", createNavbar);
+
 
 // import { logout } from "../../static/js/utils/auth.js";
 

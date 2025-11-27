@@ -43,6 +43,7 @@ api.interceptors.response.use(
   }
 );
 
+export { BASE_URL };
 export default api;
 
 // 주석 처리 된 부분은 추후 토큰 문제 해결하고 나서 주석 해제
