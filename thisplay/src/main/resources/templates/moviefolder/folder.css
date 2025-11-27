@@ -17,7 +17,9 @@
     position: relative;
     display: flex;
     align-items: center;
-    overflow: hidden;
+
+    overflow-x: visible;
+    overflow-y: hidden;
 }
 
 #folder-wrapper {
@@ -163,13 +165,9 @@
 
     transform: translateY(-50%) scale(1.1);   
 }
-.left {
-    left: 0;
-}
+.arrow.left { left: 12px; }
+.arrow.right { right: 12px; }
 
-.right {
-    right: 0;
-}
 
 .folder-menu {
     position: absolute;
