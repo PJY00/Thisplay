@@ -2,17 +2,22 @@
 /* ============================
    PROFILE
 ============================ */
+.slider-track{
+    padding-top:30px;
+}
 
 .profile-section {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    padding-bottom: 0px
 }
 
 .profile-box {
     background: #050B2E;
     /* 진한 남색 */
     padding: 12px 20px;
+    margin-top: 30px;
     border-radius: 40px;
     display: flex;
     align-items: center;
@@ -189,9 +194,6 @@
 }
 
 /* base.css가 glow를 자르는 문제 방지 */
-.slider,
-.slider-wrap,
-.slider-track,
 .slider-card {
     overflow: visible !important;
 }
