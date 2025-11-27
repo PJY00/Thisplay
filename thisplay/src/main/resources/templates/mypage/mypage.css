@@ -6,13 +6,19 @@
     padding-top:30px;
 }
 
-.profile-section {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    padding-bottom: 0px
+.my-review-section{
+    padding: 10px;
 }
 
+.profile-section {
+    display: flex;
+    justify-content: flex-start; 
+    width: 100%;
+    max-width: 1400px;  
+    padding-top: 50px;
+    padding-bottom: 0px;         
+    margin: 20px auto 0;         
+}
 .profile-box {
     background: #050B2E;
     /* 진한 남색 */
