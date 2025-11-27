@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const leftArrow = document.getElementById("left-arrow");
     const rightArrow = document.getElementById("right-arrow");
 
-    /* 🔥 카드 크기 계산 */
+  
     const CARD_WIDTH = 150;
     const GAP = 16;
-    const ITEM_WIDTH = CARD_WIDTH + GAP; // 166px
+    const ITEM_WIDTH = CARD_WIDTH + GAP; 
     const MOVE_COUNT = 5;
     const MOVE_AMOUNT = ITEM_WIDTH * MOVE_COUNT; // 한 번 누르면 5칸 이동
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    /* 🔥 좌우 화살표 이동 기능 */
+    /*좌우 화살표 이동 기능 */
     leftArrow.addEventListener("click", () => {
         folderWrapper.scrollBy({
             left: -MOVE_AMOUNT,
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    /* 📌 폴더 생성 기능 */
+    /* 폴더 생성 기능 */
     const form = document.getElementById("create-folder-form");
     const resultText = document.getElementById("folder-result");
 
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 await loadMyFolders();
                 form.reset();
             } catch (err) {
-                console.error("❌ 폴더 생성 실패:", err);
+                console.error("폴더 생성 실패:", err);
                 resultText.textContent = "폴더 생성 실패";
                 resultText.style.color = "red";
             }
