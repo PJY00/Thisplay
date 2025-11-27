@@ -1,73 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="moviepage.css" /> -->
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <!-- <link rel="stylesheet" href="moviepage.css" /> -->
-</head>
+  <body>
+    <div class="container">
+      <section class="movie-info">
+        <img id="poster" alt="영화 포스터" />
 
-<body>
-  <div class="container">
-    <section class="movie-info">
-      <img id="poster" alt="영화 포스터" />
-      <!-- <h3>
+        <!-- 영화 제목 로딩 주석 -->
+        <!-- <h3>
           <div class="movie-name" id="title">영화의 제목을 로딩중입니다.</div>
-        </h3> -->
-      <!-- <h3 id="title" class="movie-name"></h3> -->
-      <div>
-        <div id="title" class="movie-name"></div>
-        <div class="movie-addinfo" id="addinfo">
-          영화의 추가 정보를 로딩중입니다.
+      </h3> -->
+        <!-- <h3 id="title" class="movie-name"></h3> -->
+
+        <div>
+          <div id="title" class="movie-name"></div>
+
+          <div class="movie-addinfo" id="addinfo">
+            영화의 추가 정보를 로딩중입니다.
+          </div>
+
+          <div class="movie-explain" id="summary">
+            영화 요약을 로딩중입니다.
+          </div>
         </div>
-        <div class="movie-explain" id="summary">
-          영화 요약을 로딩중입니다.
+      </section>
+
+      <hr />
+
+      <!-- 감상평 쓰러가기 링크는 js로 수정 -->
+      <a id="goReview">감상평 쓰러가기</a>
+
+      <!-- <button class="like">좋아요 버튼</button> -->
+
+      <button id="addfolder">폴더에 추가하기</button>
+
+      <!-- 폴더 팝업 -->
+      <div id="folderPopup" class="folder-popup hidden">
+        <div class="folder-popup-content">
+          <!-- 폴더 선택 모드 -->
+          <div id="fp-select-mode">
+            <div class="fp-header">
+              <span>폴더에 추가하기</span>
+              <button id="fp-close" class="fp-close">✕</button>
+            </div>
+
+            <ul id="fp-folder-list" class="fp-folder-list">
+              <!-- JS로 폴더 리스트 삽입 -->
+            </ul>
+
+            <button id="fp-create-folder" class="fp-create-btn">
+              + 새 폴더 만들기
+            </button>
+          </div>
+
+          <!-- 새 폴더 만들기 -->
+          <div id="fp-create-mode" class="hidden">
+            <div class="fp-header">
+              <span>새 폴더 만들기</span>
+              <button id="fp-back" class="fp-close">←</button>
+            </div>
+
+            <select id="fp-visibility-select">
+              <option value="PRIVATE">비공개</option>
+              <option value="FRIEND">친구 공개</option>
+              <option value="PUBLIC">전체 공개</option>
+            </select>
+
+            <div class="fp-create-form">
+              <input
+                type="text"
+                id="fp-new-folder-name"
+                placeholder="폴더 이름 입력"
+              />
+
+              <button id="fp-create-folder-btn" class="fp-create-submit">
+                폴더 생성
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- 한 줄 리뷰 섹션 -->
+    <section class="oneline-review">
+      <h4>한 줄로 보는 감상평</h4>
+
+      <div id="reviews">
+        <div class="review-item">
+          <div class="profile_img">loading</div>
+          <div class="profile">loading</div>
+          <div class="review">
+            loading
+            <!-- 
+            <a
+              href="/review?id=${reviewId}"
+              class="open-review-detail"
+              data-reviewid="${reviewId}"
+            >
+              자세히 보기
+            </a> 
+            -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 리뷰 상세 모달 -->
+      <div id="reviewDetailModal" class="review-modal hidden">
+        <div class="review-modal-content">
+          <button id="modalCloseBtn" class="review-modal-close">✕</button>
+
+          <h2 id="detailReviewTitle" class="review-title">로딩 중...</h2>
+
+          <div id="detailMeta" class="review-meta"></div>
+
+          <div id="detailBody" class="review-body-full"></div>
+
+          <div id="detailOneLine" class="review-oneline"></div>
+        </div>
+      </div>
+
+      <a href="" class="more_review">더보기</a>
     </section>
-    <hr />
-    <!-- <button class="like">좋아요 버튼</button> -->
-    <!-- 감상평 쓰러가기 링크는 js로 수정 -->
-    <a id="goReviewBtn">감상평 쓰러가기</a>
-    <button id="addfolder">폴더에 추가하기</button>
-    <div id="folderPopup" class="folder-popup hidden">
-      <div class="folder-popup-content">
-        <div class="fp-header">
-          <span>폴더에 추가하기</span>
-          <button id="fp-close" class="fp-close">✕</button>
-        </div>
 
-        <ul id="fp-folder-list" class="fp-folder-list">
-          <!-- JS로 폴더 리스트 삽입 -->
-        </ul>
-
-        <button id="fp-create-folder" class="fp-create-btn">
-          + 새 폴더 만들기
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <section class="oneline-review">
-    <h4>한 줄로 보는 감상평</h4>
-    <div id="reviews">
-      <div class="review-item">
-        <div class="profile_img">loading</div>
-        <div class="profile">loading</div>
-        <div class="review">
-          loading
-          <a href="/review/id">자세히 보기</a>
-        </div>
-      </div>
-    </div>
-    <a href="" class="more_review">더보기</a>
-  </section>
-
-  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
-  <script type="module" src="../../static/js/api/axiosInstance.js"></script>
-  <script type="module" src="../navbar/navbarDOM.js"></script>
-  <script src="moviepage.js"></script>
-</body>
-
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+    <script type="module" src="../navbar/navbarDOM.js"></script>
+    <script src="moviepage.js"></script>
+  </body>
 </html>
