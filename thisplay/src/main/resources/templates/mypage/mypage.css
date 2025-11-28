@@ -203,3 +203,35 @@
 .slider-card {
     overflow: visible !important;
 }
+
+#visibility {
+background-color: #1c1f26;  
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+    margin-bottom: 15px;
+}
+
+#visibility option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#folderName {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;     
+    margin-bottom: 15px;     
+    border-radius: 6px;         
+}
+
+#folderName::placeholder {
+    color: #999;      
+}
+
+#folderName:focus {
+    outline: none;
+    border-color: #00fff7;    
+    box-shadow: 0 0 6px #00fff7;
+}
