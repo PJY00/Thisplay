@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .map((f) => {
                     const visibilityClass = getVisibilityClass(f.visibility);
                     return `
-               <div class="folder-card ${visibilityClass}" data-folderid="${f.folderId}">
+               <div class="folder-card ${visibilityClass}" data-folder-id="${f.folderId}">
                     <div class="folder-thumbnail"></div>
                     <p class="folder-title">${f.folderName}</p>
 
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 btn.addEventListener("click", async (e) => {
                     e.stopPropagation();
                     const card = e.currentTarget.closest(".folder-card");
-                    const folderId = card.dataset.folderid;
+                    const folderId = card.dataset.folderId;
                     const folderName = card.querySelector(".folder-title").textContent;
 
                     if (confirm(`'${folderName}' 폴더를 삭제하시겠습니까?`)) {

@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             modalList.innerHTML = movies.map(m => `
-                <div class="movie-card" data-movieid="${m.tmdbId}" data-folderid = "${folderId}">
+                <div class="movie-card" data-movieid="${m.tmdbId}" data-folder-id = "${folderId}">
                     <button class = "delete-movie-btn">✕</button>
                     <img src="https://image.tmdb.org/t/p/w300${m.posterPath}" alt="${m.title}">
                     <h4>${m.title}</h4>
@@ -86,4 +86,42 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.addEventListener("click", (e) => {
         if (e.target === modal) modal.classList.add("hidden");
     });
+
+    // ============================
+    // 📌 친구 공개 폴더
+    // ============================
+    const friendContainer = document.getElementById("friend-folder-container");
+
+    friendContainer?.addEventListener("click", async (e) => {
+        const card = e.target.closest(".folder-card");
+        if (!card) return;
+
+        const folderId = card.dataset.folderId;
+        currentFolderId = folderId;
+
+        modal.classList.remove("hidden");
+        modalName.textContent = card.querySelector(".folder-title").textContent;
+
+        try {
+            const res = await api.get(`/api/folders/${folderId}/movies`);
+            const movies = res.data.movies;
+
+            if (!movies || movies.length === 0) {
+                modalList.innerHTML = `<p>이 폴더에는 영화가 없습니다.</p>`;
+                return;
+            }
+
+            modalList.innerHTML = movies.map(m => `
+            <div class="movie-card" data-movieid="${m.tmdbId}" data-folderid="${folderId}">
+                <img src="https://image.tmdb.org/t/p/w300${m.posterPath}" alt="${m.title}">
+                <h4>${m.title}</h4>
+            </div>
+        `).join("");
+
+        } catch (err) {
+            console.error("친구 폴더 영화 불러오기 실패:", err);
+            modalList.innerHTML = `<p style="color:red;">영화를 불러오지 못했습니다.</p>`;
+        }
+    });
+
 });
