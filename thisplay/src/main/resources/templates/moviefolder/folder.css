@@ -484,3 +484,79 @@
 #friend-folder-container::-webkit-scrollbar {
     display: none;
 }
+
+/* ===========================
+   🌐 전체공개 폴더 (PUBLIC)
+=========================== */
+
+.folder-card.folder-public {
+    border-color: rgba(0, 255, 220, 0.9);
+    box-shadow:
+        0 0 18px rgba(0, 255, 220, 0.7),
+        0 0 32px rgba(0, 140, 255, 0.6),
+        inset 0 0 22px rgba(0, 255, 220, 0.35);
+}
+
+.folder-card.folder-public .folder-thumbnail {
+    background: linear-gradient(135deg,
+            rgba(0, 255, 220, 0.3),
+            rgba(0, 140, 255, 0.45));
+}
+
+.folder-card.folder-public .folder-title {
+    color: #cfffff;
+    text-shadow:
+        0 0 8px rgba(0, 255, 220, 0.9),
+        0 0 16px rgba(0, 180, 255, 0.8);
+}
+
+/* ===========================
+   🫂 친구공개 폴더 (FRIENDS)
+=========================== */
+
+.folder-card.folder-friends {
+    border-color: rgba(190, 150, 255, 0.9);
+    box-shadow:
+        0 0 18px rgba(180, 130, 255, 0.75),
+        0 0 30px rgba(80, 190, 255, 0.55),
+        inset 0 0 22px rgba(190, 140, 255, 0.4);
+}
+
+.folder-card.folder-friends .folder-thumbnail {
+    background: linear-gradient(135deg,
+            rgba(80, 190, 255, 0.25),
+            rgba(190, 140, 255, 0.65));
+}
+
+.folder-card.folder-friends .folder-title {
+    color: #efe2ff;
+    text-shadow:
+        0 0 8px rgba(190, 140, 255, 0.95),
+        0 0 16px rgba(90, 200, 255, 0.7);
+}
+
+
+/* ===========================
+   🔒 비공개 폴더 (PRIVATE)
+=========================== */
+
+.folder-card.folder-private {
+    border-color: rgba(255, 140, 170, 0.7);
+    box-shadow:
+        0 0 14px rgba(255, 120, 160, 0.5),
+        0 0 26px rgba(110, 20, 60, 0.6),
+        inset 0 0 18px rgba(255, 120, 170, 0.35);
+}
+
+.folder-card.folder-private .folder-thumbnail {
+    background: linear-gradient(135deg,
+            rgba(255, 160, 190, 0.28),
+            rgba(110, 30, 70, 0.65));
+}
+
+.folder-card.folder-private .folder-title {
+    color: #ffd7e6;
+    text-shadow:
+        0 0 6px rgba(255, 150, 190, 0.8),
+        0 0 12px rgba(120, 20, 60, 0.7);
+}
