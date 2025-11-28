@@ -2,17 +2,28 @@
 /* ============================
    PROFILE
 ============================ */
+.slider-track{
+    padding-top:30px;
+}
+
+.my-review-section{
+    padding: 10px;
+}
 
 .profile-section {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: flex-start; 
+    width: 100%;
+    max-width: 1400px;  
+    padding-top: 50px;
+    padding-bottom: 0px;         
+    margin: 20px auto 0;         
 }
-
 .profile-box {
     background: #050B2E;
     /* 진한 남색 */
     padding: 12px 20px;
+    margin-top: 30px;
     border-radius: 40px;
     display: flex;
     align-items: center;
@@ -189,9 +200,38 @@
 }
 
 /* base.css가 glow를 자르는 문제 방지 */
-.slider,
-.slider-wrap,
-.slider-track,
 .slider-card {
     overflow: visible !important;
+}
+
+#visibility {
+background-color: #1c1f26;  
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+    margin-bottom: 15px;
+}
+
+#visibility option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#folderName {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;     
+    margin-bottom: 15px;     
+    border-radius: 6px;         
+}
+
+#folderName::placeholder {
+    color: #999;      
+}
+
+#folderName:focus {
+    outline: none;
+    border-color: #00fff7;    
+    box-shadow: 0 0 6px #00fff7;
 }
