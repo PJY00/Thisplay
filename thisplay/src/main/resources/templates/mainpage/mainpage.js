@@ -172,10 +172,32 @@ function initSlider() {
   );
 
   // 마우스 호버 / 클릭으로 이동
-  cards.forEach((card, i) => {
-    card.addEventListener("mouseenter", () => activate(i, true));
-    card.addEventListener("click", () => activate(i, true));
+cards.forEach((card, i) => {
+  //여기서부터 추가
+  let hoverTimer = null;
+
+  card.addEventListener("mouseenter", () => {
+    // 마우스를 올려도 바로 실행 안 함 → 300ms 뒤 실행
+    hoverTimer = setTimeout(() => {
+      activate(i, true);
+    }, 200); 
   });
+
+  card.addEventListener("mouseleave", () => {
+    // 마우스를 금방 빼면 실행 취소됨
+    clearTimeout(hoverTimer);
+  });
+
+  // 클릭은 즉시 이동
+  card.addEventListener("click", () => activate(i, true));
+});
+
+  //원래 것들
+  //   card.addEventListener("mouseenter", () => activate(i, true));
+  //   card.addEventListener("click", () => activate(i, true));
+  // });
+
+
 
   // 창 크기 변경 시 중앙 유지
   addEventListener("resize", () => center(current));
