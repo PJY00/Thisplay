@@ -235,13 +235,13 @@
         opacity: 0;
         transform: translateY(-10%);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-<<<<<<< HEAD
 /* 🎬 폴더 모달 영화 카드 삭제 버튼 */
 .delete-movie-btn {
     position: absolute;
@@ -275,8 +275,6 @@
 
 
 /* 닫기 버튼 */
-=======
->>>>>>> 43f8ad895cf136c9d57129d7d150584a4f84c31e
 .close-btn {
     position: absolute;
     top: 16px;
@@ -345,7 +343,6 @@
     background-color: #444;
     border-radius: 3px;
 }
-<<<<<<< HEAD
 
 .myfolder,
 .card-container,
@@ -445,5 +442,15 @@
     font-weight: 600;
     font-size: 0.95rem;
 }
-=======
->>>>>>> 43f8ad895cf136c9d57129d7d150584a4f84c31e
+
+.folder-card.folder-public .folder-thumbnail {
+    background: linear-gradient(135deg, #00aaff, #0066ff);
+}
+
+.folder-card.folder-friends .folder-thumbnail {
+    background: linear-gradient(135deg, #00ffcc, #00bb88);
+}
+
+.folder-card.folder-private .folder-thumbnail {
+    background: linear-gradient(135deg, #d200ff, #7500ff);
+}

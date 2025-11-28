@@ -18,6 +18,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const MOVE_COUNT = 5;
     const MOVE_AMOUNT = ITEM_WIDTH * MOVE_COUNT; // 한 번 누르면 5칸 이동
 
+    function getVisibilityClass(visibility) {
+        if (visibility === "PUBLIC") return "folder-public";
+        if (visibility === "FRIENDS") return "folder-friends";
+        if (visibility === "PRIVATE") return "folder-private";
+        return "";
+    }
+
+
     /* 📌 폴더 목록 가져오기 */
     async function loadMyFolders() {
         try {
@@ -33,9 +41,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             folderWrapper.innerHTML = folders
-                .map(
-                    (f) => `
-                <div class="folder-card" data-folder-id="${f.folderId}">
+                .map((f) => {
+                    const visibilityClass = getVisibilityClass(f.visibility);
+
+                    return `
+                <div class="folder-card ${visibilityClass}" data-folder-id="${f.folderId}">
                     <div class="folder-thumbnail"></div>
                     <p class="folder-title">${f.folderName}</p>
 
@@ -46,8 +56,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </div>
                     </div>
                 </div>
-            `
-                )
+            `;
+                })
+
                 .join("");
 
             attachMenuEvents();
@@ -92,9 +103,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             friendContainer.innerHTML = folders
-                .map(
-                    (f) => `
-                <div class="folder-card" data-folderid="${f.folderId}">
+                .map((f) => {
+                    const visibilityClass = getVisibilityClass(f.visibility);
+                    return `
+               <div class="folder-card ${visibilityClass}" data-folderid="${f.folderId}">
                     <div class="folder-thumbnail"></div>
                     <p class="folder-title">${f.folderName}</p>
 
@@ -105,8 +117,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </div>
                     </div>
                 </div>
-            `
-                )
+            `;
+                })
                 .join("");
 
             attachMenuEvents(false);

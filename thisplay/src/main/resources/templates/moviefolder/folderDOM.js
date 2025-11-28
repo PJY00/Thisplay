@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = e.target.closest(".folder-card");
         if (!card) return;
 
-        const folderId = card.dataset.folderid;
+        const folderId = card.dataset.folderId;
         currentFolderId = folderId;
 
         modal.classList.remove("hidden");
