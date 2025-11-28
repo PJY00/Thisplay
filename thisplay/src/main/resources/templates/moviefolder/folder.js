@@ -5,12 +5,15 @@ const BASE_URL = "http://localhost:8080";
 console.log("✅ folder.js 연결 완료");
 
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("✅ DOMContentLoaded in folder.js"); // ⭐ 디버그 추가
+    console.log("✅ DOMContentLoaded in folder.js");
 
     const folderWrapper = document.getElementById("folder-wrapper");
     const leftArrow = document.getElementById("left-arrow");
     const rightArrow = document.getElementById("right-arrow");
-
+    const friendFolderWrapper = document.getElementById("friend-folder-container");
+    const friendLeftArrow = document.getElementById("friend-left-arrow");
+    const friendRightArrow = document.getElementById("friend-right-arrow");
+    const friendInput = document.getElementById("friend-nickname");
 
     const CARD_WIDTH = 150;
     const GAP = 16;
@@ -25,11 +28,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         return "";
     }
 
+    // ✅ 내 폴더 / 친구 폴더 공통 카드 HTML 생성 함수
+    function createFolderCardHTML(folder, isMyFolder) {
+        const visibilityClass = getVisibilityClass(folder.visibility);
 
-    /* 📌 폴더 목록 가져오기 */
+        return `
+            <div class="folder-card ${visibilityClass}" data-folder-id="${folder.folderId}">
+                <div class="folder-thumbnail"></div>
+                <p class="folder-title">${folder.folderName}</p>
+
+                <div class="folder-menu">
+                    <button class="menu-btn${isMyFolder ? "" : " hidden"}">⋮</button>
+                    <div class="menu-dropdown hidden">
+                        <button class="delete-btn${isMyFolder ? "" : " hidden"}">삭제</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /* 📌 내 폴더 목록 가져오기 */
     async function loadMyFolders() {
         try {
-            console.log("🔁 loadMyFolders 호출"); // ⭐ 디버그 추가
+            console.log("🔁 loadMyFolders 호출");
             const response = await api.get("/api/folders/me");
             const folders = response.data;
 
@@ -41,27 +62,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             folderWrapper.innerHTML = folders
-                .map((f) => {
-                    const visibilityClass = getVisibilityClass(f.visibility);
-
-                    return `
-                <div class="folder-card ${visibilityClass}" data-folder-id="${f.folderId}">
-                    <div class="folder-thumbnail"></div>
-                    <p class="folder-title">${f.folderName}</p>
-
-                    <div class="folder-menu">
-                        <button class="menu-btn">⋮</button>
-                        <div class="menu-dropdown hidden">
-                            <button class="delete-btn">삭제</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-                })
-
+                .map((f) => createFolderCardHTML(f, true))
                 .join("");
 
-            attachMenuEvents();
+            attachMenuEvents(true);
         } catch (err) {
             console.error("❌ 폴더 불러오기 실패:", err);
             folderWrapper.innerHTML = `<p style="color:red;">폴더 정보를 가져오지 못했습니다.</p>`;
@@ -72,21 +76,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ⭐ 친구 폴더 불러오기
     // ================================
     async function loadFriendFolders(nickname) {
-        console.log("🔁 loadFriendFolders 호출, nickname =", nickname); // ⭐ 디버그 추가
+        console.log("🔁 loadFriendFolders 호출, nickname =", nickname);
 
         try {
             const response = await api.get(`/api/folders/${nickname}`);
             const folders = response.data;
-            console.log("📦 친구 폴더 응답:", folders); // ⭐ 디버그 추가
+            console.log("📦 친구 폴더 응답:", folders);
 
             const friendContainer = document.getElementById("friend-folder-container");
             const msg = document.getElementById("friend-folder-result");
 
-            console.log("🧩 friendContainer =", friendContainer); // ⭐ 디버그 추가
-            console.log("🧩 msg =", msg);                         // ⭐ 디버그 추가
+            console.log("🧩 friendContainer =", friendContainer);
+            console.log("🧩 msg =", msg);
 
             if (!friendContainer) {
-                console.warn("⚠ friend-folder-container 요소를 찾지 못했습니다."); // ⚠ 의심 포인트
+                console.warn("⚠ friend-folder-container 요소를 찾지 못했습니다.");
                 return;
             }
 
@@ -103,24 +107,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             friendContainer.innerHTML = folders
-                .map((f) => {
-                    const visibilityClass = getVisibilityClass(f.visibility);
-                    return `
-               <div class="folder-card ${visibilityClass}" data-folder-id="${f.folderId}">
-                    <div class="folder-thumbnail"></div>
-                    <p class="folder-title">${f.folderName}</p>
-
-                    <div class="folder-menu">
-                        <button class="menu-btn hidden">⋮</button>
-                        <div class="menu-dropdown hidden">
-                            <button class="delete-btn hidden">삭제</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-                })
+                .map((f) => createFolderCardHTML(f, false))
                 .join("");
 
+            // ▶ 친구 폴더: 삭제 / 메뉴 비활성화
             attachMenuEvents(false);
 
             if (msg) {
@@ -137,46 +127,63 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // 🔍 친구 폴더 검색 공통 함수
+    async function runFriendSearch() {
+        console.log("✅ runFriendSearch 호출");
+
+        const input = document.getElementById("friend-nickname");
+        console.log("🔍 friend-nickname input =", input);
+
+        const nickname = input?.value.trim();
+        console.log("🔍 입력된 nickname =", nickname);
+
+        if (!nickname) {
+            const msg = document.getElementById("friend-folder-result");
+            if (msg) {
+                msg.textContent = "닉네임을 입력해주세요.";
+                msg.style.color = "red";
+            }
+            console.log("⚠ 닉네임이 비어 있음");
+            return;
+        }
+
+        await loadFriendFolders(nickname);
+    }
+
+
     // ⭐ 친구 폴더 검색 버튼 이벤트
     const searchBtn = document.getElementById("search-friend-folder-btn");
     console.log("🔍 searchBtn =", searchBtn); // ⭐ 디버그 추가
 
     if (searchBtn) {
         searchBtn.addEventListener("click", async () => {
-            console.log("✅ 검색 버튼 클릭 이벤트 진입"); // ⭐ 디버그 추가
-
-            const input = document.getElementById("friend-nickname");
-            console.log("🔍 friend-nickname input =", input); // ⭐ 디버그 추가
-
-            const nickname = input?.value.trim();
-            console.log("🔍 입력된 nickname =", nickname);     // ⭐ 디버그 추가
-
-            if (!nickname) {
-                const msg = document.getElementById("friend-folder-result");
-                if (msg) {
-                    msg.textContent = "닉네임을 입력해주세요.";
-                    msg.style.color = "red";
-                }
-                console.log("⚠ 닉네임이 비어 있음"); // ⭐ 디버그 추가
-                return;
-            }
-
-            await loadFriendFolders(nickname);
+            console.log("✅ 검색 버튼 클릭 이벤트 진입");
+            await runFriendSearch();
         });
     } else {
-        console.warn("⚠ search-friend-folder-btn 요소를 찾지 못했습니다."); // ⚠ 의심 포인트
+        console.warn("⚠ search-friend-folder-btn 요소를 찾지 못했습니다.");
     }
 
+    // 🔹 Enter 키로도 검색
+    if (friendInput) {
+        friendInput.addEventListener("keydown", async (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault(); // 폼 제출/새로고침 방지
+                console.log("✅ Enter 키 입력 – 친구 검색 실행");
+                await runFriendSearch();
+            }
+        });
+    }
     // ✅ ⋮ 버튼 및 삭제 버튼 이벤트 연결 함수
     function attachMenuEvents(isMyFolder = true) {
-
+        // 친구 폴더면 삭제 버튼 숨기기
         if (!isMyFolder) {
             document.querySelectorAll(".delete-btn").forEach(btn => btn.classList.add("hidden"));
         }
 
         document.querySelectorAll(".menu-btn").forEach((btn) => {
             btn.addEventListener("click", (e) => {
-                if (!isMyFolder) return;
+                if (!isMyFolder) return; // 친구 폴더는 메뉴 안 열림
                 e.stopPropagation();
                 const dropdown = e.currentTarget.nextElementSibling;
                 dropdown.classList.toggle("hidden");
@@ -214,6 +221,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         }
 
+        // 바깥 클릭 시 메뉴 닫기
         document.addEventListener("click", (e) => {
             if (!e.target.closest(".folder-menu")) {
                 document.querySelectorAll(".menu-dropdown").forEach((menu) => menu.classList.add("hidden"));
@@ -235,6 +243,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             behavior: "smooth",
         });
     });
+
+    // ✅ 친구 폴더 좌우 스크롤
+    if (friendLeftArrow && friendFolderWrapper) {
+        friendLeftArrow.addEventListener("click", () => {
+            friendFolderWrapper.scrollBy({
+                left: -MOVE_AMOUNT,
+                behavior: "smooth",
+            });
+        });
+    }
+
+    if (friendRightArrow && friendFolderWrapper) {
+        friendRightArrow.addEventListener("click", () => {
+            friendFolderWrapper.scrollBy({
+                left: MOVE_AMOUNT,
+                behavior: "smooth",
+            });
+        });
+    }
+
 
     /* 폴더 생성 기능 */
     const form = document.getElementById("create-folder-form");
