@@ -8,6 +8,7 @@ import lombok.Getter;
 public class FriendSearchDTO {
     private Long userId;
     private String nickname;
+    private String profileImgUrl;
     private boolean isFriend;
 
 }

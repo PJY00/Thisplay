@@ -17,6 +17,7 @@ public class FriendDTO {
     private FriendshipStatus status;// 관계 상태
     private boolean isFrom;         // 내가 보낸 요청이면 true
     private String nickname; // ❌ 이거 하나면 누가 보냈는지 구분 불가
+    private String profileImgUrl;
 
     public static FriendDTO fromEntity(Friendship friendship, Long loginUserId) {
         FriendDTO dto = new FriendDTO();
@@ -34,6 +35,7 @@ public class FriendDTO {
         UserEntity other = isFrom ? receiver : sender;
         dto.setOtherUserId(other.getUserId());
         dto.setOtherUserName(other.getNickname());
+        dto.setProfileImgUrl(other.getProfileImgUrl());
 
         return dto;
     }

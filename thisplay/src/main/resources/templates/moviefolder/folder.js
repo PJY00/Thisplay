@@ -1,5 +1,5 @@
 import api from "../../static/js/api/axiosInstance.js";
-import { logout, isLoggedIn, getToken } from "../../static/js/utils/auth.js";
+import { getToken } from "../../static/js/utils/auth.js";
 
 const BASE_URL = "http://localhost:8080";
 console.log("✅ folder.js 연결 완료");
@@ -10,9 +10,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const folderWrapper = document.getElementById("folder-wrapper");
     const leftArrow = document.getElementById("left-arrow");
     const rightArrow = document.getElementById("right-arrow");
-    const scrollAmount = 300;
 
-    // 🔹 폴더 목록 가져오기
+
+    const CARD_WIDTH = 150;
+    const GAP = 16;
+    const ITEM_WIDTH = CARD_WIDTH + GAP;
+    const MOVE_COUNT = 5;
+    const MOVE_AMOUNT = ITEM_WIDTH * MOVE_COUNT; // 한 번 누르면 5칸 이동
+
+    /* 📌 폴더 목록 가져오기 */
     async function loadMyFolders() {
         try {
             console.log("🔁 loadMyFolders 호출"); // ⭐ 디버그 추가
@@ -22,33 +28,32 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.log("📦 내 폴더 목록:", folders);
 
             if (!folders || folders.length === 0) {
-                folderWrapper.innerHTML = `<p style="color: #ccc;">등록된 폴더가 없습니다.</p>`;
+                folderWrapper.innerHTML = `<p style="color:#ccc;">등록된 폴더가 없습니다.</p>`;
                 return;
             }
 
             folderWrapper.innerHTML = folders
                 .map(
                     (f) => `
-        <div class="folder-card" data-folderid="${f.folderId}">
-            <div class="folder-thumbnail"></div>
-            <p class="folder-title">${f.folderName}</p>
+                <div class="folder-card" data-folder-id="${f.folderId}">
+                    <div class="folder-thumbnail"></div>
+                    <p class="folder-title">${f.folderName}</p>
 
-            <!-- 오른쪽 하단 ⋮ 메뉴 -->
-            <div class="folder-menu">
-                <button class="menu-btn">⋮</button>
-                <div class="menu-dropdown hidden">
-                    <button class="delete-btn">삭제</button>
+                    <div class="folder-menu">
+                        <button class="menu-btn">⋮</button>
+                        <div class="menu-dropdown hidden">
+                            <button class="delete-btn">삭제</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        `
+            `
                 )
                 .join("");
 
             attachMenuEvents();
         } catch (err) {
-            console.error("❌ 폴더 목록 불러오기 실패:", err);
-            folderWrapper.innerHTML = `<p style="color:red;">폴더를 불러오는 중 오류가 발생했습니다.</p>`;
+            console.error("❌ 폴더 불러오기 실패:", err);
+            folderWrapper.innerHTML = `<p style="color:red;">폴더 정보를 가져오지 못했습니다.</p>`;
         }
     }
 
@@ -207,19 +212,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ✅ 좌우 스크롤
     leftArrow?.addEventListener("click", () => {
         folderWrapper.scrollBy({
-            left: -scrollAmount,
+            left: -MOVE_AMOUNT,
             behavior: "smooth",
         });
     });
 
     rightArrow?.addEventListener("click", () => {
         folderWrapper.scrollBy({
-            left: scrollAmount,
+            left: MOVE_AMOUNT,
             behavior: "smooth",
         });
     });
 
-    // ✅ 폴더 생성 기능
+    /* 폴더 생성 기능 */
     const form = document.getElementById("create-folder-form");
     const resultText = document.getElementById("folder-result");
 
@@ -254,13 +259,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 await loadMyFolders();
                 form.reset();
             } catch (err) {
-                console.error("❌ 폴더 생성 실패:", err);
-                resultText.textContent = "폴더 생성에 실패했습니다.";
+                console.error("폴더 생성 실패:", err);
+                resultText.textContent = "폴더 생성 실패";
                 resultText.style.color = "red";
             }
         });
     }
 
-    // ✅ 초기 폴더 목록 로드
+    /* 초기 로딩 */
     await loadMyFolders();
 });
