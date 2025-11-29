@@ -119,8 +119,13 @@
 
 /* 활성 카드 */
 .slider-card[active] {
+    height: auto;
+    min-height: 14rem;
     flex-basis: var(--open);
     transform: translateY(-6px);
+
+    padding-bottom: 2.5rem;
+    /* ⭐ 아래쪽 여백 */
 
     border-color: var(--accent);
     box-shadow:
@@ -136,17 +141,25 @@
     gap: 0.6rem;
 }
 
+/* 제목 줄 간격 & 길이 제한 */
 .review-card-title {
     font-size: 1.4rem;
     font-weight: 800;
     color: #fff;
+    line-height: 1.25;
 
-    transition: opacity 0.3s ease;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    /* ⭐ 3줄 제한 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .review-card-oneline {
     color: #ddd;
     font-size: 1rem;
+    line-height: 1.35;
 }
 
 .review-card-star {

@@ -28,9 +28,9 @@
                 <form id="create-folder-form">
                     <input type="text" id="folderName" placeholder="새 폴더 이름 입력" required />
                     <select id="visibility">
-                        <option value="PRIVATE">비공개</option>
-                        <option value="FRIEND">친구 공개</option>
                         <option value="PUBLIC">전체 공개</option>
+                        <option value="PRIVATE">비공개</option>
+                        <option value="FRIENDS">친구 공개</option>
                     </select>
                     <button type="submit">폴더 생성</button>
                 </form>
@@ -51,7 +51,33 @@
                     <div id="modal-movie-list"></div>
                 </div>
 
+            </div>
         </section>
+        <!-- ============================= -->
+        <!-- ⭐ 친구 폴더 검색 섹션 추가 -->
+        <!-- ============================= -->
+        <section class="friendfolder">
+            <h3 class="friend-folder-title">친구의 추천 영화 폴더</h3>
+
+            <!-- 🔍 친구 검색 UI -->
+            <div class="friend-search-box">
+                <input type="text" id="friend-nickname" placeholder="친구 닉네임 입력" />
+                <button id="search-friend-folder-btn">검색</button>
+            </div>
+
+            <!-- 🔔 검색 결과 메시지 -->
+            <p id="friend-folder-result"></p>
+
+            <!-- 📁 친구 폴더 리스트 -->
+            <div class="card-container">
+                <button id="friend-left-arrow" class="arrow left">‹</button>
+                <div id="friend-folder-container">
+                    <!-- 친구 폴더 카드들이 JS로 들어옴 -->
+                </div>
+                <button id="friend-right-arrow" class="arrow right">›</button>
+            </div>
+        </section>
+
 
 
 

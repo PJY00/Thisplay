@@ -8,6 +8,7 @@
     margin: 0 auto;
     padding: 40px 20px;
     position: relative;
+    overflow: visible;
 }
 
 .folderlist {
@@ -22,9 +23,9 @@
     align-items: center;
     width: 100%;
     margin-top: 16px;
-    padding: 0 80px;
-    overflow-x: visible;
-    overflow-y: hidden;
+    padding: 12px 80px 0;
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
 #folder-wrapper {
@@ -32,6 +33,7 @@
     display: flex;
     gap: 16px;
     overflow-x: auto;
+    overflow-y: visible;
     scroll-behavior: smooth;
     scrollbar-width: none;
 }
@@ -41,7 +43,22 @@
 }
 
 .folder-card {
-    flex: 0 0 calc((100% - (7 * 16px)) / 8);
+
+    /* 가로 폭 완전 고정 (JS CARD_WIDTH와 동일하게) */
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    flex: 0 0 150px;
+    /* flex 아이템도 150px로 고정 */
+    /* 기존 코드 유지 + 이 두 줄 추가/수정 */
+    margin-top: 8px;
+    margin-bottom: 12px;
+    transition:
+        margin-top 0.25s ease,
+        box-shadow 0.35s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
+    /* transform은 일단 빼도 됨, 넣어도 됨 */
     height: 240px;
     border-radius: 18px;
     background: rgba(20, 20, 30, 0.8);
@@ -63,7 +80,8 @@
 }
 
 .folder-card:hover {
-    transform: translateY(-8px) scale(1.03);
+    margin-top: 0;
+    /* transform: translateY(-8px) scale(1.03); */
     box-shadow:
         0 0 30px rgba(0, 255, 255, 0.45),
         0 0 50px rgba(255, 0, 255, 0.35),
@@ -166,6 +184,8 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+    color: #ffffff;
+    z-index: 50;
 }
 
 .menu-dropdown {
@@ -233,12 +253,46 @@
         opacity: 0;
         transform: translateY(-10%);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
+/* 🎬 폴더 모달 영화 카드 삭제 버튼 */
+.delete-movie-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: background 0.25s ease, transform 0.2s ease;
+    z-index: 5;
+}
+
+.delete-movie-btn:hover {
+    background: rgba(255, 80, 80, 0.9);
+    transform: scale(1.1);
+}
+
+
+/* 닫기 버튼 */
 .close-btn {
     position: absolute;
     top: 16px;
@@ -277,6 +331,7 @@
     overflow: hidden;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
 }
 
 .movie-card:hover {
@@ -304,4 +359,204 @@
 .modal-content::-webkit-scrollbar-thumb {
     background-color: #444;
     border-radius: 3px;
+}
+
+/* ================================
+   👥 친구 폴더 섹션
+================================ */
+
+.friendfolder {
+    margin-top: 40px;
+    padding: 24px 20px 10px;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+/* 제목 (내 폴더 .folderlist 와 느낌 맞추기) */
+.friend-folder-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+/* 검색 박스 전체 라인 */
+.friend-search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+/* 닉네임 입력창 */
+#friend-nickname {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+
+    border-radius: 999px;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+    background: rgba(10, 10, 20, 0.9);
+    color: #e5f9ff;
+
+    outline: none;
+    box-shadow:
+        0 0 8px rgba(0, 255, 255, 0.4),
+        inset 0 0 6px rgba(0, 0, 0, 0.7);
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+#friend-nickname::placeholder {
+    color: rgba(185, 255, 247, 0.5);
+}
+
+#friend-nickname:focus {
+    border-color: rgba(0, 255, 200, 0.9);
+    background: rgba(5, 15, 40, 0.95);
+    box-shadow:
+        0 0 10px rgba(0, 255, 200, 0.7),
+        0 0 20px rgba(0, 180, 255, 0.5);
+}
+
+/* 🔍 친구 검색 버튼 (네온 스타일) */
+#search-friend-folder-btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    border-radius: 999px;
+    border: 1px solid rgba(0, 255, 255, 0.7);
+    background: radial-gradient(circle at 0% 0%, #00fff2 0%, #008cff 45%, #06142b 100%);
+    color: #020b15;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    box-shadow:
+        0 0 12px rgba(0, 255, 255, 0.7),
+        0 0 24px rgba(0, 140, 255, 0.5);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease,
+        background 0.25s ease;
+}
+
+#search-friend-folder-btn:hover {
+    transform: translateY(-1px) scale(1.03);
+    filter: brightness(1.1);
+    box-shadow:
+        0 0 18px rgba(0, 255, 255, 1),
+        0 0 32px rgba(0, 140, 255, 0.9);
+}
+
+#search-friend-folder-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+        0 0 8px rgba(0, 255, 255, 0.7),
+        0 0 16px rgba(0, 140, 255, 0.6);
+}
+
+/* 검색 결과 메시지 */
+#friend-folder-result {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: #b9fff7;
+}
+
+/* 친구 폴더 카드 컨테이너 – 내 폴더랑 레이아웃 통일 */
+#friend-folder-container {
+    margin-top: 12px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 4px 4px 10px;
+
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+#friend-folder-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* ===========================
+   🌐 전체공개 폴더 (PUBLIC)
+=========================== */
+
+.folder-card.folder-public {
+    border-color: rgba(0, 255, 220, 0.9);
+    box-shadow:
+        0 0 18px rgba(0, 255, 220, 0.7),
+        0 0 32px rgba(0, 140, 255, 0.6),
+        inset 0 0 22px rgba(0, 255, 220, 0.35);
+}
+
+.folder-card.folder-public .folder-thumbnail {
+    background: linear-gradient(135deg,
+            rgba(0, 255, 220, 0.3),
+            rgba(0, 140, 255, 0.45));
+}
+
+.folder-card.folder-public .folder-title {
+    color: #cfffff;
+    text-shadow:
+        0 0 8px rgba(0, 255, 220, 0.9),
+        0 0 16px rgba(0, 180, 255, 0.8);
+}
+
+/* ===========================
+   🫂 친구공개 폴더 (FRIENDS)
+=========================== */
+
+.folder-card.folder-friends {
+    border-color: rgba(190, 150, 255, 0.9);
+    box-shadow:
+        0 0 18px rgba(180, 130, 255, 0.75),
+        0 0 30px rgba(80, 190, 255, 0.55),
+        inset 0 0 22px rgba(190, 140, 255, 0.4);
+}
+
+.folder-card.folder-friends .folder-thumbnail {
+    background: linear-gradient(135deg,
+            rgba(80, 190, 255, 0.25),
+            rgba(190, 140, 255, 0.65));
+}
+
+.folder-card.folder-friends .folder-title {
+    color: #efe2ff;
+    text-shadow:
+        0 0 8px rgba(190, 140, 255, 0.95),
+        0 0 16px rgba(90, 200, 255, 0.7);
+}
+
+
+/* ===========================
+   🔒 비공개 폴더 (PRIVATE)
+=========================== */
+
+.folder-card.folder-private {
+    border-color: rgba(255, 140, 170, 0.7);
+    box-shadow:
+        0 0 14px rgba(255, 120, 160, 0.5),
+        0 0 26px rgba(110, 20, 60, 0.6),
+        inset 0 0 18px rgba(255, 120, 170, 0.35);
+}
+
+.folder-card.folder-private .folder-thumbnail {
+    background: linear-gradient(135deg,
+            rgba(255, 160, 190, 0.28),
+            rgba(110, 30, 70, 0.65));
+}
+
+.folder-card.folder-private .folder-title {
+    color: #ffd7e6;
+    text-shadow:
+        0 0 6px rgba(255, 150, 190, 0.8),
+        0 0 12px rgba(120, 20, 60, 0.7);
 }
