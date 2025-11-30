@@ -1,46 +1,114 @@
-/* @import url("../commonCSS/base.css"); */
+:root {
+  --bg-main: #0b0d11;
+  --bg-card: #141820;
+  --border-soft: #262a33;
+  --accent: #00fff7;
+  --accent2: #ff2fe6;
+  --text-main: #f5f5f5;
+  --text-muted: #9ca3b4;
+}
 
 body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial;
-    padding: 12px;
-    background-color: var(--color-bg, #fff);
-    /* base.css 변수 활용, 없으면 흰색 지금은 글자 잘 보이려고 임시로 한거 */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial;
+  padding: 16px;
+  margin: 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
 }
 
 .box {
-    padding: 12px;
-    border: 1px solid #eee;
-    border-radius: 6px;
-    margin-bottom: 12px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  margin-top: 5px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
 }
 
-input[type="text"] {
-    width: 70%;
-    padding: 8px;
-    margin-right: 8px;
-    box-sizing: border-box;
-}
-
-button {
-    padding: 8px 10px;
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  margin-top: 5px;
 }
 
 .row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+  box-sizing: border-box;
+  background-color: #0f1218;
+  color: var(--text-main);
+}
+
+input[type="text"]::placeholder {
+  color: var(--text-muted);
+}
+
+/* 버튼 기본 상태: 네온 없음, 얇은 라인만 */
+button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+/* hover 시에만 파란 네온 효과 */
+button:hover {
+  background-color: rgba(0, 255, 247, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow:
+    0 0 8px rgba(0, 255, 247, 0.7),
+    0 0 14px rgba(0, 255, 247, 0.4);
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 0 6px rgba(0, 255, 247, 0.5);
 }
 
 .user-card {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    border-bottom: 1px solid #f0f0f0;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 4px;
+  border-bottom: 1px solid #1d212b;
+  gap: 8px;
+}
+
+.user-card:last-child {
+  border-bottom: none;
 }
 
 .muted {
-    color: #666;
-    font-size: 0.9em;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+#message {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--accent);
 }
