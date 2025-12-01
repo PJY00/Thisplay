@@ -159,6 +159,7 @@ function createNavbar() {
       )
         .then((res) => res.json())
         .then((data) => {
+          console.log("🔍 검색 API 응답:", data);
           const results = Array.isArray(data) ? data : data.results || [];
           renderAutoComplete(results);
         })
@@ -179,7 +180,7 @@ function createNavbar() {
       li.classList.add("autocomplete-item");
 
       li.innerHTML = `
-        <img src="${movie.posterPath}" />
+        <img src="${movie.poster_path}" />
         <span>${movie.title}</span>
       `;
 

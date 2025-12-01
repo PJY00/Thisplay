@@ -179,6 +179,15 @@ public class TmdbApiClient {
                             obj.put("original_title", movie.path("original_title").asText(""));
                             filtered.add(obj);
 
+                            // poster_path (전체 URL 만들기)
+                            String posterPath = movie.hasNonNull("poster_path")
+                                    ? movie.get("poster_path").asText()
+                                    : "";
+                            obj.put("poster_path",
+                                    posterPath.isEmpty()
+                                            ? ""
+                                            : "https://image.tmdb.org/t/p/w185" + posterPath);
+                            
                             // 최대 5개까지만
                             if (filtered.size() >= 5) break;
                         }
