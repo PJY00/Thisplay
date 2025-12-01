@@ -25,12 +25,10 @@ async function loadMovieDetail() {
         러닝타임: ${movie.runtime}분 <br>
         평점: ${movie.vote_average}점
     `;
-    document
-      .getElementById("goReviewBtn")
-      .addEventListener("click", function (e) {
-        e.preventDefault();
-        location.href = `../reviewpage/writereview.html?movieId=${movieId}`;
-      });
+    document.getElementById("goReview").addEventListener("click", function (e) {
+      e.preventDefault();
+      location.href = `../reviewpage/writereview.html?movieId=${movieId}`;
+    });
 
     // document.getElementById("likes-count").textContent = movie.likes || 0;
     // document.getElementById("rating-score").textContent =

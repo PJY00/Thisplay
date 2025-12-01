@@ -1,51 +1,82 @@
 // import axios from "axios";
-import { getToken, logout } from "../utils/auth.js";
-// 상단 import는 권한(토큰) 관련 페이지이므로 주석처리 해둠
-// login page와 연결시킬 예정
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveAccessToken,
+  logout,
+  refreshAccessToken,
+} from "../utils/auth.js";
 
-//가져올 base url 나중에 주소 생기면 none 부분 그걸로 수정
+// base url 설정
 const BASE_URL = "http://localhost:8080";
-// window.location.hostname === "localhost" ? "http://localhost:8080" : "none";
 
 export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  // withCredentials: true, // 쿠키 포함 요청 허용
+  // withCredentials: true,
 });
 
+/* 요청 인터셉터*/
 api.interceptors.request.use(
-  (config) => {
-    const token = getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  async (config) => {
+    const token = getAccessToken();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// 전역 에러
+/* 응답 인터셉터 (자동 재발급) */
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
     const status = error.response?.status;
-    if (status === 401) {
-      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-      logout();
-    } else if (status >= 500) {
-      alert("서버 오류");
+
+    // Access Token 만료 → 401 Unauthorized
+    if (status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      // Refresh Token을 가져옴
+      const refreshToken = getRefreshToken();
+      if (!refreshToken) {
+        alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+        logout();
+        return Promise.reject(error);
+      }
+
+      // refresh 로 access 재발급 시도
+      try {
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+          saveAccessToken(newAccessToken);
+
+          // Authorization 헤더 갱신 후 재요청
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return api(originalRequest);
+        } else {
+          alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+          logout();
+        }
+      } catch (refreshErr) {
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        logout();
+        return Promise.reject(refreshErr);
+      }
+    }
+
+    // 기타 서버 오류 처리
+    if (status >= 500) {
+      alert("서버 오류가 발생했습니다.");
     } else {
       console.error("API Error:", error.message);
     }
+
     return Promise.reject(error);
   }
 );
 
 export { BASE_URL };
 export default api;
-
-// 주석 처리 된 부분은 추후 토큰 문제 해결하고 나서 주석 해제
-// nodejs 패스 문제로 import가 안돼서 html에 직접적으로 import 하겠음
-// 추후 이 문제도 수정할 예정
