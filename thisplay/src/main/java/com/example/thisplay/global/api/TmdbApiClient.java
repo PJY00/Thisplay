@@ -177,7 +177,6 @@ public class TmdbApiClient {
                             obj.put("id", movie.path("id").asInt());
                             obj.put("title", title);  // 한국어 제목
                             obj.put("original_title", movie.path("original_title").asText(""));
-                            filtered.add(obj);
 
                             // poster_path (전체 URL 만들기)
                             String posterPath = movie.hasNonNull("poster_path")
@@ -187,7 +186,8 @@ public class TmdbApiClient {
                                     posterPath.isEmpty()
                                             ? ""
                                             : "https://image.tmdb.org/t/p/w185" + posterPath);
-                            
+                            filtered.add(obj);
+
                             // 최대 5개까지만
                             if (filtered.size() >= 5) break;
                         }

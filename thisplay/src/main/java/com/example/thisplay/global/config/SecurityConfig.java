@@ -8,6 +8,7 @@ import com.example.thisplay.global.jwt.JWTFilter;
 import com.example.thisplay.global.jwt.JWTUtil;
 import com.example.thisplay.global.jwt.LoginFilter;
 import com.example.thisplay.common.Auth.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,8 +60,16 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/login","/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**").permitAll() //인증 없이 접근 가능
+                        .requestMatchers( "/login","/", "/join", "/logout", "/api/main/**","/api/movies/show/**","/oauth2/**", "/login/oauth2/**", "/api/**", "/images/**").permitAll() //인증 없이 접근 가능
                         .anyRequest().authenticated());
+
+        http.exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write("{\"message\": \"UNAUTHORIZED\"}");
+                })
+        );
 
         // LoginFilter 등록
         http
@@ -137,7 +146,9 @@ public class SecurityConfig {
                             );
 
                             // 로그인 성공 후 redirect
-                            response.sendRedirect("/loginSuccess");
+                             response.sendRedirect("/loginSuccess");
+                            // response.sendRedirect("http://127.0.0.1:5500/thisplay/src/main/resources/templates/mainpage/mainpage.html");
+
                         })
 
                         .failureHandler((request, response, exception) -> {
