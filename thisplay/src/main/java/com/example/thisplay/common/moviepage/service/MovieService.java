@@ -79,14 +79,16 @@ public class MovieService {
                 !owner.getUserId().equals(requester.getUserId())) {
             throw new RuntimeException("이 폴더는 비공개입니다.");
         }
+        // 0️⃣ 폴더 주인은 무조건 접근 가능
+        if (owner.getUserId().equals(requester.getUserId())) {
+            return mapToViewFolderDTO(folder);
+        }
 
         // ✅ FRIENDS → 친구만
         if (folder.getVisibility() == FolderVisibility.FRIENDS &&
                 !friendshipService.areFriends(requester, owner)) {
             throw new RuntimeException("이 폴더는 친구에게만 공개됩니다.");
         }
-
-        // ✅ PUBLIC → 누구나 (검사 없음)
 
         return mapToViewFolderDTO(folder);
     }
