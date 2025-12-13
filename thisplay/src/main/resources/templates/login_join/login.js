@@ -62,6 +62,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Google 로그인
   googleBtn.addEventListener("click", () => {
+    // 이전 페이지 저장
+    localStorage.setItem("previousPage", window.location.href);
+    // 구글 OAuth2 로그인 시작
     window.location.href = "http://localhost:8080/oauth2/authorization/google";
   });
+});
+
+// Google OAuth 로그인 성공 JSON 자동 처리
+window.addEventListener("load", async () => {
+  try {
+    const res = await fetch("http://localhost:8080/loginSuccess", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const data = await res.json().catch(() => null);
+
+    if (!data || !data.accessToken) return; // 일반 로딩일 때 무시
+
+    console.log("⭐ Google OAuth 로그인 성공:", data);
+
+    saveAccessToken(data.accessToken);
+    saveRefreshToken(data.refreshToken);
+
+    if (data.userId) {
+      localStorage.setItem("userId", data.userId);
+    }
+
+    const previousPage = localStorage.getItem("previousPage");
+
+    if (previousPage && !previousPage.includes("/login")) {
+      localStorage.removeItem("previousPage");
+      window.location.href = previousPage;
+    } else {
+      window.location.href = "../mainpage/mainpage.html";
+    }
+  } catch (err) {
+    console.log("구글 OAuth JSON 아님 또는 오류:", err);
+  }
 });
