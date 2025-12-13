@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ${movies
           .map(
             (m) => `
-                <article class="project-card">
+                <article class="project-card" data-movie-id ="${m.id}">
                   <img class="project-card__bg" src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="">
                   <div class="project-card__content">
                     <img class="project-card__thumb" src="https://image.tmdb.org/t/p/w500${m.poster_path}" alt="">
@@ -82,6 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
       initSlider();
+      // 카드 클릭 시 영화 상세 페이지 이동
+      document.querySelectorAll(".project-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          const movieId = card.dataset.movieId;
+          location.href = `../moviepage/moviepage.html?movieId=${movieId}`;
+        });
+      });
+
     } catch (error) {
       console.error("❌ 영화 불러오기 실패:", error);
       container.innerHTML = `<p style="color:red;">영화 정보를 불러오지 못했습니다.</p>`;
@@ -164,10 +172,32 @@ function initSlider() {
   );
 
   // 마우스 호버 / 클릭으로 이동
-  cards.forEach((card, i) => {
-    card.addEventListener("mouseenter", () => activate(i, true));
-    card.addEventListener("click", () => activate(i, true));
+cards.forEach((card, i) => {
+  //여기서부터 추가
+  let hoverTimer = null;
+
+  card.addEventListener("mouseenter", () => {
+    // 마우스를 올려도 바로 실행 안 함 → 300ms 뒤 실행
+    hoverTimer = setTimeout(() => {
+      activate(i, true);
+    }, 200); 
   });
+
+  card.addEventListener("mouseleave", () => {
+    // 마우스를 금방 빼면 실행 취소됨
+    clearTimeout(hoverTimer);
+  });
+
+  // 클릭은 즉시 이동
+  card.addEventListener("click", () => activate(i, true));
+});
+
+  //원래 것들
+  //   card.addEventListener("mouseenter", () => activate(i, true));
+  //   card.addEventListener("click", () => activate(i, true));
+  // });
+
+
 
   // 창 크기 변경 시 중앙 유지
   addEventListener("resize", () => center(current));

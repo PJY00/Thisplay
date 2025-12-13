@@ -1,34 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <title>친구 목록 / 요청 관리</title>
+    <link rel="stylesheet" href="friendlist.css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
 </head>
 
 <body>
-    <section class="friendlist">
-        <h3>
-            내 친구 리스트 <div class="friendcount">42</div>
-        </h3>
-        <div class="friend-item">이새우
-            <button class="un-friend">친구에서 빼기</button>
-            <button class="friend-block">친구 차단</button>
+    <div class="box">
+        <div class="section-title">
+            <h3 color="white">내 친구 목록</h3>
+            <div>
+                <button id="refreshBtn">수동 새로고침</button>
+            </div>
         </div>
-        <div class="friend-item">뿌링클
-            <button class="un-friend">친구에서 빼기</button>
-            <button class="friend-block">친구 차단</button>
-        </div>
-        <div class="friend-item">허니콤보
-            <button class="un-friend">친구에서 빼기</button>
-            <button class="friend-block">친구 차단</button>
-        </div>
-        <div class="friend-item">황금올리브
-            <button class="un-friend">친구에서 빼기</button>
-            <button class="friend-block">친구 차단</button>
-        </div>
-    </section>
+        <div id="friendsList" class="list">불러오는 중...</div>
+    </div>
+
+    <div class="box">
+        <h3>요청 관리 (들어온 요청 / 보낸 요청)</h3>
+        <div id="requestsList" class="list">불러오는 중...</div>
+    </div>
+
+    <div id="statusMsg" style="margin-top:8px;color:green;"></div>
+    <!-- <script type="module" src="../navbar/navbarDOM.js"></script> -->
+
+    <script type="module" src="../friendpage/friendlist.js"></script>
+
 </body>
 
 </html>

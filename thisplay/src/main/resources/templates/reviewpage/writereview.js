@@ -14,6 +14,7 @@ console.log("✅ writereview.js 연결 완료");
 const params = new URLSearchParams(location.search);
 const isEdit = params.get("edit") === "true";
 const editReviewId = params.get("reviewId");
+const movieId = new URLSearchParams(location.search).get("movieId");
 
 
 // ==========================================================
@@ -57,19 +58,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ⭐ 신규 작성 모드일 경우
     console.log("🆕 신규 리뷰 작성 모드");
 
-    // 임시 TMDB ID → 실제 구현에서는 URL 파라미터로 받아오면 됨
-    const tmdbId = 1022789;
-    window.tmdbId = tmdbId;
+    window.tmdbId = movieId
 
     try {
-        const res = await api.get(`/api/movies/show/${tmdbId}`);
+        const res = await api.get(`/api/movies/show/${movieId}`);
         document.getElementById("movieTitle").value = res.data.title || "제목 없음";
     } catch (err) {
         console.error("❌ 영화 제목 불러오기 실패:", err);
         document.getElementById("movieTitle").value = "제목 없음";
     }
 });
-
 
 
 // ==========================================================
@@ -100,8 +98,6 @@ document.getElementById("submitReviewBtn").addEventListener("click", async (e) =
         movieId: window.tmdbId
     };
 
-
-
     // ======================================================
     // ✏ [수정 모드]: PUT 요청 실행
     // ======================================================
@@ -123,7 +119,6 @@ document.getElementById("submitReviewBtn").addEventListener("click", async (e) =
     }
 
 
-
     // ======================================================
     // 🆕 [신규 작성 모드]: POST 요청 실행
     // ======================================================
@@ -132,14 +127,13 @@ document.getElementById("submitReviewBtn").addEventListener("click", async (e) =
         console.log("✅ 리뷰 등록 성공:", res.data);
         alert("리뷰가 등록되었습니다!");
 
-        location.href = "/review/list"; // 리스트로 이동
+        location.href = "../reviewpage/reviewlist.html"; // 리스트로 이동
 
     } catch (err) {
         console.error("❌ 리뷰 등록 실패:", err);
         alert("리뷰 등록 중 오류 발생 (콘솔 확인)");
     }
 });
-
 
 
 // ==========================================================

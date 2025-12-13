@@ -1,0 +1,55 @@
+.container {
+  background-color: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-top:80px;
+}
+
+.inner-flex {
+  display: flex;
+  gap: 24px;
+}
+
+.left-container {
+  flex: 1; /* 왼쪽 영역 */
+  min-width: 300px;
+}
+
+.right-container {
+  flex: 1; /* 오른쪽 영역 */
+  min-width: 400px;
+}
+
+.box {
+  background: #f6f6f6;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list {
+  margin-top: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+svg {
+  stroke: black;
+  fill: none;
+  width: 1.5rem;
+  height: 1.5rem;
+}

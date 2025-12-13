@@ -1,0 +1,119 @@
+/* ===========================
+   NOTICE LIST PAGE
+=========================== */
+
+.notice-wrapper {
+  padding-top: 50px;
+  padding-bottom: 60px;
+  color: var(--color-text);
+}
+
+/* 제목 */
+.notice-title {
+  font-family: var(--font-heading);
+  font-size: 2.3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* 검색 + 글쓰기 */
+.notice-top-bar {
+  margin-top: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.notice-search {
+  display: flex;
+  gap: 10px;
+}
+
+.notice-search input {
+  width: 240px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #f1f1f1;
+  border: 1.5px solid #ccc;
+  color: black;
+}
+
+.notice-search input::placeholder {
+  color: #888;
+}
+
+.search-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: white;
+}
+
+.notice-write-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: rgba(0, 255, 170, 0.18);
+  color: var(--primary-glow);
+  font-weight: bold;
+}
+
+/* 테이블 헤더 */
+.notice-table-header {
+  display: grid;
+  grid-template-columns: 4fr 1.5fr 1.5fr 1fr;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-muted);
+}
+
+/* 리스트 */
+.notice-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.notice-row {
+  display: grid;
+  grid-template-columns: 4fr 1.5fr 1.5fr 1fr;
+  align-items: center;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  transition: 0.25s ease;
+}
+
+.notice-row:hover {
+  background: rgba(0, 255, 170, 0.08);
+}
+
+.col-title {
+  color: white;
+  font-size: 1.05rem;
+}
+
+.col-writer,
+.col-date,
+.col-view {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+/* 페이지네이션 */
+.notice-pagination {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.notice-pagination .page {
+  margin: 0 6px;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.notice-pagination .page.active {
+  color: var(--primary-glow);
+  text-decoration: underline;
+}

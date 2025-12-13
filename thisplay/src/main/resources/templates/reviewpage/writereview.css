@@ -1,6 +1,7 @@
 /* ===== 리뷰 작성 페이지 레이아웃 ===== */
 body {
-    padding-top: 4rem;
+    padding-top: 40rem;
+    
 }
 
 .container {
@@ -17,12 +18,15 @@ body {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    padding-top: 75px;
 }
 
-/* ===== 상단 등록 버튼 ===== */
-.writingheader {
+/* ===== 등록 버튼 ===== */
+.writingfooter {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #submitReviewBtn {

@@ -1,0 +1,99 @@
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #0b0d11;
+    color: #e5e5e5;
+    margin-top: 80px; 
+}
+
+
+header {
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid #1d212b;
+    background-color: #0f131a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #00fff7;    /* 네온 포인트 */
+    letter-spacing: 0.6px;
+}
+
+header div {
+    font-size: 0.85rem;
+    color: #a5a8b4;
+}
+
+
+.friend-container {
+    max-width: 1200px;
+    margin: 1.8rem auto;
+    margin-top:80px;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+
+}
+
+.friend-container iframe {
+    flex: 1;
+    height: calc(100vh - 160px);
+    border: 1px solid #1d212b;
+    border-radius: 12px;
+    background-color: #141820;
+    overflow: hidden;
+
+    /* 내부 그림자 + 외곽 네온 살짝 */
+    box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.5),
+                0 0 12px rgba(0, 255, 247, 0.12);
+    transition: 0.2s;
+}
+
+
+
+#addFrame {
+    flex: 0.9; 
+}
+
+#listFrame {
+    flex: 1.1;
+}
+
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .container iframe {
+        height: 45vh;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 1rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .container iframe {
+        height: 40vh;
+    }
+}

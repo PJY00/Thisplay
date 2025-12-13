@@ -1,0 +1,110 @@
+/* @import url("../commonCSS/base.css"); */
+
+
+:root {
+  --bg-main: #0b0d11;
+  --bg-card: #141820;
+  --border-soft: #272b35;
+  --accent: #00fff7;
+  --accent2: #ff2fe6;
+  --text-main: #f5f5f5;
+  --text-muted: #9da3b5;
+}
+
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial;
+  padding: 16px;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+
+.box {
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* 제목 영역 (제목 + 버튼) */
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 5px;
+}
+
+.list {
+  margin-top: 10px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 4px;
+  border-bottom: 1px solid #1d212b;
+  gap: 8px;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item-main-text {
+  font-size: 0.95rem;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+
+button {
+  padding: 6px 10px;
+  margin-left: 6px;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  transition: 0.15s ease;
+  min-width: 70px;
+
+  box-shadow: none; /* 기본은 네온 없음 */
+}
+
+button:hover {
+  background: rgba(0, 255, 247, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+
+  /* hover 시 네온 효과 */
+  box-shadow:
+    0 0 8px rgba(0, 255, 247, 0.6),
+    0 0 14px rgba(0, 255, 247, 0.3);
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 0 6px rgba(0, 255, 247, 0.4);
+}

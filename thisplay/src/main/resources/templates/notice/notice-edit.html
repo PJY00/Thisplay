@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thisplay - 공지 수정</title>
+    <link rel="stylesheet" href="./notice-edit.css" />
+  </head>
+
+  <body>
+    <div class="write-wrapper container">
+      <!-- 상단: 제목 -->
+      <div class="write-header">
+        <h1>공지 수정</h1>
+
+        <div class="write-actions">
+          <button id="editSubmit" class="submit-btn">수정하기</button>
+        </div>
+      </div>
+
+      <!-- 제목 입력 -->
+      <div class="write-title-box">
+        <input type="text" id="editTitle" placeholder="제목을 입력하세요" />
+      </div>
+
+      <!-- 내용 입력 -->
+      <div class="write-content-box">
+        <textarea id="editContent" placeholder="내용을 입력하세요"></textarea>
+      </div>
+    </div>
+
+    <script type="module" src="../navbar/navbarDOM.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/axios@1.6.8/dist/axios.min.js"></script>
+    <script type="module" src="../../static/js/api/axiosInstance.js"></script>
+    <script type="module" src="./notice-edit.js"></script>
+  </body>
+</html>

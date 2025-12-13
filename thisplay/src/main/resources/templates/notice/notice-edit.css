@@ -1,0 +1,39 @@
+/* ==========================
+   NOTICE EDIT PAGE
+========================== */
+
+.write-wrapper {
+  padding-top: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.write-header {
+  padding-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.write-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: black;
+}
+
+.write-title-box,
+.write-content-box {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+}
+
+.write-title-box input,
+.write-content-box textarea {
+  width: 100%;
+  border: none;
+  font-size: 1.1rem;
+  color: #333;
+}

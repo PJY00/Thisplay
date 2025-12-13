@@ -1,0 +1,250 @@
+@import url("../commonCss/base.css");
+/* ============================
+   PROFILE
+============================ */
+.slider-track{
+    padding-top:30px;
+}
+
+.my-review-section{
+    padding: 10px;
+}
+
+.profile-section {
+    display: flex;
+    justify-content: flex-start; 
+    width: 100%;
+    max-width: 1400px;  
+    padding-top: 50px;
+    padding-bottom: 0px;         
+    margin: 20px auto 0;         
+}
+.profile-box {
+    background: #050B2E;
+    /* 진한 남색 */
+    padding: 12px 20px;
+    margin-top: 30px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-icon {
+    font-size: 1.4rem;
+}
+
+.edit-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.edit-btn:hover {
+    opacity: 0.7;
+}
+
+/* ============================
+   MY REVIEW
+============================ */
+
+:root {
+    --accent: #ff6b35;
+    --gap: 2rem;
+    --speed: 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --closed: 12rem;
+    --open: 26rem;
+}
+
+/* 기본 슬라이더 */
+.slider {
+    max-width: 1400px;
+    margin: auto;
+    /* padding: 2rem 0; */
+    overflow: visible;
+}
+
+.slider-wrap {
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-behavior: smooth;
+}
+
+.slider-wrap::-webkit-scrollbar {
+    display: none;
+}
+
+.slider-track {
+    display: flex;
+    gap: var(--gap);
+    align-items: center;
+    padding-bottom: 40px;
+}
+
+/* ---- 리뷰 카드 ---- */
+.slider-card {
+    flex: 0 0 var(--closed);
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 1rem;
+    padding: 1.4rem;
+    height: 14rem;
+    cursor: pointer;
+    /* overflow: hidden; */
+
+    transition:
+        flex-basis var(--speed),
+        transform var(--speed),
+        box-shadow 0.4s ease,
+        border 0.4s ease;
+
+    /* 네온 테두리 (기본 약하게) */
+    border: 2px solid rgba(255, 111, 63, 0.35);
+    box-shadow:
+        0 0 8px rgba(255, 111, 63, 0.35),
+        inset 0 0 12px rgba(255, 111, 63, 0.2);
+}
+
+/* 활성 카드 */
+.slider-card[active] {
+    height: auto;
+    min-height: 14rem;
+    flex-basis: var(--open);
+    transform: translateY(-6px);
+
+    padding-bottom: 2.5rem;
+    /* ⭐ 아래쪽 여백 */
+
+    border-color: var(--accent);
+    box-shadow:
+        0 0 16px var(--accent),
+        0 0 36px rgba(255, 111, 63, 0.7),
+        inset 0 0 18px rgba(255, 111, 63, 0.3);
+}
+
+/* 카드 내용 */
+.review-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+/* 제목 줄 간격 & 길이 제한 */
+.review-card-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.25;
+
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    /* ⭐ 3줄 제한 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.review-card-oneline {
+    color: #ddd;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+.review-card-star {
+    color: #ffcc66;
+    font-size: 1.2rem;
+    margin-top: auto;
+}
+
+/* ---- 컨트롤러 ---- */
+.slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.slider-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.slider-btn:hover {
+    background: var(--accent);
+}
+
+.slider-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.slider-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.slider-dots .dot.active {
+    background: var(--accent);
+    transform: scale(1.2);
+}
+
+/* base.css가 glow를 자르는 문제 방지 */
+.slider-card {
+    overflow: visible !important;
+}
+
+#visibility {
+background-color: #1c1f26;  
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;           
+    margin-bottom: 15px;
+}
+
+#visibility option {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+}
+
+#folderName {
+    background-color: #1c1f26;   
+    color: #ffffff;              
+    border: 1px solid #444;      
+    padding: 8px 10px;     
+    margin-bottom: 15px;     
+    border-radius: 6px;         
+}
+
+#folderName::placeholder {
+    color: #999;      
+}
+
+#folderName:focus {
+    outline: none;
+    border-color: #00fff7;    
+    box-shadow: 0 0 6px #00fff7;
+}
