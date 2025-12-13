@@ -33,18 +33,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         const visibilityClass = getVisibilityClass(folder.visibility);
 
         return `
-            <div class="folder-card ${visibilityClass}" data-folder-id="${folder.folderId}">
-                <div class="folder-thumbnail"></div>
-                <p class="folder-title">${folder.folderName}</p>
+      <div class="folder-card ${visibilityClass}" data-folder-id="${folder.folderId}">
+        
+        <!-- 📌 폴더 귀(탭): 제목은 여기로 이동 -->
+        <div class="folder-tab">
+          <!-- ⚠️ 기존 기능 유지 위해 folder-title 클래스는 반드시 유지 -->
+          <p class="folder-title">${folder.folderName}</p>
+        </div>
 
-                <div class="folder-menu">
-                    <button class="menu-btn${isMyFolder ? "" : " hidden"}">⋮</button>
-                    <div class="menu-dropdown hidden">
-                        <button class="delete-btn${isMyFolder ? "" : " hidden"}">삭제</button>
-                    </div>
-                </div>
-            </div>
-        `;
+        <!-- 📄 폴더 본체 -->
+        <div class="folder-body">
+          <div class="folder-thumbnail"></div>
+        </div>
+
+        <!-- ⋮ 메뉴(기존 그대로) -->
+        <div class="folder-menu">
+          <button class="menu-btn${isMyFolder ? "" : " hidden"}" type="button">⋮</button>
+          <div class="menu-dropdown hidden">
+            <button class="delete-btn${isMyFolder ? "" : " hidden"}" type="button">삭제</button>
+          </div>
+        </div>
+      </div>
+    `;
     }
 
     /* 📌 내 폴더 목록 가져오기 */
