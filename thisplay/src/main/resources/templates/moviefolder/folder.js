@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const friendRightArrow = document.getElementById("friend-right-arrow");
     const friendInput = document.getElementById("friend-nickname");
 
-    const CARD_WIDTH = 150;
+    const CARD_WIDTH = 300;
     const GAP = 16;
     const ITEM_WIDTH = CARD_WIDTH + GAP;
     const MOVE_COUNT = 5;

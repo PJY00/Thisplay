@@ -111,29 +111,31 @@
    - 공개 범위 색상은 CSS 변수로 통일
 ========================================================= */
 .folder-card {
-    /* ---------- 사이즈: JS의 CARD_WIDTH(150px)와 동기화 ---------- */
-    --card-w: 150px;
+    /* ---------- 사이즈 ---------- */
+    --card-w: 300px;
     --card-h: 240px;
     --radius: 18px;
 
-    /* ---------- 공개 범위(색상) 기본값(없을 때 fallback) ---------- */
-    --borderColor: rgba(0, 255, 255, 0.2);
-    --borderHoverColor: rgba(0, 255, 255, 0.6);
+    /* ✅ 폴더 본체는 고정(통일) */
+    --bodyBorder: rgba(255, 255, 255, 0.12);
+    --bodyBorderHover: rgba(255, 255, 255, 0.22);
 
-    --cardShadow:
-        0 0 12px rgba(0, 255, 255, 0.25),
-        inset 0 0 20px rgba(255, 0, 255, 0.15);
+    --bodyShadow:
+        0 12px 28px rgba(0, 0, 0, 0.55),
+        inset 0 0 18px rgba(255, 255, 255, 0.04);
 
-    --cardHoverShadow:
-        0 0 30px rgba(0, 255, 255, 0.45),
-        0 0 50px rgba(255, 0, 255, 0.35),
-        inset 0 0 25px rgba(0, 255, 255, 0.25);
+    --bodyHoverShadow:
+        0 18px 40px rgba(0, 0, 0, 0.65),
+        inset 0 0 22px rgba(255, 255, 255, 0.06);
 
-    --thumbA: rgba(0, 255, 255, 0.15);
-    --thumbB: rgba(255, 0, 255, 0.15);
+    /* ✅ 썸네일도 고정(통일) */
+    --thumbA: rgba(255, 255, 255, 0.10);
+    --thumbB: rgba(255, 255, 255, 0.03);
 
-    --accent: rgba(0, 255, 255, 0.55);
-    --accentGlow: rgba(0, 255, 255, 0.35);
+    /* ✅ 탭(귀) 색상만 공개범위에 따라 바뀜 */
+    --tabColor: rgba(0, 255, 220, 0.95);
+    /* 기본값(PUBLIC 느낌) */
+    --tabGlow: rgba(0, 180, 255, 0.45);
 
     width: var(--card-w);
     min-width: var(--card-w);
@@ -145,19 +147,17 @@
     margin-bottom: 12px;
 
     border-radius: var(--radius);
-    background: rgba(20, 20, 30, 0.8);
+    background: rgba(20, 20, 30, 0.85);
     backdrop-filter: blur(8px);
 
-    border: 1px solid var(--borderColor);
-    box-shadow: var(--cardShadow);
+    /* ✅ 본체 보더/쉐도우는 통일 */
+    border: 1px solid var(--bodyBorder);
+    box-shadow: var(--bodyShadow);
 
     position: relative;
     cursor: pointer;
-
-    /* 폴더 귀가 위로 나가야 하므로 visible */
     overflow: visible;
 
-    /* 내용 배치는 folder-body가 담당(하단바 제거했으므로 flex-end 불필요) */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -172,10 +172,10 @@
 
 .folder-card:hover {
     margin-top: 0;
-    box-shadow: var(--cardHoverShadow);
-    border-color: var(--borderHoverColor);
-    /* transform: translateY(-8px) scale(1.03); */
+    box-shadow: var(--bodyHoverShadow);
+    border-color: var(--bodyBorderHover);
 }
+
 
 /* 카드 상단의 유리 하이라이트 레이어 */
 .folder-card::before {
@@ -204,68 +204,126 @@
     display: block;
 }
 
-/* =========================================================
-   [컴포넌트] 폴더 본체(썸네일 영역)
-   - overflow hidden은 여기서만 처리(귀 안 잘리게)
-========================================================= */
+/* =========================================
+   ✅ 폴더 본체: 미세 패턴(그리드 + 노이즈)
+   - 폴더 내부가 비어보이지 않게 고급스럽게
+========================================= */
 .folder-body {
-    width: 100%;
-    height: 100%;
-    border-radius: var(--radius);
-    overflow: hidden;
+    position: relative;
+    /* pseudo 요소를 올리기 위해 */
 }
 
-/* 썸네일은 folder-body에 100% 채우기 */
-.folder-thumbnail {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--thumbA), var(--thumbB));
-}
-
-/* =========================================================
-   [컴포넌트] 폴더 귀(tab) + 제목
-   - 제목은 “하단 바”가 아니라 귀 내부 텍스트로만 표시
-   - 클래스명 .folder-title은 JS/삭제 로직 때문에 유지하는 전제
-========================================================= */
-.folder-tab {
+/* 그리드 패턴 */
+.folder-body::before {
+    content: "";
     position: absolute;
-    top: -12px;
+    inset: 0;
+    pointer-events: none;
+
+    /* 미세 격자 + 대각선 하이라이트를 섞어 입체감 */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.10), transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.07), transparent 60%);
+    background-size:
+        18px 18px,
+        18px 18px,
+        100% 100%,
+        100% 100%;
+    background-position:
+        0 0,
+        0 0,
+        0 0,
+        0 0;
+
+    opacity: 0.55;
+    mix-blend-mode: overlay;
+}
+
+/* 노이즈(가짜) 패턴: repeating-radial로 살짝 거칠게 */
+.folder-body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background-image:
+        repeating-radial-gradient(circle at 10% 20%,
+            rgba(255, 255, 255, 0.06) 0 1px,
+            transparent 1px 3px);
+    opacity: 0.10;
+    mix-blend-mode: soft-light;
+}
+
+/* 썸네일이 가장 아래에서 깔리고, 패턴은 위에 올라가야 함 */
+.folder-thumbnail {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* 패턴 레이어가 썸네일 위로 올라오게 */
+.folder-body::before,
+.folder-body::after {
+    z-index: 1;
+}
+
+/* 메뉴/탭과 겹침 방지 */
+.folder-card::before {
+    z-index: 2;
+}
+
+/* =========================================
+   ✅ 폴더 귀(Tab) 크게 + 긴 제목 대응
+========================================= */
+
+/* 탭 자체를 더 크게 */
+.folder-tab {
+    top: -18px;
+    /* 위로 조금 더 */
     left: 12px;
 
-    /* 오른쪽 메뉴(⋮)와 겹치지 않게 최대 폭 제한 */
-    max-width: calc(100% - 48px);
+    padding: 14px 22px;
+    /* ✅ 크게 */
+    border-radius: 14px 14px 10px 10px;
 
-    padding: 6px 12px;
-    border-radius: 10px 10px 6px 6px;
-    z-index: 30;
-
-    background: rgba(10, 10, 20, 0.92);
-    backdrop-filter: blur(8px);
-
-    border: 1px solid var(--accent);
-    box-shadow:
-        0 0 10px var(--accentGlow),
-        inset 0 0 12px rgba(255, 255, 255, 0.06);
+    max-width: calc(100% - 16px);
+    /* ✅ 최대한 넓게 (메뉴 안쪽이라면 아래로 조정 가능) */
 }
 
-/* 제목: 하단바 스타일 전부 제거 + 말줄임 */
-.folder-title {
-    margin: 0;
-    padding: 0;
+/* 제목도 커지고, 기본은 말줄임 */
+.folder-tab .folder-title {
+    font-size: 1.18rem;
+    font-weight: 800;
+    line-height: 1.2;
 
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-
-    color: #fff;
-    text-shadow:
-        0 0 8px var(--accentGlow),
-        0 0 14px rgba(255, 255, 255, 0.1);
-
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* ✅ 2줄까지 */
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
 }
+
+/* ✅ hover(또는 focus) 시 제목 전체가 보이도록 확장 */
+.folder-card:hover .folder-tab,
+.folder-tab:focus-within {
+    max-width: calc(100% - 12px);
+}
+
+/* hover 시 말줄임 해제(한 줄로 끝까지 보여주기) */
+.folder-card:hover .folder-tab .folder-title,
+.folder-tab:focus-within .folder-title {
+    overflow: visible;
+    text-overflow: clip;
+}
+
+/* 탭이 커졌으니 카드 상단에 살짝 여유 주기(시각 균형) */
+.folder-card {
+    margin-top: 14px;
+}
+
 
 /* =========================================================
    [컴포넌트] ⋮ 메뉴(삭제 드롭다운)
@@ -323,52 +381,20 @@
    - border/그림자/썸네일/탭/제목 glow가 한 번에 바뀜
 ========================================================= */
 .folder-card.folder-public {
-    --borderColor: rgba(0, 255, 220, 0.9);
-    --borderHoverColor: rgba(0, 255, 220, 1);
-
-    --cardShadow:
-        0 0 18px rgba(0, 255, 220, 0.7),
-        0 0 32px rgba(0, 140, 255, 0.6),
-        inset 0 0 22px rgba(0, 255, 220, 0.35);
-
-    --thumbA: rgba(0, 255, 220, 0.3);
-    --thumbB: rgba(0, 140, 255, 0.45);
-
-    --accent: rgba(0, 255, 220, 0.9);
-    --accentGlow: rgba(0, 180, 255, 0.45);
+    --tabColor: rgba(0, 255, 220, 0.95);
+    --tabGlow: rgba(0, 180, 255, 0.45);
 }
 
 .folder-card.folder-friends {
-    --borderColor: rgba(190, 150, 255, 0.9);
-    --borderHoverColor: rgba(190, 150, 255, 1);
-
-    --cardShadow:
-        0 0 18px rgba(180, 130, 255, 0.75),
-        0 0 30px rgba(80, 190, 255, 0.55),
-        inset 0 0 22px rgba(190, 140, 255, 0.4);
-
-    --thumbA: rgba(80, 190, 255, 0.25);
-    --thumbB: rgba(190, 140, 255, 0.65);
-
-    --accent: rgba(190, 150, 255, 0.9);
-    --accentGlow: rgba(90, 200, 255, 0.35);
+    --tabColor: rgba(190, 150, 255, 0.95);
+    --tabGlow: rgba(90, 200, 255, 0.35);
 }
 
 .folder-card.folder-private {
-    --borderColor: rgba(255, 140, 170, 0.7);
-    --borderHoverColor: rgba(255, 140, 170, 0.95);
-
-    --cardShadow:
-        0 0 14px rgba(255, 120, 160, 0.5),
-        0 0 26px rgba(110, 20, 60, 0.6),
-        inset 0 0 18px rgba(255, 120, 170, 0.35);
-
-    --thumbA: rgba(255, 160, 190, 0.28);
-    --thumbB: rgba(110, 30, 70, 0.65);
-
-    --accent: rgba(255, 140, 170, 0.75);
-    --accentGlow: rgba(255, 120, 160, 0.35);
+    --tabColor: rgba(255, 140, 170, 0.85);
+    --tabGlow: rgba(255, 120, 160, 0.35);
 }
+
 
 /* =========================================================
    [모달] 폴더 클릭 시 영화 리스트 팝업
