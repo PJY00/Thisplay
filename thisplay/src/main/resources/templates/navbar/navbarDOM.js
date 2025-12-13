@@ -4,6 +4,38 @@ import {
   getRefreshToken,
 } from "../../static/js/utils/auth.js";
 
+// OAuth redirect URL 감지
+if (window.location.pathname.includes("/login/oauth2/code/google")) {
+  window.location.href =
+    "http://127.0.0.1:5500/thisplay/src/main/resources/templates/login_join/login.html";
+}
+
+async function checkGoogleLoginJson() {
+  try {
+    const res = await fetch("http://localhost:8080/loginSuccess", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) return;
+
+    const data = await res.json();
+
+    if (!data.accessToken) return;
+
+    saveAccessToken(data.accessToken);
+    saveRefreshToken(data.refreshToken);
+    localStorage.setItem("userId", data.userId);
+
+    // 이전 페이지 또는 메인으로 이동
+    const prev = localStorage.getItem("previousPage");
+    window.location.href =
+      prev && !prev.includes("/login") ? prev : "../mainpage/mainpage.html";
+  } catch (err) {
+    console.log("구글 로그인 아님", err);
+  }
+}
+
 function createNavbar() {
   // CSS 삽입
   const link = document.createElement("link");
@@ -201,4 +233,8 @@ function createNavbar() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", createNavbar);
+// document.addEventListener("DOMContentLoaded", createNavbar);
+document.addEventListener("DOMContentLoaded", async () => {
+  await checkGoogleLoginJson();
+  createNavbar();
+});
