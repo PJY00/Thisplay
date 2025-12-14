@@ -1,12 +1,18 @@
 @import url("./commonCSS/base.css");
 
 /* =========================================================
-   [섹션] 내 폴더 영역 레이아웃
-   - 페이지 배경/폭/패딩
-   - 슬라이더(화살표 + 가로 스크롤 트랙) 컨테이너
+   Folder page CSS (v3)
+   ✅ Hover hit-test fix (ONLY when mouse is on painted folder)
+   ✅ ⋮ menu follows the same "visual tuning" as the folder
+      (menu is positioned with translate variables)
+   ✅ Works well with your SVG that uses <symbol> + <use>
 ========================================================= */
+
+/* =========================
+   Page wrapper
+========================= */
 .myfolder {
-    background-color: #000;
+    background: #000;
     color: #fff;
     width: 100%;
     max-width: 1600px;
@@ -18,59 +24,52 @@
 
 .folderlist {
     font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-weight: 700;
+    margin: 0 0 20px;
 }
 
+/* =========================
+   Slider container
+========================= */
 .card-container {
     position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     margin-top: 16px;
-
-    /* 좌우 화살표 공간 확보 */
     padding: 12px 80px 0;
-
+    /* arrows space */
     overflow-x: hidden;
     overflow-y: visible;
 }
 
-/* =========================================================
-   [컴포넌트] 가로 스크롤 트랙(내 폴더/친구 폴더 공통)
-   - 스크롤바 숨김, 부드러운 스크롤
-========================================================= */
 #folder-wrapper,
 #friend-folder-container {
     display: flex;
-    gap: 16px;
+    gap: 2px;
     overflow-x: auto;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    /* Firefox */
 }
 
 #folder-wrapper::-webkit-scrollbar,
 #friend-folder-container::-webkit-scrollbar {
     display: none;
-    /* Chrome/Safari */
 }
 
-/* 내 폴더 트랙은 좌우 화살표 사이에서 남은 공간을 전부 차지 */
 #folder-wrapper {
     flex: 1;
     overflow-y: visible;
 }
 
-/* 친구 폴더 트랙은 별도 마진/패딩으로 레이아웃 맞춤 */
 #friend-folder-container {
     margin-top: 12px;
     padding: 4px 4px 10px;
 }
 
-/* =========================================================
-   [컴포넌트] 좌/우 화살표(슬라이더 컨트롤)
-========================================================= */
+/* =========================
+   Arrows
+========================= */
 .arrow {
     position: absolute;
     top: 50%;
@@ -80,10 +79,10 @@
     border: none;
     cursor: pointer;
     font-size: 3rem;
-    font-weight: bold;
+    font-weight: 800;
     padding: 0;
     line-height: 1;
-    transition: color 0.25s ease, text-shadow 0.3s ease, transform 0.2s ease;
+    transition: color .25s ease, text-shadow .3s ease, transform .2s ease;
     z-index: 20;
 }
 
@@ -105,260 +104,180 @@
 }
 
 /* =========================================================
-   [컴포넌트] 폴더 카드(폴더 귀 버전)
-   - (중요) 귀가 카드 밖으로 튀어나와야 하므로 overflow는 visible
-   - 썸네일 클리핑은 folder-body에서 담당
-   - 공개 범위 색상은 CSS 변수로 통일
+   Folder card (SVG)
 ========================================================= */
 .folder-card {
-    /* ---------- 사이즈 ---------- */
-    --card-w: 300px;
-    --card-h: 240px;
-    --radius: 18px;
+    /* ====== size ====== */
+    --folder-w: 340px;
+    --folder-h: 260px;
 
-    /* ✅ 폴더 본체는 고정(통일) */
-    --bodyBorder: rgba(255, 255, 255, 0.12);
-    --bodyBorderHover: rgba(255, 255, 255, 0.22);
+    /* ====== visual tuning (SVG is scaled/translated) ====== */
+    --svg-scale: 1.28;
+    --svg-translate-y: 20px;
+    --svg-origin-x: 50%;
+    --svg-origin-y: 45%;
 
-    --bodyShadow:
-        0 12px 28px rgba(0, 0, 0, 0.55),
-        inset 0 0 18px rgba(255, 255, 255, 0.04);
+    /* ====== interaction tuning ====== */
+    --lift: -6px;
+    --lift-scale: 1.02;
+    --press-lift: -2px;
+    --press-scale: 0.99;
 
-    --bodyHoverShadow:
-        0 18px 40px rgba(0, 0, 0, 0.65),
-        inset 0 0 22px rgba(255, 255, 255, 0.06);
+    /* hover glow (visibility class overrides) */
+    --glow: rgba(0, 255, 220, 0.35);
 
-    /* ✅ 썸네일도 고정(통일) */
-    --thumbA: rgba(255, 255, 255, 0.10);
-    --thumbB: rgba(255, 255, 255, 0.03);
+    /* ====== ⋮ menu position (relative to top-right of visual box) ======
+     X는 보통 음수(왼쪽), Y는 양수(아래)로 두면 탭 위쪽에 잘 붙음 */
+    --menu-x: -65px;
+    --menu-y: 70px;
 
-    /* ✅ 탭(귀) 색상만 공개범위에 따라 바뀜 */
-    --tabColor: rgba(0, 255, 220, 0.95);
-    /* 기본값(PUBLIC 느낌) */
-    --tabGlow: rgba(0, 180, 255, 0.45);
-
-    width: var(--card-w);
-    min-width: var(--card-w);
-    max-width: var(--card-w);
-    flex: 0 0 var(--card-w);
-    height: var(--card-h);
-
-    margin-top: 8px;
-    margin-bottom: 12px;
-
-    border-radius: var(--radius);
-    background: rgba(20, 20, 30, 0.85);
-    backdrop-filter: blur(8px);
-
-    /* ✅ 본체 보더/쉐도우는 통일 */
-    border: 1px solid var(--bodyBorder);
-    box-shadow: var(--bodyShadow);
-
-    position: relative;
-    cursor: pointer;
-    overflow: visible;
+    width: var(--folder-w);
+    flex: 0 0 var(--folder-w);
 
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: flex-start;
-    align-items: stretch;
 
-    transition:
-        margin-top 0.25s ease,
-        transform 0.3s ease,
-        box-shadow 0.35s ease,
-        border-color 0.3s ease;
+    gap: 0px;
+    /* folder ↔ title */
+    overflow: visible;
+    /* dropdown visible */
 }
 
-.folder-card:hover {
-    margin-top: 0;
-    box-shadow: var(--bodyHoverShadow);
-    border-color: var(--bodyBorderHover);
-}
-
-
-/* 카드 상단의 유리 하이라이트 레이어 */
-.folder-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Visual area: IMPORTANT
+   - pointer-events: none to prevent "empty card area" hover/click
+   - enable pointer events only on the actual painted folder (SVG/use) and menu
+*/
+.folder-card .folder-visual {
+    position: relative;
     width: 100%;
-    height: 60%;
-    background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
-    opacity: 0.35;
+    height: var(--folder-h);
+    overflow: visible;
+
+    /* ✅ 핵심: 빈 사각형 영역이 hover/click을 먹지 못하게 */
     pointer-events: none;
-    transition: opacity 0.3s ease;
-    border-radius: var(--radius);
 }
 
-.folder-card:hover::before {
-    opacity: 0.55;
-}
-
-/* (혹시 폴더 카드 내부에 img를 직접 넣는 경우 대비) */
-.folder-card img {
+/* SVG base */
+.folder-card .folder-svg {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     display: block;
-}
 
-/* =========================================
-   ✅ 폴더 본체: 미세 패턴(그리드 + 노이즈)
-   - 폴더 내부가 비어보이지 않게 고급스럽게
-========================================= */
-.folder-body {
-    position: relative;
-    /* pseudo 요소를 올리기 위해 */
-}
+    transform: scale(var(--svg-scale)) translateY(var(--svg-translate-y));
+    transform-origin: var(--svg-origin-x) var(--svg-origin-y);
+    transition: transform .25s ease, filter .25s ease;
+    will-change: transform, filter;
 
-/* 그리드 패턴 */
-.folder-body::before {
-    content: "";
-    position: absolute;
-    inset: 0;
+    /* ✅ SVG 자체는 pointer-events off (루트 viewport hover 방지) */
     pointer-events: none;
-
-    /* 미세 격자 + 대각선 하이라이트를 섞어 입체감 */
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.10), transparent 55%),
-        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.07), transparent 60%);
-    background-size:
-        18px 18px,
-        18px 18px,
-        100% 100%,
-        100% 100%;
-    background-position:
-        0 0,
-        0 0,
-        0 0,
-        0 0;
-
-    opacity: 0.55;
-    mix-blend-mode: overlay;
 }
 
-/* 노이즈(가짜) 패턴: repeating-radial로 살짝 거칠게 */
-.folder-body::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-
-    background-image:
-        repeating-radial-gradient(circle at 10% 20%,
-            rgba(255, 255, 255, 0.06) 0 1px,
-            transparent 1px 3px);
-    opacity: 0.10;
-    mix-blend-mode: soft-light;
+/* ✅ 실제 hit-test는 <use>가 담당
+   - <use>는 "그려진 폴더 모양" 기준으로 hit-test 됨 (투명 영역은 안 잡힘)
+*/
+.folder-card .folder-svg use {
+    pointer-events: visiblePainted;
 }
 
-/* 썸네일이 가장 아래에서 깔리고, 패턴은 위에 올라가야 함 */
-.folder-thumbnail {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
+/* ✅ Menu must remain clickable */
+.folder-card .folder-menu,
+.folder-card .menu-btn,
+.folder-card .menu-dropdown,
+.folder-card .menu-dropdown * {
+    pointer-events: auto;
 }
 
-/* 패턴 레이어가 썸네일 위로 올라오게 */
-.folder-body::before,
-.folder-body::after {
-    z-index: 1;
+/* --- ✅ Hover/Active: use 위에 있을 때만 효과 --- */
+@supports selector(:has(*)) {
+
+    .folder-card .folder-visual:has(.folder-svg use:hover) .folder-svg {
+        transform:
+            scale(var(--svg-scale)) translateY(var(--svg-translate-y)) translateY(var(--lift)) scale(var(--lift-scale));
+        filter:
+            drop-shadow(0 14px 32px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px var(--glow));
+    }
+
+    .folder-card .folder-visual:has(.folder-svg use:active) .folder-svg {
+        transform:
+            scale(var(--svg-scale)) translateY(var(--svg-translate-y)) translateY(var(--press-lift)) scale(var(--press-scale));
+        filter:
+            drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
+    }
 }
 
-/* 메뉴/탭과 겹침 방지 */
-.folder-card::before {
-    z-index: 2;
+/* Fallback (no :has): use:hover 기준으로만 */
+@supports not selector(:has(*)) {
+
+    .folder-card .folder-svg use:hover~* {
+        /* no-op, kept for clarity */
+    }
+
+    .folder-card .folder-svg use:hover {
+        /* fallback only: we can't style parent on hover reliably without :has */
+    }
 }
-
-/* =========================================
-   ✅ 폴더 귀(Tab) 크게 + 긴 제목 대응
-========================================= */
-
-/* 탭 자체를 더 크게 */
-.folder-tab {
-    top: -18px;
-    /* 위로 조금 더 */
-    left: 12px;
-
-    padding: 14px 22px;
-    /* ✅ 크게 */
-    border-radius: 14px 14px 10px 10px;
-
-    max-width: calc(100% - 16px);
-    /* ✅ 최대한 넓게 (메뉴 안쪽이라면 아래로 조정 가능) */
-}
-
-/* 제목도 커지고, 기본은 말줄임 */
-.folder-tab .folder-title {
-    font-size: 1.18rem;
-    font-weight: 800;
-    line-height: 1.2;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    /* ✅ 2줄까지 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    white-space: normal;
-}
-
-/* ✅ hover(또는 focus) 시 제목 전체가 보이도록 확장 */
-.folder-card:hover .folder-tab,
-.folder-tab:focus-within {
-    max-width: calc(100% - 12px);
-}
-
-/* hover 시 말줄임 해제(한 줄로 끝까지 보여주기) */
-.folder-card:hover .folder-tab .folder-title,
-.folder-tab:focus-within .folder-title {
-    overflow: visible;
-    text-overflow: clip;
-}
-
-/* 탭이 커졌으니 카드 상단에 살짝 여유 주기(시각 균형) */
-.folder-card {
-    margin-top: 14px;
-}
-
 
 /* =========================================================
-   [컴포넌트] ⋮ 메뉴(삭제 드롭다운)
-   - 폴더 귀와 z-index가 겹치지 않게 위계만 정리
+   Title (below)
 ========================================================= */
-.folder-menu {
-    position: absolute;
-    bottom: 12px;
-    right: 10px;
-    z-index: 40;
+.folder-title.folder-title-below {
+    margin: 0;
+    padding-top: 2px;
+    width: 100%;
+    text-align: center;
+
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.15;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.menu-btn {
+/* =========================================================
+   ⋮ menu / dropdown
+   - menu는 visual 위에서 위치 조절(translate)로 맞추기 쉬움
+========================================================= */
+.folder-card .folder-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(var(--menu-x), var(--menu-y));
+    z-index: 60;
+}
+
+.folder-card .menu-btn {
     background: transparent;
     border: none;
+    padding: 6px 8px;
     font-size: 20px;
+    line-height: 1;
     cursor: pointer;
-    color: #ffffff;
-    z-index: 50;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
 }
 
-.menu-dropdown {
+.folder-card .menu-dropdown {
     position: absolute;
-    bottom: 30px;
+    top: calc(100% + 6px);
     right: 0;
 
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 
     display: flex;
     flex-direction: column;
+    min-width: 120px;
+
+    z-index: 70;
 }
 
-.menu-dropdown button {
+.folder-card .menu-dropdown button {
     border: none;
     background: transparent;
     padding: 8px 12px;
@@ -367,50 +286,41 @@
     font-size: 14px;
 }
 
-.menu-dropdown button:hover {
-    background-color: #f0f0f0;
+.folder-card .menu-dropdown button:hover {
+    background: #f0f0f0;
 }
 
-/* 공통 유틸 */
 .hidden {
     display: none;
 }
 
 /* =========================================================
-   [테마] 공개 범위별 색상(변수만 변경)
-   - border/그림자/썸네일/탭/제목 glow가 한 번에 바뀜
+   Visibility theme (hover glow only)
 ========================================================= */
 .folder-card.folder-public {
-    --tabColor: rgba(0, 255, 220, 0.95);
-    --tabGlow: rgba(0, 180, 255, 0.45);
+    --glow: rgba(0, 255, 220, 0.42);
 }
 
 .folder-card.folder-friends {
-    --tabColor: rgba(190, 150, 255, 0.95);
-    --tabGlow: rgba(90, 200, 255, 0.35);
+    --glow: rgba(190, 150, 255, 0.42);
 }
 
 .folder-card.folder-private {
-    --tabColor: rgba(255, 140, 170, 0.85);
-    --tabGlow: rgba(255, 120, 160, 0.35);
+    --glow: rgba(255, 130, 160, 0.42);
 }
 
-
 /* =========================================================
-   [모달] 폴더 클릭 시 영화 리스트 팝업
+   Modal (folder movie list)
 ========================================================= */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
-
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-
     z-index: 1000;
     transition: opacity 0.3s ease;
 }
@@ -423,15 +333,12 @@
     background: #1c1c1c;
     color: #fff;
     border-radius: 16px;
-
     width: 80%;
     max-width: 800px;
     max-height: 80vh;
     overflow-y: auto;
-
     padding: 24px 32px;
     position: relative;
-
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     animation: modalFadeIn 0.3s ease;
 }
@@ -448,7 +355,6 @@
     }
 }
 
-/* 모달 닫기 버튼 */
 .close-btn {
     position: absolute;
     top: 16px;
@@ -465,17 +371,15 @@
     color: #ff5555;
 }
 
-/* 모달 제목 */
 #modal-folder-name {
     font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-weight: 800;
+    margin: 0 0 20px;
     border-bottom: 2px solid #ff4444;
     display: inline-block;
     padding-bottom: 6px;
 }
 
-/* 모달 내부 영화 그리드 */
 #modal-movie-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -483,7 +387,6 @@
     margin-top: 20px;
 }
 
-/* 모달 내부 영화 카드 */
 .movie-card {
     background: #2a2a2a;
     border-radius: 10px;
@@ -511,28 +414,22 @@
     color: #f0f0f0;
 }
 
-/* 모달 안 삭제(X) 버튼 */
 .delete-movie-btn {
     position: absolute;
     top: 8px;
     right: 8px;
-
     width: 26px;
     height: 26px;
     border-radius: 50%;
-
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.4);
     color: #fff;
-
     font-size: 16px;
     line-height: 24px;
     cursor: pointer;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     transition: background 0.25s ease, transform 0.2s ease;
     z-index: 5;
 }
@@ -542,18 +439,17 @@
     transform: scale(1.1);
 }
 
-/* 모달 스크롤바 */
 .modal-content::-webkit-scrollbar {
     width: 6px;
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-    background-color: #444;
+    background: #444;
     border-radius: 3px;
 }
 
 /* =========================================================
-   [섹션] 친구 폴더 영역(검색 UI 포함)
+   Friend folder section
 ========================================================= */
 .friendfolder {
     margin-top: 40px;
@@ -563,9 +459,9 @@
 
 .friend-folder-title {
     font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 16px;
-    color: #ffffff;
+    font-weight: 800;
+    margin: 0 0 16px;
+    color: #fff;
 }
 
 .friend-search-box {
@@ -579,17 +475,14 @@
     flex: 1;
     padding: 10px 14px;
     font-size: 0.95rem;
-
     border-radius: 999px;
     border: 1px solid rgba(0, 255, 255, 0.5);
     background: rgba(10, 10, 20, 0.9);
     color: #e5f9ff;
-
     outline: none;
     box-shadow:
         0 0 8px rgba(0, 255, 255, 0.4),
         inset 0 0 6px rgba(0, 0, 0, 0.7);
-
     transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
@@ -608,22 +501,18 @@
 #search-friend-folder-btn {
     padding: 10px 18px;
     font-size: 0.95rem;
-    font-weight: 600;
-
+    font-weight: 700;
     border-radius: 999px;
     border: 1px solid rgba(0, 255, 255, 0.7);
     background: radial-gradient(circle at 0% 0%, #00fff2 0%, #008cff 45%, #06142b 100%);
     color: #020b15;
-
     cursor: pointer;
     white-space: nowrap;
-
     text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
     box-shadow:
         0 0 12px rgba(0, 255, 255, 0.7),
         0 0 24px rgba(0, 140, 255, 0.5);
-
-    transition: transform 0.15s ease, box-shadow 0.25s ease, filter 0.25s ease, background 0.25s ease;
+    transition: transform .15s ease, box-shadow .25s ease, filter .25s ease;
 }
 
 #search-friend-folder-btn:hover {
@@ -645,4 +534,61 @@
     margin-top: 6px;
     font-size: 0.9rem;
     color: #b9fff7;
+}
+
+/* 가로만 스크롤, 세로 스크롤 절대 금지 */
+#folder-wrapper,
+#friend-folder-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* 카드/비주얼에서도 세로 스크롤 절대 금지 */
+.folder-card,
+.folder-card .folder-visual {
+    overflow-y: hidden;
+}
+
+/* ✅ 가로 스크롤은 유지, 스크롤바(막대)만 숨기기 */
+#folder-wrapper,
+#friend-folder-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* 옛 Edge/IE */
+}
+
+/* Chrome/Safari: 스크롤바 높이를 0으로 만들어서 완전 숨김 */
+#folder-wrapper::-webkit-scrollbar,
+#friend-folder-container::-webkit-scrollbar {
+    height: 0 !important;
+}
+
+.card-container {
+    overflow-y: hidden;
+}
+
+/* ✅ (확실) 폴더 슬라이더 영역의 스크롤바 전부 숨기기 */
+.card-container,
+.card-container * {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* old Edge/IE */
+}
+
+.card-container::-webkit-scrollbar,
+.card-container *::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    /* ✅ 이게 핵심 */
+}
+
+/* ✅ 그래도 공간이 남는 느낌 방지 */
+#folder-wrapper,
+#friend-folder-container {
+    overflow-y: hidden;
 }
