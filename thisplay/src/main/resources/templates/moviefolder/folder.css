@@ -1,7 +1,18 @@
-@import url("../commonCSS/base.css");
+@import url("./commonCSS/base.css");
 
+/* =========================================================
+   Folder page CSS (v3)
+   ✅ Hover hit-test fix (ONLY when mouse is on painted folder)
+   ✅ ⋮ menu follows the same "visual tuning" as the folder
+      (menu is positioned with translate variables)
+   ✅ Works well with your SVG that uses <symbol> + <use>
+========================================================= */
+
+/* =========================
+   Page wrapper
+========================= */
 .myfolder {
-    background-color: #000;
+    background: #000;
     color: #fff;
     width: 100%;
     max-width: 1600px;
@@ -13,10 +24,13 @@
 
 .folderlist {
     font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-weight: 700;
+    margin: 0 0 20px;
 }
 
+/* =========================
+   Slider container
+========================= */
 .card-container {
     position: relative;
     display: flex;
@@ -24,119 +38,38 @@
     width: 100%;
     margin-top: 16px;
     padding: 12px 80px 0;
+    /* arrows space */
     overflow-x: hidden;
     overflow-y: visible;
 }
 
-#folder-wrapper {
-    flex: 1;
+#folder-wrapper,
+#friend-folder-container {
     display: flex;
-    gap: 16px;
+    gap: 2px;
     overflow-x: auto;
-    overflow-y: visible;
     scroll-behavior: smooth;
     scrollbar-width: none;
 }
 
-#folder-wrapper::-webkit-scrollbar {
+#folder-wrapper::-webkit-scrollbar,
+#friend-folder-container::-webkit-scrollbar {
     display: none;
 }
 
-.folder-card {
-
-    /* 가로 폭 완전 고정 (JS CARD_WIDTH와 동일하게) */
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
-    flex: 0 0 150px;
-    /* flex 아이템도 150px로 고정 */
-    /* 기존 코드 유지 + 이 두 줄 추가/수정 */
-    margin-top: 8px;
-    margin-bottom: 12px;
-    transition:
-        margin-top 0.25s ease,
-        box-shadow 0.35s ease,
-        border-color 0.3s ease,
-        transform 0.3s ease;
-    /* transform은 일단 빼도 됨, 넣어도 됨 */
-    height: 240px;
-    border-radius: 18px;
-    background: rgba(20, 20, 30, 0.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow:
-        0 0 12px rgba(0, 255, 255, 0.25),
-        inset 0 0 20px rgba(255, 0, 255, 0.15);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    transition: transform 0.3s ease,
-        box-shadow 0.35s ease,
-        border-color 0.3s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.folder-card:hover {
-    margin-top: 0;
-    /* transform: translateY(-8px) scale(1.03); */
-    box-shadow:
-        0 0 30px rgba(0, 255, 255, 0.45),
-        0 0 50px rgba(255, 0, 255, 0.35),
-        inset 0 0 25px rgba(0, 255, 255, 0.25);
-    border-color: rgba(0, 255, 255, 0.6);
-}
-
-.folder-card img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-}
-
-.folder-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    background: linear-gradient(rgba(255, 255, 255, 0.35),
-            rgba(255, 255, 255, 0));
-    opacity: 0.35;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-
-.folder-card:hover::before {
-    opacity: 0.55;
-}
-
-.folder-thumbnail {
+#folder-wrapper {
     flex: 1;
-    width: 100%;
-    border-radius: 18px 18px 0 0;
-    overflow: hidden;
-    background: linear-gradient(135deg,
-            rgba(0, 255, 255, 0.15),
-            rgba(255, 0, 255, 0.15));
+    overflow-y: visible;
 }
 
-.folder-title {
-    width: 100%;
-    padding: 12px 0;
-    font-weight: 600;
-    text-align: center;
-    background: rgba(10, 10, 20, 0.7);
-    color: #b9fff7;
-    border-top: 1px solid rgba(0, 255, 255, 0.35);
-    border-radius: 0 0 18px 18px;
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
-    font-size: 1rem;
+#friend-folder-container {
+    margin-top: 12px;
+    padding: 4px 4px 10px;
 }
 
+/* =========================
+   Arrows
+========================= */
 .arrow {
     position: absolute;
     top: 50%;
@@ -146,13 +79,10 @@
     border: none;
     cursor: pointer;
     font-size: 3rem;
-    font-weight: bold;
+    font-weight: 800;
     padding: 0;
     line-height: 1;
-    transition:
-        color 0.25s ease,
-        text-shadow 0.3s ease,
-        transform 0.2s ease;
+    transition: color .25s ease, text-shadow .3s ease, transform .2s ease;
     z-index: 20;
 }
 
@@ -173,33 +103,181 @@
     transform: translateY(-50%) scale(1.1);
 }
 
-.folder-menu {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
+/* =========================================================
+   Folder card (SVG)
+========================================================= */
+.folder-card {
+    /* ====== size ====== */
+    --folder-w: 340px;
+    --folder-h: 260px;
 
-.menu-btn {
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #ffffff;
-    z-index: 50;
-}
+    /* ====== visual tuning (SVG is scaled/translated) ====== */
+    --svg-scale: 1.28;
+    --svg-translate-y: 20px;
+    --svg-origin-x: 50%;
+    --svg-origin-y: 45%;
 
-.menu-dropdown {
-    position: absolute;
-    bottom: 30px;
-    right: 0;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* ====== interaction tuning ====== */
+    --lift: -6px;
+    --lift-scale: 1.02;
+    --press-lift: -2px;
+    --press-scale: 0.99;
+
+    /* hover glow (visibility class overrides) */
+    --glow: rgba(0, 255, 220, 0.35);
+
+    /* ====== ⋮ menu position (relative to top-right of visual box) ======
+     X는 보통 음수(왼쪽), Y는 양수(아래)로 두면 탭 위쪽에 잘 붙음 */
+    --menu-x: -65px;
+    --menu-y: 70px;
+
+    width: var(--folder-w);
+    flex: 0 0 var(--folder-w);
+
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 0px;
+    /* folder ↔ title */
+    overflow: visible;
+    /* dropdown visible */
 }
 
-.menu-dropdown button {
+/* Visual area: IMPORTANT
+   - pointer-events: none to prevent "empty card area" hover/click
+   - enable pointer events only on the actual painted folder (SVG/use) and menu
+*/
+.folder-card .folder-visual {
+    position: relative;
+    width: 100%;
+    height: var(--folder-h);
+    overflow: visible;
+
+    /* ✅ 핵심: 빈 사각형 영역이 hover/click을 먹지 못하게 */
+    pointer-events: none;
+}
+
+/* SVG base */
+.folder-card .folder-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    transform: scale(var(--svg-scale)) translateY(var(--svg-translate-y));
+    transform-origin: var(--svg-origin-x) var(--svg-origin-y);
+    transition: transform .25s ease, filter .25s ease;
+    will-change: transform, filter;
+
+    /* ✅ SVG 자체는 pointer-events off (루트 viewport hover 방지) */
+    pointer-events: none;
+}
+
+/* ✅ 실제 hit-test는 <use>가 담당
+   - <use>는 "그려진 폴더 모양" 기준으로 hit-test 됨 (투명 영역은 안 잡힘)
+*/
+.folder-card .folder-svg use {
+    pointer-events: visiblePainted;
+}
+
+/* ✅ Menu must remain clickable */
+.folder-card .folder-menu,
+.folder-card .menu-btn,
+.folder-card .menu-dropdown,
+.folder-card .menu-dropdown * {
+    pointer-events: auto;
+}
+
+/* --- ✅ Hover/Active: use 위에 있을 때만 효과 --- */
+@supports selector(:has(*)) {
+
+    .folder-card .folder-visual:has(.folder-svg use:hover) .folder-svg {
+        transform:
+            scale(var(--svg-scale)) translateY(var(--svg-translate-y)) translateY(var(--lift)) scale(var(--lift-scale));
+        filter:
+            drop-shadow(0 14px 32px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px var(--glow));
+    }
+
+    .folder-card .folder-visual:has(.folder-svg use:active) .folder-svg {
+        transform:
+            scale(var(--svg-scale)) translateY(var(--svg-translate-y)) translateY(var(--press-lift)) scale(var(--press-scale));
+        filter:
+            drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
+    }
+}
+
+/* Fallback (no :has): use:hover 기준으로만 */
+@supports not selector(:has(*)) {
+
+    .folder-card .folder-svg use:hover~* {
+        /* no-op, kept for clarity */
+    }
+
+    .folder-card .folder-svg use:hover {
+        /* fallback only: we can't style parent on hover reliably without :has */
+    }
+}
+
+/* =========================================================
+   Title (below)
+========================================================= */
+.folder-title.folder-title-below {
+    margin: 0;
+    padding-top: 2px;
+    width: 100%;
+    text-align: center;
+
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.15;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================================================
+   ⋮ menu / dropdown
+   - menu는 visual 위에서 위치 조절(translate)로 맞추기 쉬움
+========================================================= */
+.folder-card .folder-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(var(--menu-x), var(--menu-y));
+    z-index: 60;
+}
+
+.folder-card .menu-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 8px;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+}
+
+.folder-card .menu-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+
+    z-index: 70;
+}
+
+.folder-card .menu-dropdown button {
     border: none;
     background: transparent;
     padding: 8px 12px;
@@ -208,18 +286,35 @@
     font-size: 14px;
 }
 
-.menu-dropdown button:hover {
-    background-color: #f0f0f0;
+.folder-card .menu-dropdown button:hover {
+    background: #f0f0f0;
 }
 
 .hidden {
     display: none;
 }
 
+/* =========================================================
+   Visibility theme (hover glow only)
+========================================================= */
+.folder-card.folder-public {
+    --glow: rgba(0, 255, 220, 0.42);
+}
+
+.folder-card.folder-friends {
+    --glow: rgba(190, 150, 255, 0.42);
+}
+
+.folder-card.folder-private {
+    --glow: rgba(255, 130, 160, 0.42);
+}
+
+/* =========================================================
+   Modal (folder movie list)
+========================================================= */
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.7);
@@ -260,39 +355,6 @@
     }
 }
 
-/* 🎬 폴더 모달 영화 카드 삭제 버튼 */
-.delete-movie-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #fff;
-
-    font-size: 16px;
-    line-height: 24px;
-    cursor: pointer;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    transition: background 0.25s ease, transform 0.2s ease;
-    z-index: 5;
-}
-
-.delete-movie-btn:hover {
-    background: rgba(255, 80, 80, 0.9);
-    transform: scale(1.1);
-}
-
-
-/* 닫기 버튼 */
 .close-btn {
     position: absolute;
     top: 16px;
@@ -311,8 +373,8 @@
 
 #modal-folder-name {
     font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-weight: 800;
+    margin: 0 0 20px;
     border-bottom: 2px solid #ff4444;
     display: inline-block;
     padding-bottom: 6px;
@@ -352,34 +414,56 @@
     color: #f0f0f0;
 }
 
+.delete-movie-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.25s ease, transform 0.2s ease;
+    z-index: 5;
+}
+
+.delete-movie-btn:hover {
+    background: rgba(255, 80, 80, 0.9);
+    transform: scale(1.1);
+}
+
 .modal-content::-webkit-scrollbar {
     width: 6px;
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-    background-color: #444;
+    background: #444;
     border-radius: 3px;
 }
 
-/* ================================
-   👥 친구 폴더 섹션
-================================ */
-
+/* =========================================================
+   Friend folder section
+========================================================= */
 .friendfolder {
     margin-top: 40px;
     padding: 24px 20px 10px;
     border-top: 1px solid rgba(0, 255, 255, 0.2);
 }
 
-/* 제목 (내 폴더 .folderlist 와 느낌 맞추기) */
 .friend-folder-title {
     font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 16px;
-    color: #ffffff;
+    font-weight: 800;
+    margin: 0 0 16px;
+    color: #fff;
 }
 
-/* 검색 박스 전체 라인 */
 .friend-search-box {
     display: flex;
     align-items: center;
@@ -387,26 +471,19 @@
     margin-bottom: 12px;
 }
 
-/* 닉네임 입력창 */
 #friend-nickname {
     flex: 1;
     padding: 10px 14px;
     font-size: 0.95rem;
-
     border-radius: 999px;
     border: 1px solid rgba(0, 255, 255, 0.5);
     background: rgba(10, 10, 20, 0.9);
     color: #e5f9ff;
-
     outline: none;
     box-shadow:
         0 0 8px rgba(0, 255, 255, 0.4),
         inset 0 0 6px rgba(0, 0, 0, 0.7);
-
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
 #friend-nickname::placeholder {
@@ -421,30 +498,21 @@
         0 0 20px rgba(0, 180, 255, 0.5);
 }
 
-/* 🔍 친구 검색 버튼 (네온 스타일) */
 #search-friend-folder-btn {
     padding: 10px 18px;
     font-size: 0.95rem;
-    font-weight: 600;
-
+    font-weight: 700;
     border-radius: 999px;
     border: 1px solid rgba(0, 255, 255, 0.7);
     background: radial-gradient(circle at 0% 0%, #00fff2 0%, #008cff 45%, #06142b 100%);
     color: #020b15;
-
     cursor: pointer;
     white-space: nowrap;
-
     text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
     box-shadow:
         0 0 12px rgba(0, 255, 255, 0.7),
         0 0 24px rgba(0, 140, 255, 0.5);
-
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.25s ease,
-        filter 0.25s ease,
-        background 0.25s ease;
+    transition: transform .15s ease, box-shadow .25s ease, filter .25s ease;
 }
 
 #search-friend-folder-btn:hover {
@@ -462,101 +530,235 @@
         0 0 16px rgba(0, 140, 255, 0.6);
 }
 
-/* 검색 결과 메시지 */
 #friend-folder-result {
     margin-top: 6px;
     font-size: 0.9rem;
     color: #b9fff7;
 }
 
-/* 친구 폴더 카드 컨테이너 – 내 폴더랑 레이아웃 통일 */
+/* 가로만 스크롤, 세로 스크롤 절대 금지 */
+#folder-wrapper,
 #friend-folder-container {
-    margin-top: 12px;
-    display: flex;
-    gap: 16px;
     overflow-x: auto;
-    padding: 4px 4px 10px;
+    overflow-y: hidden;
+}
 
-    scroll-behavior: smooth;
+/* 카드/비주얼에서도 세로 스크롤 절대 금지 */
+.folder-card,
+.folder-card .folder-visual {
+    overflow-y: hidden;
+}
+
+/* ✅ 가로 스크롤은 유지, 스크롤바(막대)만 숨기기 */
+#folder-wrapper,
+#friend-folder-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+
     scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* 옛 Edge/IE */
 }
 
+/* Chrome/Safari: 스크롤바 높이를 0으로 만들어서 완전 숨김 */
+#folder-wrapper::-webkit-scrollbar,
 #friend-folder-container::-webkit-scrollbar {
-    display: none;
+    height: 0 !important;
 }
 
-/* ===========================
-   🌐 전체공개 폴더 (PUBLIC)
-=========================== */
+.card-container {
+    overflow-y: hidden;
+}
+
+/* ✅ (확실) 폴더 슬라이더 영역의 스크롤바 전부 숨기기 */
+.card-container,
+.card-container * {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* old Edge/IE */
+}
+
+.card-container::-webkit-scrollbar,
+.card-container *::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    /* ✅ 이게 핵심 */
+}
+
+/* ✅ 그래도 공간이 남는 느낌 방지 */
+#folder-wrapper,
+#friend-folder-container {
+    overflow-y: hidden;
+}
+
+.folder-card {
+    /* 기본값 */
+    --folder-back: #475569;
+    --folder-front: #94a3b8;
+}
+
+/* 전체공개: 블루 */
+.folder-card.folder-public {
+    --folder-back: #1d4ed8;
+    --folder-front: #60a5fa;
+}
+
+/* 친구공개: 틸 + 살짝 부드럽게 */
+.folder-card.folder-friends {
+    --folder-back: #0f766e;
+    --folder-front: #5eead4;
+}
+
+/* 개인: 로즈(너무 빨갛지 않게) */
+.folder-card.folder-private {
+    --folder-back: #be123c;
+    --folder-front: #fb7185;
+}
+
 
 .folder-card.folder-public {
-    border-color: rgba(0, 255, 220, 0.9);
-    box-shadow:
-        0 0 18px rgba(0, 255, 220, 0.7),
-        0 0 32px rgba(0, 140, 255, 0.6),
-        inset 0 0 22px rgba(0, 255, 220, 0.35);
+    --folder-ear: rgba(180, 220, 255, 0.55);
 }
-
-.folder-card.folder-public .folder-thumbnail {
-    background: linear-gradient(135deg,
-            rgba(0, 255, 220, 0.3),
-            rgba(0, 140, 255, 0.45));
-}
-
-.folder-card.folder-public .folder-title {
-    color: #cfffff;
-    text-shadow:
-        0 0 8px rgba(0, 255, 220, 0.9),
-        0 0 16px rgba(0, 180, 255, 0.8);
-}
-
-/* ===========================
-   🫂 친구공개 폴더 (FRIENDS)
-=========================== */
 
 .folder-card.folder-friends {
-    border-color: rgba(190, 150, 255, 0.9);
-    box-shadow:
-        0 0 18px rgba(180, 130, 255, 0.75),
-        0 0 30px rgba(80, 190, 255, 0.55),
-        inset 0 0 22px rgba(190, 140, 255, 0.4);
+    --folder-ear: rgba(190, 160, 255, 0.55);
 }
-
-.folder-card.folder-friends .folder-thumbnail {
-    background: linear-gradient(135deg,
-            rgba(80, 190, 255, 0.25),
-            rgba(190, 140, 255, 0.65));
-}
-
-.folder-card.folder-friends .folder-title {
-    color: #efe2ff;
-    text-shadow:
-        0 0 8px rgba(190, 140, 255, 0.95),
-        0 0 16px rgba(90, 200, 255, 0.7);
-}
-
-
-/* ===========================
-   🔒 비공개 폴더 (PRIVATE)
-=========================== */
 
 .folder-card.folder-private {
-    border-color: rgba(255, 140, 170, 0.7);
-    box-shadow:
-        0 0 14px rgba(255, 120, 160, 0.5),
-        0 0 26px rgba(110, 20, 60, 0.6),
-        inset 0 0 18px rgba(255, 120, 170, 0.35);
+    --folder-ear: rgba(255, 200, 160, 0.5);
 }
 
-.folder-card.folder-private .folder-thumbnail {
-    background: linear-gradient(135deg,
-            rgba(255, 160, 190, 0.28),
-            rgba(110, 30, 70, 0.65));
+.folder-card.folder-public {
+    --folder-back: #1d4ed8;
+    --folder-front: #60a5fa;
+
+    /* 귀는 front보다 살짝만 밝게 */
+    --folder-ear: rgba(147, 197, 253, 0.28);
 }
 
-.folder-card.folder-private .folder-title {
-    color: #ffd7e6;
-    text-shadow:
-        0 0 6px rgba(255, 150, 190, 0.8),
-        0 0 12px rgba(120, 20, 60, 0.7);
+.folder-card.folder-public {
+    --folder-back: #1d4ed8;
+    --folder-front: #60a5fa;
+    --folder-ear: #93c5fd;
+    /* 귀만 살짝 밝게 */
+}
+
+.folder-card.folder-friends {
+    --folder-back: #0f766e;
+    --folder-front: #5eead4;
+    --folder-ear: #a78bfa;
+    /* 보라 '끼'는 귀로 */
+}
+
+.folder-card.folder-private {
+    --folder-back: #be123c;
+    --folder-front: #fb7185;
+    --folder-ear: #fecaca;
+    /* 따뜻한 톤 */
+}
+
+/* 바디는 통일 */
+.folder-card {
+    --folder-base: #6aaefc;
+    /* 너가 원하는 고정 색으로 */
+    --folder-back: var(--folder-base);
+    --folder-front: var(--folder-base);
+
+    /* 귀 기본값 */
+    --folder-ear: rgba(255, 255, 255, 0.25);
+}
+
+/* 공개범위별로 귀만 변경 */
+.folder-card.folder-public {
+    --folder-ear: rgba(147, 197, 253, 0.55);
+}
+
+/* blue */
+.folder-card.folder-friends {
+    --folder-ear: rgba(167, 139, 250, 0.55);
+}
+
+/* purple */
+.folder-card.folder-private {
+    --folder-ear: rgba(253, 186, 116, 0.50);
+}
+
+/* warm */
+
+
+/* 바디는 무조건 통일 */
+.folder-card {
+    --folder-body: #6aaefc;
+    /* 원하는 공통 바디색 */
+    --folder-back-grad-top: rgba(255, 255, 255, 0.20);
+    --folder-back-grad-bottom: rgba(0, 0, 0, 0.22);
+}
+
+/* 귀만 공개범위별 변경 */
+.folder-card.folder-public {
+    --folder-ear: rgba(147, 197, 253, 0.70);
+}
+
+.folder-card.folder-friends {
+    --folder-ear: rgba(167, 139, 250, 0.70);
+}
+
+.folder-card.folder-private {
+    --folder-ear: rgba(253, 186, 116, 0.70);
+}
+
+/* 바디는 공통 */
+.folder-card {
+    --folder-body: #6aaefc;
+    --folder-body-light: #8bbcff;
+}
+
+/* ✅ tab(귀) 색만 공개범위별 변경 */
+.folder-card.folder-public {
+    --folder-ear: rgba(147, 197, 253, 0.75);
+}
+
+/* 파랑 */
+.folder-card.folder-friends {
+    --folder-ear: rgba(167, 139, 250, 0.75);
+}
+
+/* 보라 */
+.folder-card.folder-private {
+    --folder-ear: rgba(253, 186, 116, 0.75);
+}
+
+/* 주황/피치 */
+
+
+/* 폴더 기본 바디 색(모두 동일) */
+.folder-card {
+    --folder-body: #6aaefc;
+    --folder-body-light: #8bbcff;
+
+    /* 귀(tab) 기본값 */
+    --folder-ear: rgba(147, 197, 253, 0.55);
+
+    /* 너가 넣은 하단 라인(바) 없애기: barGrad를 투명으로 */
+    --folder-bar-grad-top: rgba(255, 255, 255, 0);
+    --folder-bar-grad-bottom: rgba(0, 0, 0, 0);
+}
+
+/* 전체공개: 시원한 하늘색 */
+.folder-card.folder-public {
+    --folder-ear: rgba(122, 212, 248, 0.65);
+}
+
+/* 친구공개: 민트+보라 느낌(너가 원하던 보라 기운) */
+.folder-card.folder-friends {
+    --folder-ear: rgba(120, 240, 210, 0.60);
+    /* 보라 “기운” 살짝 */
+    /* 필요하면 아래로 교체: rgba(176, 80, 212, 0.45) */
+}
+
+/* 개인(비공개): 너무 쎄지 않게 로즈 톤 */
+.folder-card.folder-private {
+    --folder-ear: rgba(248, 95, 96, 0.45);
 }

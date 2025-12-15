@@ -10,42 +10,187 @@ document.addEventListener("DOMContentLoaded", async () => {
     const folderWrapper = document.getElementById("folder-wrapper");
     const leftArrow = document.getElementById("left-arrow");
     const rightArrow = document.getElementById("right-arrow");
+
     const friendFolderWrapper = document.getElementById("friend-folder-container");
     const friendLeftArrow = document.getElementById("friend-left-arrow");
     const friendRightArrow = document.getElementById("friend-right-arrow");
     const friendInput = document.getElementById("friend-nickname");
 
-    const CARD_WIDTH = 150;
-    const GAP = 16;
+    const CARD_WIDTH = 360;
+    const GAP = 8;
     const ITEM_WIDTH = CARD_WIDTH + GAP;
     const MOVE_COUNT = 5;
-    const MOVE_AMOUNT = ITEM_WIDTH * MOVE_COUNT; // 한 번 누르면 5칸 이동
+    const MOVE_AMOUNT = ITEM_WIDTH * MOVE_COUNT;
+
+    // ✅ 폴더 열기(프로젝트에 맞게 라우트만 바꾸면 됨)
+    function handleFolderOpen(folderId, isMyFolder) {
+        // 1) 혹시 기존에 모달/상세열기 함수가 전역으로 있으면 그걸 우선 사용
+        const fn =
+            window.openFolderModal ||
+            window.openFolder ||
+            window.showFolderMovies;
+
+        if (typeof fn === "function") {
+            return fn(folderId, isMyFolder);
+        }
+
+        // 2) 없으면 기본 이동 (여기 경로만 네 프로젝트 라우트에 맞게 수정)
+        location.href = `/folders/${folderId}`;
+    }
+
+    // ✅ "카드"가 아니라 "폴더"만 클릭되게: 컨테이너에 이벤트 1번만 등록
+    function bindFolderOpenDelegation(container, isMyFolder) {
+        if (!container) return;
+
+        // 중복 바인딩 방지
+        if (container.dataset.folderOpenBound === "1") return;
+        container.dataset.folderOpenBound = "1";
+
+        container.addEventListener("click", (e) => {
+            // ⋮ 메뉴/드롭다운 영역 클릭은 무시
+            if (e.target.closest(".folder-menu")) return;
+
+            // ✅ 폴더 그림(SVG) 또는 제목(탭) 클릭일 때만 열기
+            const onSvg = e.target.closest(".folder-svg");
+            const onTitle = e.target.closest(".folder-title");
+            if (!onSvg && !onTitle) return;
+
+            const card = e.target.closest(".folder-card");
+            if (!card) return;
+
+            const folderId = card.dataset.folderId;
+            if (!folderId) return;
+
+            handleFolderOpen(folderId, isMyFolder);
+        });
+    }
+
+
+    // ✅ 클릭 위임 바인딩(딱 1번만)
+    bindFolderOpenDelegation(folderWrapper, true);
+    bindFolderOpenDelegation(friendFolderWrapper, false);
+
+    // injectFolderSpriteOnce(); // (removed) inline SVG is used per card
 
     function getVisibilityClass(visibility) {
-        if (visibility === "PUBLIC") return "folder-public";
-        if (visibility === "FRIENDS") return "folder-friends";
-        if (visibility === "PRIVATE") return "folder-private";
+        const v = (visibility || "").toUpperCase();
+        if (v === "PUBLIC") return "folder-public";
+        if (v === "FRIENDS" || v === "FRIEND") return "folder-friends";
+        if (v === "PRIVATE") return "folder-private";
         return "";
     }
 
-    // ✅ 내 폴더 / 친구 폴더 공통 카드 HTML 생성 함수
+    function getTabPalette(visibility) {
+        const v = (visibility || "").toUpperCase();
+
+        // tabColor: 탭 메인색 / tabDark: 탭 그라데이션 시작(더 진하게)
+        if (v === "PRIVATE") {
+            return { tabColor: "#E24A4A", tabDark: "#7A1212" }; // 개인: 딥레드
+        }
+        if (v === "FRIENDS" || v === "FRIEND") {
+            return { tabColor: "#A855F7", tabDark: "#3B0A73" }; // 친구: 딥퍼플
+        }
+        return { tabColor: "#60A5FA", tabDark: "#0B2A5B" };     // 전체: 딥블루
+    }
+
+    // ✅ 카드 HTML (폴더 모양 = SVG) — per-card inline SVG (tab 색 JS로 확실히 적용)
     function createFolderCardHTML(folder, isMyFolder) {
         const visibilityClass = getVisibilityClass(folder.visibility);
+        const bodyColor = "#FFC000";  // 사이버펑크 머스타드(바디)
+        const bodyGlow = "#FFC000";   // 상단 하이라이트
+        const { tabColor, tabDark } = getTabPalette(folder.visibility);
+        const uid = `f${folder.folderId}`;
 
         return `
-            <div class="folder-card ${visibilityClass}" data-folder-id="${folder.folderId}">
-                <div class="folder-thumbnail"></div>
-                <p class="folder-title">${folder.folderName}</p>
+    <div class="folder-card ${visibilityClass}"
+         data-folder-id="${folder.folderId}"
+         data-visibility="${folder.visibility}">
 
-                <div class="folder-menu">
-                    <button class="menu-btn${isMyFolder ? "" : " hidden"}">⋮</button>
-                    <div class="menu-dropdown hidden">
-                        <button class="delete-btn${isMyFolder ? "" : " hidden"}">삭제</button>
-                    </div>
-                </div>
-            </div>
-        `;
+      <div class="folder-visual">
+        <svg class="folder-svg" viewBox="0 0 1080 1080" aria-hidden="true" role="img">
+          <defs>
+            <filter id="glow-${uid}" x="-100%" y="-100%" width="250%" height="250%">
+              <feGaussianBlur stdDeviation="7" result="coloredBlur" />
+              <feOffset dx="0" dy="0" result="offsetblur"></feOffset>
+              <feFlood flood-color="black" flood-opacity="0.4"></feFlood>
+              <feComposite in2="offsetblur" operator="in"></feComposite>
+              <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+
+            <!-- back(귀->바디) -->
+            <linearGradient id="backTabGrad-${uid}" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                <!-- ✅ tab 단색 -->
+                <stop offset="0%"  stop-color="${tabColor}"/>
+                <stop offset="10%" stop-color="${tabColor}"/>
+
+                <!-- ✅ tab → body 자연 연결 -->
+                <stop offset="24%" stop-color="${bodyColor}"/>
+                <stop offset="100%" stop-color="${bodyColor}"/>
+            </linearGradient>
+
+            <linearGradient id="bodyGrad-${uid}" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="${bodyGlow}"/>
+              <stop offset="35%" stop-color="${bodyColor}"/>
+              <stop offset="100%" stop-color="${bodyColor}"/>
+            </linearGradient>
+
+            <!-- back overlay -->
+            <linearGradient id="backGrad-${uid}" x1="533.84" y1="50" x2="533.84" y2="269.59" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="rgba(255,255,255,0.18)" />
+              <stop offset="1" stop-color="rgba(0,0,0,0.28)" />
+            </linearGradient>
+
+            <!-- front overlay -->
+            <linearGradient id="frontGrad-${uid}" x1="128.32" y1="514.49" x2="933.02" y2="514.49" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#000" />
+              <stop offset=".05" stop-color="#787878" stop-opacity=".53" />
+              <stop offset=".32" stop-color="#fff" stop-opacity="0" />
+              <stop offset=".68" stop-color="#fff" stop-opacity="0" />
+              <stop offset=".95" stop-color="#878787" stop-opacity=".47" />
+              <stop offset="1" stop-color="#000" />
+            </linearGradient>
+
+            <!-- front seam 제거(페이드) -->
+            <linearGradient id="frontFadeGrad-${uid}" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="black" stop-opacity="0"/>
+              <stop offset="30%" stop-color="white" stop-opacity="1"/>
+              <stop offset="100%" stop-color="white" stop-opacity="1"/>
+            </linearGradient>
+
+            <mask id="frontFadeMask-${uid}" maskUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="1080" height="1080" fill="url(#frontFadeGrad-${uid})"/>
+            </mask>
+          </defs>
+
+          <g filter="url(#glow-${uid})">
+            <!-- back -->
+            <path d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z" fill="url(#backTabGrad-${uid})"/>
+            <path d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z" fill="url(#backGrad-${uid})" opacity="0.45"/>
+
+            <!-- front (mask로 위 경계 부드럽게) -->
+            <g mask="url(#frontFadeMask-${uid})">
+              <path d="M200.95,241.68h660.72c34.13,0,61.84,27.71,61.84,61.84v424.77c0,32.56-26.44,59-59,59H210.18c-36.43,0-66-29.57-66-66v-422.84c0-31.33,25.44-56.77,56.77-56.77Z" fill="url(#bodyGrad-${uid})"/>
+              <path d="M200.95,241.68h660.72c34.13,0,61.84,27.71,61.84,61.84v424.77c0,32.56-26.44,59-59,59H210.18c-36.43,0-66-29.57-66-66v-422.84c0-31.33,25.44-56.77,56.77-56.77Z" fill="url(#frontGrad-${uid})" opacity="0.10"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="folder-menu">
+          <button class="menu-btn${isMyFolder ? "" : " hidden"}" type="button">⋮</button>
+          <div class="menu-dropdown hidden">
+            <button class="delete-btn${isMyFolder ? "" : " hidden"}" type="button">삭제</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="folder-title folder-title-below">${folder.folderName}</p>
+    </div>
+  `;
     }
+
 
     /* 📌 내 폴더 목록 가져오기 */
     async function loadMyFolders() {
@@ -61,10 +206,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            folderWrapper.innerHTML = folders
-                .map((f) => createFolderCardHTML(f, true))
-                .join("");
-
+            folderWrapper.innerHTML = folders.map((f) => createFolderCardHTML(f, true)).join("");
             attachMenuEvents(true);
         } catch (err) {
             console.error("❌ 폴더 불러오기 실패:", err);
@@ -86,9 +228,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const friendContainer = document.getElementById("friend-folder-container");
             const msg = document.getElementById("friend-folder-result");
 
-            console.log("🧩 friendContainer =", friendContainer);
-            console.log("🧩 msg =", msg);
-
             if (!friendContainer) {
                 console.warn("⚠ friend-folder-container 요소를 찾지 못했습니다.");
                 return;
@@ -106,13 +245,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            friendContainer.innerHTML = folders
-                .map((f) => createFolderCardHTML(f, false))
-                .join("");
-
-            // ▶ 친구 폴더: 삭제 / 메뉴 비활성화
+            friendContainer.innerHTML = folders.map((f) => createFolderCardHTML(f, false)).join("");
             attachMenuEvents(false);
-
             if (msg) {
                 msg.textContent = `${nickname}님의 폴더 ${folders.length}개를 불러왔습니다.`;
                 msg.style.color = "green";
@@ -129,13 +263,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 🔍 친구 폴더 검색 공통 함수
     async function runFriendSearch() {
-        console.log("✅ runFriendSearch 호출");
-
         const input = document.getElementById("friend-nickname");
-        console.log("🔍 friend-nickname input =", input);
-
         const nickname = input?.value.trim();
-        console.log("🔍 입력된 nickname =", nickname);
 
         if (!nickname) {
             const msg = document.getElementById("friend-folder-result");
@@ -143,50 +272,46 @@ document.addEventListener("DOMContentLoaded", async () => {
                 msg.textContent = "닉네임을 입력해주세요.";
                 msg.style.color = "red";
             }
-            console.log("⚠ 닉네임이 비어 있음");
             return;
         }
 
         await loadFriendFolders(nickname);
     }
 
-
     // ⭐ 친구 폴더 검색 버튼 이벤트
     const searchBtn = document.getElementById("search-friend-folder-btn");
-    console.log("🔍 searchBtn =", searchBtn); // ⭐ 디버그 추가
-
     if (searchBtn) {
         searchBtn.addEventListener("click", async () => {
-            console.log("✅ 검색 버튼 클릭 이벤트 진입");
             await runFriendSearch();
         });
-    } else {
-        console.warn("⚠ search-friend-folder-btn 요소를 찾지 못했습니다.");
     }
 
     // 🔹 Enter 키로도 검색
     if (friendInput) {
         friendInput.addEventListener("keydown", async (e) => {
             if (e.key === "Enter") {
-                e.preventDefault(); // 폼 제출/새로고침 방지
-                console.log("✅ Enter 키 입력 – 친구 검색 실행");
+                e.preventDefault();
                 await runFriendSearch();
             }
         });
     }
-    // ✅ ⋮ 버튼 및 삭제 버튼 이벤트 연결 함수
+
+    // ✅ 바깥 클릭 이벤트 중복 등록 방지
+    let outsideBound = false;
+
     function attachMenuEvents(isMyFolder = true) {
-        // 친구 폴더면 삭제 버튼 숨기기
-        if (!isMyFolder) {
-            document.querySelectorAll(".delete-btn").forEach(btn => btn.classList.add("hidden"));
-        }
 
         document.querySelectorAll(".menu-btn").forEach((btn) => {
             btn.addEventListener("click", (e) => {
-                if (!isMyFolder) return; // 친구 폴더는 메뉴 안 열림
+                if (!isMyFolder) return;
                 e.stopPropagation();
-                const dropdown = e.currentTarget.nextElementSibling;
-                dropdown.classList.toggle("hidden");
+
+                // 다른 메뉴 닫기
+                document.querySelectorAll(".menu-dropdown").forEach((m) => m.classList.add("hidden"));
+
+                const menu = e.currentTarget.closest(".folder-menu");
+                const dropdown = menu?.querySelector(".menu-dropdown");
+                dropdown?.classList.toggle("hidden");
             });
         });
 
@@ -201,9 +326,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (confirm(`'${folderName}' 폴더를 삭제하시겠습니까?`)) {
                         try {
                             const res = await api.delete(`/api/folders/${folderId}`, {
-                                headers: {
-                                    Authorization: `Bearer ${getToken()}`,
-                                },
+                                headers: { Authorization: `Bearer ${getToken()}` },
                             });
 
                             if (res.status === 200) {
@@ -221,48 +344,37 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         }
 
-        // 바깥 클릭 시 메뉴 닫기
-        document.addEventListener("click", (e) => {
-            if (!e.target.closest(".folder-menu")) {
-                document.querySelectorAll(".menu-dropdown").forEach((menu) => menu.classList.add("hidden"));
-            }
-        });
+        if (!outsideBound) {
+            outsideBound = true;
+            document.addEventListener("click", (e) => {
+                if (!e.target.closest(".folder-menu")) {
+                    document.querySelectorAll(".menu-dropdown").forEach((menu) => menu.classList.add("hidden"));
+                }
+            });
+        }
     }
 
     // ✅ 좌우 스크롤
     leftArrow?.addEventListener("click", () => {
-        folderWrapper.scrollBy({
-            left: -MOVE_AMOUNT,
-            behavior: "smooth",
-        });
+        folderWrapper.scrollBy({ left: -MOVE_AMOUNT, behavior: "smooth" });
     });
 
     rightArrow?.addEventListener("click", () => {
-        folderWrapper.scrollBy({
-            left: MOVE_AMOUNT,
-            behavior: "smooth",
-        });
+        folderWrapper.scrollBy({ left: MOVE_AMOUNT, behavior: "smooth" });
     });
 
     // ✅ 친구 폴더 좌우 스크롤
     if (friendLeftArrow && friendFolderWrapper) {
         friendLeftArrow.addEventListener("click", () => {
-            friendFolderWrapper.scrollBy({
-                left: -MOVE_AMOUNT,
-                behavior: "smooth",
-            });
+            friendFolderWrapper.scrollBy({ left: -MOVE_AMOUNT, behavior: "smooth" });
         });
     }
 
     if (friendRightArrow && friendFolderWrapper) {
         friendRightArrow.addEventListener("click", () => {
-            friendFolderWrapper.scrollBy({
-                left: MOVE_AMOUNT,
-                behavior: "smooth",
-            });
+            friendFolderWrapper.scrollBy({ left: MOVE_AMOUNT, behavior: "smooth" });
         });
     }
-
 
     /* 폴더 생성 기능 */
     const form = document.getElementById("create-folder-form");
@@ -287,14 +399,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
 
                 const data = response.data;
-                console.log("✅ 폴더 생성 성공:", data);
-
                 resultText.textContent = `"${data.folderName}" 폴더가 생성되었습니다!`;
                 resultText.style.color = "green";
 
-                setTimeout(() => {
-                    resultText.textContent = "";
-                }, 5000);
+                setTimeout(() => (resultText.textContent = ""), 5000);
 
                 await loadMyFolders();
                 form.reset();
