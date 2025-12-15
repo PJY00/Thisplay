@@ -22,77 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const MOVE_COUNT = 5;
     const MOVE_AMOUNT = ITEM_WIDTH * MOVE_COUNT;
 
-    // ✅ (중요) SVG defs는 문서에 1번만 있어야 함 (id 충돌 방지)
-    function injectFolderSpriteOnce() {
-        if (document.getElementById("folderSprite")) return;
-
-        const sprite = document.createElement("div");
-        sprite.id = "folderSprite";
-        sprite.style.position = "absolute";
-        sprite.style.width = "0";
-        sprite.style.height = "0";
-        sprite.style.overflow = "hidden";
-
-        sprite.innerHTML = `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
-  <defs>
-    <filter id="glow" x="-100%" y="-100%" width="250%" height="250%">
-      <feGaussianBlur stdDeviation="7" result="coloredBlur" />
-      <feOffset dx="0" dy="0" result="offsetblur"></feOffset>
-      <feFlood flood-color="black" flood-opacity="0.4"></feFlood>
-      <feComposite in2="offsetblur" operator="in"></feComposite>
-      <feMerge>
-        <feMergeNode />
-        <feMergeNode in="SourceGraphic"></feMergeNode>
-      </feMerge>
-    </filter>
-
-    <clipPath id="mainMask">
-      <path d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z"/>
-    </clipPath>
-
-    <linearGradient id="backGrad" x1="533.84" y1="50" x2="533.84" y2="269.59" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fff" />
-      <stop offset="1" stop-color="#000" />
-    </linearGradient>
-
-    <linearGradient id="frontGrad" x1="128.32" y1="514.49" x2="933.02" y2="514.49" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#000" />
-      <stop offset=".05" stop-color="#787878" stop-opacity=".53" />
-      <stop offset=".32" stop-color="#fff" stop-opacity="0" />
-      <stop offset=".68" stop-color="#fff" stop-opacity="0" />
-      <stop offset=".95" stop-color="#878787" stop-opacity=".47" />
-      <stop offset="1" stop-color="#000" />
-    </linearGradient>
-
-    <linearGradient id="barGrad" x1="532.72" y1="699.13" x2="532.72" y2="771.46" gradientUnits="userSpaceOnUse">
-      <stop offset=".35" stop-color="#000" stop-opacity="0" />
-      <stop offset=".52" stop-color="#fff" stop-opacity=".2" />
-      <stop offset=".7" stop-color="#000" stop-opacity="0" />
-    </linearGradient>
-    <linearGradient id="barGrad-2" y1="673.38" y2="745.7" xlink:href="#barGrad" />
-
-    <!-- ✅ 카드에서 재사용할 폴더 아이콘 -->
-    <symbol id="folderIcon" viewBox="0 0 1080 1080">
-      <g filter="url(#glow)">
-        <g clip-path="url(#mainMask)">
-          <path class="back" d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z" fill="#f85f60"/>
-          <path class="gradOverlay" d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z" fill="url(#backGrad)" opacity="0.97"/>
-          <path class="front" d="M200.95,241.68h660.72c34.13,0,61.84,27.71,61.84,61.84v424.77c0,32.56-26.44,59-59,59H210.18c-36.43,0-66-29.57-66-66v-422.84c0-31.33,25.44-56.77,56.77-56.77Z" fill="#f85f60"/>
-          <path class="gradOverlay" d="M200.95,241.68h660.72c34.13,0,61.84,27.71,61.84,61.84v424.77c0,32.56-26.44,59-59,59H210.18c-36.43,0-66-29.57-66-66v-422.84c0-31.33,25.44-56.77,56.77-56.77Z" fill="url(#frontGrad)" opacity="1"/>
-          <g opacity="0.3">
-            <rect x="136" y="724.45" width="800" height="21.8" fill="url(#barGrad)" />
-            <rect x="136" y="698.69" width="800" height="21.8" fill="url(#barGrad-2)" />
-          </g>
-        </g>
-      </g>
-    </symbol>
-  </defs>
-</svg>
-    `;
-        document.body.appendChild(sprite);
-    }
-
     // ✅ 폴더 열기(프로젝트에 맞게 라우트만 바꾸면 됨)
     function handleFolderOpen(folderId, isMyFolder) {
         // 1) 혹시 기존에 모달/상세열기 함수가 전역으로 있으면 그걸 우선 사용
@@ -106,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // 2) 없으면 기본 이동 (여기 경로만 네 프로젝트 라우트에 맞게 수정)
-        location.href = `/folders/${folder.folderId}`;
+        location.href = `/folders/${folderId}`;
     }
 
     // ✅ "카드"가 아니라 "폴더"만 클릭되게: 컨테이너에 이벤트 1번만 등록
@@ -141,25 +70,112 @@ document.addEventListener("DOMContentLoaded", async () => {
     bindFolderOpenDelegation(folderWrapper, true);
     bindFolderOpenDelegation(friendFolderWrapper, false);
 
-    injectFolderSpriteOnce();
+    // injectFolderSpriteOnce(); // (removed) inline SVG is used per card
 
     function getVisibilityClass(visibility) {
-        if (visibility === "PUBLIC") return "folder-public";
-        if (visibility === "FRIENDS") return "folder-friends";
-        if (visibility === "PRIVATE") return "folder-private";
+        const v = (visibility || "").toUpperCase();
+        if (v === "PUBLIC") return "folder-public";
+        if (v === "FRIENDS" || v === "FRIEND") return "folder-friends";
+        if (v === "PRIVATE") return "folder-private";
         return "";
     }
 
-    // ✅ 카드 HTML (폴더 모양 = SVG)
+    function getTabPalette(visibility) {
+        const v = (visibility || "").toUpperCase();
+
+        // tabColor: 탭 메인색 / tabDark: 탭 그라데이션 시작(더 진하게)
+        if (v === "PRIVATE") {
+            return { tabColor: "#E24A4A", tabDark: "#7A1212" }; // 개인: 딥레드
+        }
+        if (v === "FRIENDS" || v === "FRIEND") {
+            return { tabColor: "#A855F7", tabDark: "#3B0A73" }; // 친구: 딥퍼플
+        }
+        return { tabColor: "#60A5FA", tabDark: "#0B2A5B" };     // 전체: 딥블루
+    }
+
+    // ✅ 카드 HTML (폴더 모양 = SVG) — per-card inline SVG (tab 색 JS로 확실히 적용)
     function createFolderCardHTML(folder, isMyFolder) {
         const visibilityClass = getVisibilityClass(folder.visibility);
+        const bodyColor = "#FFC000";  // 사이버펑크 머스타드(바디)
+        const bodyGlow = "#FFC000";   // 상단 하이라이트
+        const { tabColor, tabDark } = getTabPalette(folder.visibility);
+        const uid = `f${folder.folderId}`;
 
         return `
-    <div class="folder-card ${visibilityClass}" data-folder-id="${folder.folderId}">
-      
+    <div class="folder-card ${visibilityClass}"
+         data-folder-id="${folder.folderId}"
+         data-visibility="${folder.visibility}">
+
       <div class="folder-visual">
-        <svg class="folder-svg" viewBox="0 0 1080 1080" aria-hidden="true">
-          <use href="#folderIcon" xlink:href="#folderIcon"></use>
+        <svg class="folder-svg" viewBox="0 0 1080 1080" aria-hidden="true" role="img">
+          <defs>
+            <filter id="glow-${uid}" x="-100%" y="-100%" width="250%" height="250%">
+              <feGaussianBlur stdDeviation="7" result="coloredBlur" />
+              <feOffset dx="0" dy="0" result="offsetblur"></feOffset>
+              <feFlood flood-color="black" flood-opacity="0.4"></feFlood>
+              <feComposite in2="offsetblur" operator="in"></feComposite>
+              <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+
+            <!-- back(귀->바디) -->
+            <linearGradient id="backTabGrad-${uid}" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                <!-- ✅ tab 단색 -->
+                <stop offset="0%"  stop-color="${tabColor}"/>
+                <stop offset="10%" stop-color="${tabColor}"/>
+
+                <!-- ✅ tab → body 자연 연결 -->
+                <stop offset="24%" stop-color="${bodyColor}"/>
+                <stop offset="100%" stop-color="${bodyColor}"/>
+            </linearGradient>
+
+            <linearGradient id="bodyGrad-${uid}" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="${bodyGlow}"/>
+              <stop offset="35%" stop-color="${bodyColor}"/>
+              <stop offset="100%" stop-color="${bodyColor}"/>
+            </linearGradient>
+
+            <!-- back overlay -->
+            <linearGradient id="backGrad-${uid}" x1="533.84" y1="50" x2="533.84" y2="269.59" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="rgba(255,255,255,0.18)" />
+              <stop offset="1" stop-color="rgba(0,0,0,0.28)" />
+            </linearGradient>
+
+            <!-- front overlay -->
+            <linearGradient id="frontGrad-${uid}" x1="128.32" y1="514.49" x2="933.02" y2="514.49" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#000" />
+              <stop offset=".05" stop-color="#787878" stop-opacity=".53" />
+              <stop offset=".32" stop-color="#fff" stop-opacity="0" />
+              <stop offset=".68" stop-color="#fff" stop-opacity="0" />
+              <stop offset=".95" stop-color="#878787" stop-opacity=".47" />
+              <stop offset="1" stop-color="#000" />
+            </linearGradient>
+
+            <!-- front seam 제거(페이드) -->
+            <linearGradient id="frontFadeGrad-${uid}" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="black" stop-opacity="0"/>
+              <stop offset="30%" stop-color="white" stop-opacity="1"/>
+              <stop offset="100%" stop-color="white" stop-opacity="1"/>
+            </linearGradient>
+
+            <mask id="frontFadeMask-${uid}" maskUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="1080" height="1080" fill="url(#frontFadeGrad-${uid})"/>
+            </mask>
+          </defs>
+
+          <g filter="url(#glow-${uid})">
+            <!-- back -->
+            <path d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z" fill="url(#backTabGrad-${uid})"/>
+            <path d="M864.51,787.3H210.18c-36.45,0-66-29.55-66-66V192.12c0-34.15,27.69-61.84,61.84-61.84h164.94c7.37,0,14.57,2.24,20.63,6.43l52.03,38.35c15.42,11.37,34.08,17.5,53.24,17.5h371.38c30.52,0,55.26,24.74,55.26,55.26v480.47c0,32.58-26.42,59-59,59Z" fill="url(#backGrad-${uid})" opacity="0.45"/>
+
+            <!-- front (mask로 위 경계 부드럽게) -->
+            <g mask="url(#frontFadeMask-${uid})">
+              <path d="M200.95,241.68h660.72c34.13,0,61.84,27.71,61.84,61.84v424.77c0,32.56-26.44,59-59,59H210.18c-36.43,0-66-29.57-66-66v-422.84c0-31.33,25.44-56.77,56.77-56.77Z" fill="url(#bodyGrad-${uid})"/>
+              <path d="M200.95,241.68h660.72c34.13,0,61.84,27.71,61.84,61.84v424.77c0,32.56-26.44,59-59,59H210.18c-36.43,0-66-29.57-66-66v-422.84c0-31.33,25.44-56.77,56.77-56.77Z" fill="url(#frontGrad-${uid})" opacity="0.10"/>
+            </g>
+          </g>
         </svg>
 
         <div class="folder-menu">
@@ -174,6 +190,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `;
     }
+
 
     /* 📌 내 폴더 목록 가져오기 */
     async function loadMyFolders() {
@@ -230,7 +247,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             friendContainer.innerHTML = folders.map((f) => createFolderCardHTML(f, false)).join("");
             attachMenuEvents(false);
-
             if (msg) {
                 msg.textContent = `${nickname}님의 폴더 ${folders.length}개를 불러왔습니다.`;
                 msg.style.color = "green";

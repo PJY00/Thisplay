@@ -592,3 +592,173 @@
 #friend-folder-container {
     overflow-y: hidden;
 }
+
+.folder-card {
+    /* 기본값 */
+    --folder-back: #475569;
+    --folder-front: #94a3b8;
+}
+
+/* 전체공개: 블루 */
+.folder-card.folder-public {
+    --folder-back: #1d4ed8;
+    --folder-front: #60a5fa;
+}
+
+/* 친구공개: 틸 + 살짝 부드럽게 */
+.folder-card.folder-friends {
+    --folder-back: #0f766e;
+    --folder-front: #5eead4;
+}
+
+/* 개인: 로즈(너무 빨갛지 않게) */
+.folder-card.folder-private {
+    --folder-back: #be123c;
+    --folder-front: #fb7185;
+}
+
+
+.folder-card.folder-public {
+    --folder-ear: rgba(180, 220, 255, 0.55);
+}
+
+.folder-card.folder-friends {
+    --folder-ear: rgba(190, 160, 255, 0.55);
+}
+
+.folder-card.folder-private {
+    --folder-ear: rgba(255, 200, 160, 0.5);
+}
+
+.folder-card.folder-public {
+    --folder-back: #1d4ed8;
+    --folder-front: #60a5fa;
+
+    /* 귀는 front보다 살짝만 밝게 */
+    --folder-ear: rgba(147, 197, 253, 0.28);
+}
+
+.folder-card.folder-public {
+    --folder-back: #1d4ed8;
+    --folder-front: #60a5fa;
+    --folder-ear: #93c5fd;
+    /* 귀만 살짝 밝게 */
+}
+
+.folder-card.folder-friends {
+    --folder-back: #0f766e;
+    --folder-front: #5eead4;
+    --folder-ear: #a78bfa;
+    /* 보라 '끼'는 귀로 */
+}
+
+.folder-card.folder-private {
+    --folder-back: #be123c;
+    --folder-front: #fb7185;
+    --folder-ear: #fecaca;
+    /* 따뜻한 톤 */
+}
+
+/* 바디는 통일 */
+.folder-card {
+    --folder-base: #6aaefc;
+    /* 너가 원하는 고정 색으로 */
+    --folder-back: var(--folder-base);
+    --folder-front: var(--folder-base);
+
+    /* 귀 기본값 */
+    --folder-ear: rgba(255, 255, 255, 0.25);
+}
+
+/* 공개범위별로 귀만 변경 */
+.folder-card.folder-public {
+    --folder-ear: rgba(147, 197, 253, 0.55);
+}
+
+/* blue */
+.folder-card.folder-friends {
+    --folder-ear: rgba(167, 139, 250, 0.55);
+}
+
+/* purple */
+.folder-card.folder-private {
+    --folder-ear: rgba(253, 186, 116, 0.50);
+}
+
+/* warm */
+
+
+/* 바디는 무조건 통일 */
+.folder-card {
+    --folder-body: #6aaefc;
+    /* 원하는 공통 바디색 */
+    --folder-back-grad-top: rgba(255, 255, 255, 0.20);
+    --folder-back-grad-bottom: rgba(0, 0, 0, 0.22);
+}
+
+/* 귀만 공개범위별 변경 */
+.folder-card.folder-public {
+    --folder-ear: rgba(147, 197, 253, 0.70);
+}
+
+.folder-card.folder-friends {
+    --folder-ear: rgba(167, 139, 250, 0.70);
+}
+
+.folder-card.folder-private {
+    --folder-ear: rgba(253, 186, 116, 0.70);
+}
+
+/* 바디는 공통 */
+.folder-card {
+    --folder-body: #6aaefc;
+    --folder-body-light: #8bbcff;
+}
+
+/* ✅ tab(귀) 색만 공개범위별 변경 */
+.folder-card.folder-public {
+    --folder-ear: rgba(147, 197, 253, 0.75);
+}
+
+/* 파랑 */
+.folder-card.folder-friends {
+    --folder-ear: rgba(167, 139, 250, 0.75);
+}
+
+/* 보라 */
+.folder-card.folder-private {
+    --folder-ear: rgba(253, 186, 116, 0.75);
+}
+
+/* 주황/피치 */
+
+
+/* 폴더 기본 바디 색(모두 동일) */
+.folder-card {
+    --folder-body: #6aaefc;
+    --folder-body-light: #8bbcff;
+
+    /* 귀(tab) 기본값 */
+    --folder-ear: rgba(147, 197, 253, 0.55);
+
+    /* 너가 넣은 하단 라인(바) 없애기: barGrad를 투명으로 */
+    --folder-bar-grad-top: rgba(255, 255, 255, 0);
+    --folder-bar-grad-bottom: rgba(0, 0, 0, 0);
+}
+
+/* 전체공개: 시원한 하늘색 */
+.folder-card.folder-public {
+    --folder-ear: rgba(122, 212, 248, 0.65);
+}
+
+/* 친구공개: 민트+보라 느낌(너가 원하던 보라 기운) */
+.folder-card.folder-friends {
+    --folder-ear: rgba(120, 240, 210, 0.60);
+    /* 보라 “기운” 살짝 */
+    /* 필요하면 아래로 교체: rgba(176, 80, 212, 0.45) */
+}
+
+/* 개인(비공개): 너무 쎄지 않게 로즈 톤 */
+.folder-card.folder-private {
+    --folder-ear: rgba(248, 95, 96, 0.45);
+}
