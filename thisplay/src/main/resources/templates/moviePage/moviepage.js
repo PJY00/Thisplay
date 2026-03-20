@@ -1,13 +1,23 @@
+// ==========================
 // URL에서 영화 ID 추출
+// ==========================
 const params = new URLSearchParams(window.location.search);
-// const movieId = params.get("id");
-let movieId = params.get("movieId");
+let movieId = params.get("movieId") || 1218925;
 
-if (!movieId) {
-  movieId = 1218925; // 여기 원하는 ID 넣기 (Fight Club 예시)
-}
+// 현재 선택된 리뷰 ID (댓글용)
+let currentReviewId = null;
 
-// 영화 상세정보 불러오기
+// ==========================
+// CSS 로드
+// ==========================
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href = "moviepage.css";
+document.head.appendChild(cssLink);
+
+// ==========================
+// 영화 상세 정보
+// ==========================
 async function loadMovieDetail() {
   try {
     const res = await axios.get(
@@ -15,253 +25,23 @@ async function loadMovieDetail() {
     );
     const movie = res.data;
 
-    // HTML에 데이터 삽입
     document.getElementById("poster").src = movie.poster_path;
     document.getElementById("title").textContent = movie.title;
     document.getElementById("summary").textContent = movie.overview;
-    document.querySelector("#addinfo").innerHTML = `
-        원제: ${movie.original_title} <br>
-        개봉일: ${movie.release_date.substring(0, 10)} <br>
-        러닝타임: ${movie.runtime}분 <br>
-        평점: ${movie.vote_average}점
+    document.getElementById("addinfo").innerHTML = `
+      원제: ${movie.original_title}<br>
+      개봉일: ${movie.release_date.substring(0, 10)}<br>
+      러닝타임: ${movie.runtime}분<br>
+      평점: ${movie.vote_average}점
     `;
-    document.getElementById("goReview").addEventListener("click", function (e) {
-      e.preventDefault();
-      location.href = `../reviewpage/writereview.html?movieId=${movieId}`;
-    });
 
-    // document.getElementById("likes-count").textContent = movie.likes || 0;
-    // document.getElementById("rating-score").textContent =
-    //   movie.vote_average || "0.0";
+    document.getElementById(
+      "goReview"
+    ).href = `../reviewpage/writereview.html?movieId=${movieId}`;
   } catch (err) {
     console.error("영화 데이터 로드 실패:", err);
   }
 }
-
-// 리뷰 목록 불러오기
-// async function loadReviews() {
-//   try {
-//     const res = await axios.get(
-//       `http://localhost:8080/api/reviews/movie/${movieId}`
-//     );
-
-//     const reviews = res.data.reviews;
-
-//     const list = document.querySelector("#reviews");
-//     list.innerHTML = "";
-
-//     if (!reviews || reviews.length === 0) {
-//       list.innerHTML = "<p>아직 등록된 감상평이 없습니다.</p>";
-//       return;
-//     }
-//     console.log(reviews);
-
-//     reviews.forEach((r) => {
-//       const div = document.createElement("div");
-//       div.classList.add("review-item");
-//       div.textContent = r.content;
-//       list.appendChild(div);
-//     });
-//   } catch (err) {
-//     console.error("리뷰 로드 실패:", err);
-//   }
-// }
-
-const cssLink = document.createElement("link");
-cssLink.rel = "stylesheet";
-cssLink.href = "moviepage.css";
-document.head.appendChild(cssLink);
-
-// 좋아요 버튼
-// document.getElementById("like-btn").addEventListener("click", async () => {
-//   try {
-//     await axios.post(`http://localhost:8080/api/movies/${movieId}/like`);
-//     loadMovieDetail(); // 좋아요 수 갱신
-//   } catch (err) {
-//     console.error("좋아요 실패:", err);
-//   }
-// });
-
-async function loadOneLineReviews(movieId, page = 0, sort = "latest") {
-  try {
-    const res = await axios.get(
-      `http://localhost:8080/api/reviews/${movieId}/oneline`,
-      {
-        params: {
-          sort: sort,
-          page: page,
-          size: 10,
-        },
-      }
-    );
-
-    console.log("한줄 리뷰 응답:", res.data);
-    return res.data; // Page<DTO> 구조
-  } catch (err) {
-    console.error("한줄 리뷰 로드 실패:", err);
-  }
-}
-
-// async function renderOneLineReviews() {
-//   const reviewsDiv = document.getElementById("reviews");
-
-//   const pageData = await loadOneLineReviews(movieId);
-
-//   if (!pageData || pageData.content.length === 0) {
-//     reviewsDiv.innerHTML = "<p>등록된 한 줄 리뷰가 없습니다.</p>";
-//     return;
-//   }
-
-//   reviewsDiv.innerHTML = "";
-
-//   pageData.content.forEach((review) => {
-//     const item = document.createElement("div");
-//     item.classList.add("review-item");
-
-//     item.innerHTML = `
-//       <div class="profile">${review.username ?? "익명"}</div>
-//       <div class="review">
-//         ${review.content}
-//         <a href="/review/${review.reviewId}">자세히 보기</a>
-//       </div>
-//     `;
-//     reviewsDiv.appendChild(item);
-//   });
-// }
-
-// const params = new URLSearchParams(window.location.search);
-// const movieId = params.get("id"); // 또는 movieId= 로 보낸 경우 수정 필요
-
-async function renderOneLineReviews() {
-  const reviewsDiv = document.getElementById("reviews");
-
-  if (!reviewsDiv) {
-    console.error("reviews 요소를 찾을 수 없습니다.");
-    return;
-  }
-
-  const pageData = await loadOneLineReviews(movieId);
-
-  console.log("한줄 리뷰 응답:", pageData);
-
-  if (!pageData || !pageData.content || pageData.content.length === 0) {
-    reviewsDiv.innerHTML = `<p>등록된 한 줄 리뷰가 없습니다.</p>`;
-    return;
-  }
-
-  reviewsDiv.innerHTML = "";
-
-  const escapeHTML = (str) => {
-    if (!str) return "";
-    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  };
-
-  pageData.content.forEach((review) => {
-    const nickname = review.nickname ?? "익명";
-    const oneLineReview = escapeHTML(review.oneLineReview);
-    const reviewId = review.reviewId;
-    const profileImage = review.profileImageUrl
-      ? `<img src="${review.profileImageUrl}" class="profile-img">`
-      : `<div class="profile-img empty"></div>`;
-
-    const item = document.createElement("div");
-    item.classList.add("review-item");
-
-    item.innerHTML = `
-      <div class="profile_img">${profileImage}</div>
-      <div class="profile">${nickname}</div>
-      <div class="review">
-        ${oneLineReview}
-        <a 
-          href="/review?id=${reviewId}" 
-          class="open-review-detail"
-          data-reviewid="${reviewId}"
-        >자세히 보기</a>
-      </div>
-    `;
-
-    reviewsDiv.appendChild(item);
-  });
-}
-
-// 리뷰 상세보기 모달 열기
-document.addEventListener("click", async (e) => {
-  const link = e.target.closest(".open-review-detail");
-  if (!link) return;
-
-  e.preventDefault();
-
-  const reviewId = link.dataset.reviewid;
-  openReviewDetailModal(reviewId);
-});
-
-async function openReviewDetailModal(reviewId) {
-  const modal = document.getElementById("reviewDetailModal");
-
-  document.getElementById("detailReviewTitle").textContent = "로딩 중...";
-  document.getElementById("detailMeta").innerHTML = "";
-  document.getElementById("detailBody").innerHTML = "";
-  document.getElementById("detailOneLine").innerHTML = "";
-
-  modal.classList.remove("hidden");
-
-  function formatDate(str) {
-    const fixed = str.replace(/\+00:00$/, "Z");
-
-    const date = new Date(fixed);
-
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-
-    const hh = String(date.getHours()).padStart(2, "0");
-    const mm = String(date.getMinutes()).padStart(2, "0");
-
-    return `${y}-${m}-${d} ${hh}:${mm}`;
-  }
-
-  try {
-    const res = await axios.get(
-      `http://localhost:8080/api/reviews/${reviewId}`,
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-    );
-
-    const r = res.data;
-    document.getElementById("detailReviewTitle").textContent =
-      r.reviewTitle ?? "(제목 없음)";
-
-    document.getElementById("detailMeta").innerHTML = `
-      ⭐ ${r.star ?? 0} · 작성일 ${formatDate(r.createdAt)}
-      · 👍 ${r.likeCount ?? 0} · 👁 ${r.viewCount ?? 0}
-    `;
-
-    document.getElementById("detailBody").innerHTML =
-      r.reviewBody?.replace(/\n/g, "<br>") ?? "본문 없음";
-
-    document.getElementById("detailOneLine").innerHTML = `
-      <strong>한줄평:</strong> ${r.oneLineReview ?? "(없음)"}
-    `;
-  } catch (err) {
-    console.error("리뷰 상세 조회 실패:", err);
-    alert("리뷰 정보를 불러올 수 없습니다.");
-  }
-}
-
-// 모달 닫기
-document.getElementById("modalCloseBtn").addEventListener("click", () => {
-  document.getElementById("reviewDetailModal").classList.add("hidden");
-});
-
-// 페이지 로드 시 실행
-loadMovieDetail();
-// renderOneLineReviews();
-renderOneLineReviews();
-// loadReviews();
-
-// 리뷰 작성 링크
-document.getElementById(
-  "goReview"
-).href = `../reviewpage/writereview.html?movieId=${movieId}`;
 
 // 폴더 팝업
 // 폴더 팝업 요소
@@ -395,3 +175,221 @@ async function saveMovieToFolder(folderId) {
     alert("영화를 폴더에 저장하지 못했습니다.");
   }
 }
+
+// ==========================
+// 한줄 리뷰 목록
+// ==========================
+async function loadOneLineReviews(movieId, page = 0) {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reviews/${movieId}/oneline`,
+      { params: { page, size: 10 } }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("한줄 리뷰 로드 실패:", err);
+  }
+}
+
+async function renderOneLineReviews() {
+  const reviewsDiv = document.getElementById("reviews");
+  const pageData = await loadOneLineReviews(movieId);
+
+  if (!pageData || !pageData.content || pageData.content.length === 0) {
+    reviewsDiv.innerHTML = "<p>등록된 한 줄 리뷰가 없습니다.</p>";
+    return;
+  }
+
+  reviewsDiv.innerHTML = "";
+
+  pageData.content.forEach((review) => {
+    const item = document.createElement("div");
+    item.className = "review-item";
+
+    item.innerHTML = `
+      <div class="profile">${review.nickname ?? "익명"}</div>
+      <div class="review">
+        ${review.oneLineReview}
+        <a href="#" class="open-review-detail"
+           data-reviewid="${review.reviewId}">
+          자세히 보기
+        </a>
+      </div>
+    `;
+    reviewsDiv.appendChild(item);
+  });
+}
+
+// ==========================
+// 리뷰 상세 모달
+// ==========================
+document.addEventListener("click", (e) => {
+  const link = e.target.closest(".open-review-detail");
+  if (!link) return;
+
+  e.preventDefault();
+  openReviewDetailModal(link.dataset.reviewid);
+});
+
+async function openReviewDetailModal(reviewId) {
+  currentReviewId = reviewId;
+
+  const modal = document.getElementById("reviewDetailModal");
+  modal.classList.remove("hidden");
+
+  document.getElementById("detailReviewTitle").textContent = "로딩 중...";
+  document.getElementById("detailMeta").innerHTML = "";
+  document.getElementById("detailBody").innerHTML = "";
+  document.getElementById("detailOneLine").innerHTML = "";
+
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reviews/${reviewId}`
+    );
+    const r = res.data;
+
+    document.getElementById("detailReviewTitle").textContent =
+      r.reviewTitle ?? "(제목 없음)";
+
+    document.getElementById("detailMeta").innerHTML = `
+      ⭐ ${r.star ?? 0}
+    `;
+
+    document.getElementById("detailBody").innerHTML =
+      r.reviewBody?.replace(/\n/g, "<br>") ?? "";
+
+    document.getElementById(
+      "detailOneLine"
+    ).innerHTML = `<strong>한줄평:</strong> ${r.oneLineReview ?? ""}`;
+
+    // 좋아요
+    document.getElementById("detailLikeCount").textContent = r.likeCount ?? 0;
+
+    const likeBtn = document.getElementById("detailLikeBtn");
+    likeBtn.classList.remove("active");
+    likeBtn.onclick = () => handleLike(reviewId);
+
+    // 댓글 로드
+    loadComments(reviewId);
+  } catch (err) {
+    alert("리뷰를 불러올 수 없습니다.");
+    console.error(err);
+  }
+}
+
+// ==========================
+// 좋아요 처리 (쿠키 기반)
+// ==========================
+async function handleLike(reviewId) {
+  const btn = document.getElementById("detailLikeBtn");
+
+  try {
+    if (btn.classList.contains("active")) {
+      await axios.delete(`http://localhost:8080/api/likes/${reviewId}`, {
+        withCredentials: true,
+      });
+      btn.classList.remove("active");
+    } else {
+      await axios.post(
+        `http://localhost:8080/api/likes/${reviewId}`,
+        {},
+        { withCredentials: true }
+      );
+      btn.classList.add("active");
+    }
+
+    const res = await axios.get(`http://localhost:8080/api/likes/${reviewId}`);
+    document.getElementById("detailLikeCount").textContent =
+      res.data.likeCount ?? 0;
+  } catch (err) {
+    if (err.response?.status === 401) {
+      alert("로그인이 필요합니다.");
+    } else {
+      console.error("좋아요 처리 실패:", err);
+    }
+  }
+}
+
+// ==========================
+// 댓글
+// ==========================
+async function loadComments(reviewId) {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reviews/${reviewId}/comments`
+    );
+
+    const list = document.getElementById("commentList");
+    list.innerHTML = "";
+
+    if (!res.data || res.data.length === 0) {
+      list.innerHTML = "<li style='color:gray'>댓글이 없습니다.</li>";
+      return;
+    }
+
+    res.data.forEach((c) => {
+      const li = document.createElement("li");
+      li.className = "comment-item";
+      li.innerHTML = `
+        <div class="comment-meta">
+          ${c.nickname ?? "익명"} · ${formatDate(c.createdAt)}
+        </div>
+        <div class="comment-content">
+          ${escapeHtml(c.content)}
+        </div>
+      `;
+      list.appendChild(li);
+    });
+  } catch (err) {
+    console.error("댓글 로드 실패:", err);
+  }
+}
+
+document
+  .getElementById("commentSubmitBtn")
+  ?.addEventListener("click", async () => {
+    const input = document.getElementById("commentInput");
+    const content = input.value.trim();
+    if (!content) return alert("댓글을 입력하세요.");
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/reviews/${currentReviewId}/comments`,
+        { content },
+        { withCredentials: true }
+      );
+      input.value = "";
+      loadComments(currentReviewId);
+    } catch (err) {
+      if (err.response?.status === 401) {
+        alert("로그인이 필요합니다.");
+      } else {
+        console.error("댓글 작성 실패:", err);
+      }
+    }
+  });
+
+// ==========================
+// 유틸
+// ==========================
+function formatDate(str) {
+  const d = new Date(str);
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// ==========================
+// 모달 닫기
+// ==========================
+document.getElementById("modalCloseBtn").addEventListener("click", () => {
+  document.getElementById("reviewDetailModal").classList.add("hidden");
+});
+
+// ==========================
+// 초기 실행
+// ==========================
+loadMovieDetail();
+renderOneLineReviews();
